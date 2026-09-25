@@ -6,6 +6,8 @@ on:
     paths:
       - 'site/**'
       - '.github/workflows/deploy-site.yml'
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -29,6 +31,22 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
+      # The installer is named per version, so the page cannot hard-code a direct link.
+      # Look up the newest release's installer here and write its URL into the download
+      # button. A release without one leaves the button on the releases page.
+      - name: Point the download button at the latest installer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          url=$(gh api "repos/${{ github.repository }}/releases/latest" --jq '.assets[] | select(.name | startswith("Sotto-Setup-") and endswith(".exe")) | .browser_download_url' | head -n 1)
+          if [ -n "$url" ]; then
+            sed -i "s#href=\"https://github.com/millZach/Sotto-releases/releases/latest\" data-latest-installer#href=\"$url\" data-latest-installer#" site/index.html
+            echo "Download button: $url"
+          else
+            echo "No installer on the latest release; the button keeps the releases page."
+          fi
+          grep -o 'href="[^"]*" data-latest-installer' site/index.html
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
