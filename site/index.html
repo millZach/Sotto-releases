@@ -114,7 +114,7 @@ html[data-bg="grain"] .bg::after { opacity: 0.22; }
 .strip.is-scrolled { border-color: var(--hairline); }
 .strip .brand { display: flex; align-items: center; gap: 10px; font-weight: 500; color: var(--text); }
 .strip .brand img { width: 22px; height: 22px; border-radius: 6px; }
-.strip nav { display: flex; gap: 22px; font-size: 15px; }
+.strip nav { display: flex; align-items: center; gap: 22px; font-size: 15px; }
 .strip nav a { color: var(--text-2); }
 .strip nav a.cta { color: var(--accent-text); }
 
@@ -125,14 +125,20 @@ html[data-bg="grain"] .bg::after { opacity: 0.22; }
   min-height: calc(100vh - 52px);
   overflow: hidden;
 }
-.hero-copy { position: relative; z-index: 3; max-width: var(--col); margin: 0 auto; }
-.hero h1 { font-size: clamp(36px, 4.6vw, 56px); line-height: 1.04; max-width: 17ch; }
-.hero .lede { margin-top: 14px; font-size: clamp(16px, 1.3vw, 18px); color: var(--muted); max-width: 46ch; }
+/* The hero shares main's edges and centres over the demo. */
+.hero-copy { position: relative; z-index: 3; max-width: calc(var(--col) - 2 * var(--gutter)); margin: 0 auto; text-align: center; }
+.hero h1 { font-size: clamp(36px, 4.6vw, 56px); line-height: 1.04; max-width: 24ch; margin-inline: auto; text-wrap: balance; }
+.hero .lede { margin: 14px auto 0; font-size: clamp(16px, 1.3vw, 18px); color: var(--muted); max-width: 50ch; text-wrap: balance; }
 .hero .lede b { font-weight: 500; }
 .hero .lede b[data-mark="codex"] { color: var(--codex); }
 .hero .lede b[data-mark="claude"] { color: var(--claude); }
 .hero .lede b[data-mark="grok"] { color: var(--grok); }
 .hero .lede b[data-mark="devin"] { color: var(--devin); }
+.hero-cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 18px; margin-top: 26px; }
+.hero-cta .btn { padding: 11px 18px; }
+.hero-cta .more { color: var(--text-2); font-size: 16px; }
+.hero-cta .more::after { content: ' \2192'; color: var(--accent-text); }
+.hero-cta .fine { flex-basis: 100%; font-size: 14px; }
 
 .field { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .mote {
@@ -453,7 +459,7 @@ kbd { font: inherit; font-size: 11.5px; padding: 1px 6px; border: 1px solid var(
 
 .pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 26px; }
 .pair { border-top: 1px solid var(--hairline); padding-top: 14px; }
-.pair .else { color: var(--faint); font-size: 15px; }
+.pair .else { color: var(--muted); font-size: 15px; }
 .pair .here { color: var(--text); font-size: 17px; margin-top: 4px; }
 
 .buttons { display: flex; gap: 12px; flex-wrap: wrap; margin: 26px 0 16px; }
@@ -470,13 +476,32 @@ kbd { font: inherit; font-size: 11.5px; padding: 1px 6px; border: 1px solid var(
 .btn svg.os { width: 18px; height: 18px; fill: currentColor; }
 .fine { color: var(--muted); font-size: 15px; }
 
-footer { position: relative; z-index: 1; max-width: var(--col); margin: 0 auto; padding: 32px var(--gutter) 48px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: var(--faint); font-size: 14px; }
+/* The download card: the button, what you are getting, and what to expect. */
+.get { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px 28px; align-items: center; margin-top: 28px; padding: 24px; border: 1px solid var(--hairline); border-radius: 14px; background: color-mix(in srgb, var(--sidebar) 70%, transparent); }
+.get .buttons { margin: 0; }
+.get .spec { color: var(--text-2); font-size: 15px; }
+.get .spec span + span::before { content: '\00b7'; margin: 0 8px; color: var(--muted); }
+.get ul { grid-column: 1 / -1; margin: 0; padding: 16px 0 0; border-top: 1px solid var(--hairline); list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 28px; color: var(--muted); font-size: 15px; }
+.get ul b { display: block; color: var(--text); font-weight: 500; }
+
+/* The source repository: a button in the strip and a line under the download card. */
+.gh-btn { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-2); font-size: 14px; }
+.strip nav a.gh-btn { color: var(--text-2); }
+.gh-btn:hover { color: var(--text); border-color: var(--muted); text-decoration: none; }
+.gh-btn .star { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
+.gh-btn:hover .star { fill: var(--ask); stroke: var(--ask); }
+.oss { display: flex; align-items: center; gap: 14px 18px; flex-wrap: wrap; margin-top: 16px; padding: 18px 24px; border: 1px solid var(--hairline); border-radius: 14px; }
+.oss > .gh { width: 24px; height: 24px; fill: var(--text-2); flex: none; }
+.oss p { flex: 1; min-width: 240px; color: var(--muted); font-size: 15px; }
+.oss p b { color: var(--text); font-weight: 500; }
+
+footer { position: relative; z-index: 1; max-width: var(--col); margin: 0 auto; padding: 32px var(--gutter) 48px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
 footer nav { display: flex; gap: 20px; }
 footer nav a { color: var(--muted); }
 
 @media (max-width: 760px) {
   .moment { grid-template-columns: 1fr; gap: 14px; }
-  .hero h1 { max-width: 12ch; }
+  .get { grid-template-columns: 1fr; padding: 18px; }
   .strip nav a:not(.cta) { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -497,6 +522,7 @@ footer nav a { color: var(--muted); }
   <nav>
     <a href="#what">What it does</a>
     <a href="#why">Why Sotto</a>
+    <a href="https://github.com/millZach/Sotto" class="gh-btn"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg>Star on GitHub</a>
     <a href="#download" class="cta">Download</a>
   </nav>
 </header>
@@ -507,6 +533,14 @@ footer nav a { color: var(--muted); }
   <div class="hero-copy">
     <h1>Say it once. Sotto types it, or hands it to your agent.</h1>
     <p class="lede">Dictation that spells your names right, and one window for every thread you have running in <b data-mark="codex">Codex</b>, <b data-mark="claude">Claude Code</b>, <b data-mark="grok">Grok Build</b> and <b data-mark="devin">Devin</b>.</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="https://github.com/millZach/Sotto-releases/releases/latest" data-latest-installer>
+        <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
+        Download for Windows
+      </a>
+      <a class="more" href="#what">See what it does</a>
+      <p class="fine">Free and open source. Windows 10 or 11. Mac on its way.</p>
+    </div>
   </div>
 
   <div class="stage-wrap">
@@ -676,8 +710,6 @@ footer nav a { color: var(--muted); }
     </div>
   </section>
 
-  <svg class="wave" data-wave aria-hidden="true"><path/></svg>
-
   <section id="why">
     <h2>Why Sotto.</h2>
     <div class="pairs">
@@ -688,18 +720,28 @@ footer nav a { color: var(--muted); }
     </div>
   </section>
 
-  <svg class="wave" data-wave aria-hidden="true"><path/></svg>
-
   <section id="download">
     <h2>Free to download.</h2>
-    <p class="sub">Windows 10 or 11 on x64. Bring an OpenRouter key. A Mac build is on its way.</p>
-    <div class="buttons">
-      <a class="btn primary" href="https://github.com/millZach/Sotto-releases/releases/latest" data-latest-installer>
-        <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
-        Download for Windows<svg class="under-wave" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M0 6 Q 12 0 25 6 T 50 6 T 75 6 T 100 6 T 125 6 T 150 6 T 175 6 T 200 6"/></svg>
-      </a>
+    <p class="sub">Free, open source, and in beta. Bring an OpenRouter key for dictation.</p>
+    <div class="get">
+      <div class="buttons">
+        <a class="btn primary" href="https://github.com/millZach/Sotto-releases/releases/latest" data-latest-installer>
+          <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
+          Download for Windows<svg class="under-wave" viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M0 6 Q 12 0 25 6 T 50 6 T 75 6 T 100 6 T 125 6 T 150 6 T 175 6 T 200 6"/></svg>
+        </a>
+      </div>
+      <p class="spec"><span data-latest-version>Version 0.1.19</span><span data-latest-size>107 MB</span><span>Windows 10 or 11, x64</span></p>
+      <ul>
+        <li><b>What it costs</b>Dictation bills through your key, about $0.10 per hour of audio. Your agents bill the way they already do.</li>
+        <li><b>First run</b>The installer isn't code-signed yet, so Windows may show a SmartScreen prompt. Choose More info, then Run anyway.</li>
+        <li><b>Mac</b>An Apple silicon build is on its way. <a href="https://github.com/millZach/Sotto-releases/releases">All releases</a></li>
+      </ul>
     </div>
-    <p class="fine">Transcription bills through your key, about a cent per hundred short dictations.</p>
+    <div class="oss">
+      <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <p><b>Open source, MIT licensed.</b> Read the code, file an issue, or star it on GitHub.</p>
+      <a class="gh-btn" href="https://github.com/millZach/Sotto"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg>Star on GitHub</a>
+    </div>
   </section>
 </main>
 
@@ -747,6 +789,17 @@ footer nav a { color: var(--muted); }
   }
   for (let i = 0; i < 8; i++) spawn(field, false, i)
   for (let i = 0; i < 10; i++) spawn(sky, true, i)
+  // Hero motes keep clear of the words: each gets a home outside the copy, padded by its drift.
+  {
+    const f = field.getBoundingClientRect(), pad = 96
+    const boxes = [...document.querySelectorAll('.hero-copy > *')].map((el) => el.getBoundingClientRect())
+    const clear = (m) => boxes.every((c) => { const x = f.left + m.bx * f.width, y = f.top + m.by * f.height; return x + 50 < c.left - pad || x > c.right + pad || y + 50 < c.top - pad || y > c.bottom + pad })
+    for (const m of motes) {
+      if (m.far) continue
+      for (let k = 0; k < 60 && !clear(m); k++) { m.bx = rnd(0.03, 0.95); m.by = rnd(0.05, 0.9) }
+      if (!clear(m)) m.el.hidden = true
+    }
+  }
   let holdUntil = 0
   function drift(now) {
     const W = field.clientWidth, H = field.clientHeight, SW = innerWidth, SH = innerHeight
@@ -890,11 +943,12 @@ footer nav a { color: var(--muted); }
     requestAnimationFrame(tick)
   }
   document.querySelectorAll('[data-chapter]').forEach((b) => b.addEventListener('click', () => seek(CH[Number(b.dataset.chapter)].at)))
-  $('replay').addEventListener('click', () => seek(reduced ? INTRO_END : 0))
+  const START = 400 // the demo starts partway into the drift, so the window opens sooner
+  $('replay').addEventListener('click', () => seek(reduced ? INTRO_END : START))
   let userPaused = false
   $('playPause').addEventListener('click', () => {
     if (playing) playing = false
-    else if (finished) seek(reduced ? INTRO_END : 0)
+    else if (finished) seek(reduced ? INTRO_END : START)
     else playing = true
     userPaused = !playing
     updateControls()
@@ -906,7 +960,8 @@ footer nav a { color: var(--muted); }
 
   function fit() {
     const w = Math.min(1, (innerWidth - 32) / 760)
-    const h = Math.min(1, Math.max(0.6, (innerHeight - 330) / 440))
+    const top = stage.parentElement.getBoundingClientRect().top + scrollY
+    const h = Math.min(1, Math.max(0.6, (innerHeight - top - 90) / 440))
     document.documentElement.style.setProperty('--stage-scale', Math.min(w, h).toFixed(3))
   }
   fit(); addEventListener('resize', fit)
@@ -915,12 +970,12 @@ footer nav a { color: var(--muted); }
   if (reduced) {
     motes.forEach((m) => { const w = m.far ? innerWidth : field.clientWidth, h = m.far ? innerHeight : field.clientHeight; m.el.style.transform = `translate(${m.bx * w}px, ${m.by * h}px)`; m.el.classList.add('is-born') })
     seek(INTRO_END, false)
-  } else seek(0, true)
+  } else seek(START, true)
   last = performance.now()
   requestAnimationFrame(tick)
 
   // ---------- Looping vignettes below the hero, running only while on screen ----------
-  function vignette(root, period, steps, resetFn) {
+  function vignette(root, period, steps, resetFn, restAt = Infinity) {
     let timers = [], running = false
     function run() {
       resetFn()
@@ -928,9 +983,11 @@ footer nav a { color: var(--muted); }
       timers.push(setTimeout(run, period))
     }
     function stop() { timers.forEach(clearTimeout); timers = []; running = false }
-    if (reduced) { resetFn(); steps.forEach((s) => s.fn()); return }
+    // At rest each card shows a finished moment, and holds it for a beat on screen before the loop starts.
+    resetFn(); steps.filter((s) => reduced || s.at <= restAt).forEach((s) => s.fn())
+    if (reduced) return
     new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !running) { running = true; run() }
+      if (e.isIntersecting && !running) { running = true; timers = [setTimeout(run, 2600)] }
       else if (!e.isIntersecting && running) stop()
     }, { threshold: 0.3 }).observe(root)
   }
@@ -961,7 +1018,7 @@ footer nav a { color: var(--muted); }
     { at: 2300, fn: () => { $('v3allow').classList.add('is-pressed'); v3c.classList.add('press') } },
     { at: 2700, fn: () => { $('v3ask').classList.add('answered'); $('v3act').classList.add('is-on'); v3c.classList.remove('is-on', 'press') } },
     { at: 3900, fn: cls('v3act', 'is-done', true) },
-  ], () => { $('v3ask').classList.remove('is-on', 'answered'); $('v3allow').classList.remove('is-pressed'); $('v3act').classList.remove('is-on', 'is-done'); v3c.classList.remove('is-on', 'press'); v3c.style.transform = 'translate(20px, 120px)' })
+  ], () => { $('v3ask').classList.remove('is-on', 'answered'); $('v3allow').classList.remove('is-pressed'); $('v3act').classList.remove('is-on', 'is-done'); v3c.classList.remove('is-on', 'press'); v3c.style.transform = 'translate(20px, 120px)' }, 300)
 
   // 4. Ship: the button follows the folder's state, then does the whole thing.
   const labels = ['Commit', 'Commit & push', 'Commit, push & PR']
