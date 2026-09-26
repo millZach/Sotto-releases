@@ -33,20 +33,29 @@ jobs:
         uses: actions/configure-pages@v5
 
       # The installer is named per version, so the page cannot hard-code a direct link.
-      # Look up the newest release's installer here and write its URL into the download
-      # button. A release without one leaves the button on the releases page.
-      - name: Point the download button at the latest installer
+      # Look up the newest release's installer here and write its URL into every download
+      # button, and its version and size into the download card. A release without one
+      # leaves the buttons on the releases page and the card as committed.
+      - name: Point the download buttons at the latest installer
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          url=$(gh api "repos/${{ github.repository }}/releases/latest" --jq '.assets[] | select(.name | startswith("Sotto-Setup-") and endswith(".exe")) | .browser_download_url' | head -n 1)
+          api="repos/${{ github.repository }}/releases/latest"
+          installer='[.assets[] | select(.name | startswith("Sotto-Setup-") and endswith(".exe"))][0]'
+          url=$(gh api "$api" --jq "$installer | .browser_download_url // empty")
           if [ -n "$url" ]; then
-            sed -i "s#href=\"https://github.com/millZach/Sotto-releases/releases/latest\" data-latest-installer#href=\"$url\" data-latest-installer#" site/index.html
-            echo "Download button: $url"
+            mb=$(gh api "$api" --jq "$installer | (.size / 1048576 + 0.5) | floor")
+            version=$(gh api "$api" --jq '.tag_name | ltrimstr("v")')
+            sed -i \
+              -e "s#href=\"https://github.com/millZach/Sotto-releases/releases/latest\" data-latest-installer#href=\"$url\" data-latest-installer#g" \
+              -e "s#<span data-latest-version>[^<]*</span>#<span data-latest-version>Version $version</span>#" \
+              -e "s#<span data-latest-size>[^<]*</span>#<span data-latest-size>$mb MB</span>#" \
+              site/index.html
+            echo "Download buttons: $url (version $version, $mb MB)"
           else
-            echo "No installer on the latest release; the button keeps the releases page."
+            echo "No installer on the latest release; the buttons keep the releases page."
           fi
-          grep -o 'href="[^"]*" data-latest-installer' site/index.html
+          grep -o 'href="[^"]*" data-latest-installer\|<span data-latest-[a-z]*>[^<]*</span>' site/index.html
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
