@@ -32,30 +32,50 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # The installer is named per version, so the page cannot hard-code a direct link.
-      # Look up the newest release's installer here and write its URL into every download
-      # button, and its version and size into the download card. A release without one
-      # leaves the buttons on the releases page and the card as committed.
-      - name: Point the download buttons at the latest installer
+      # Each build's file is named per version, so the page cannot hard-code direct links. Look up the newest
+      # stable release and the newest Owl, and write each build's file URL, version and size into every link
+      # and spec line marked with its data-download key. A build its release lacks keeps the releases page,
+      # its committed version and no size.
+      - name: Point the download links at the newest builds
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
-          api="repos/${{ github.repository }}/releases/latest"
-          installer='[.assets[] | select(.name | startswith("Sotto-Setup-") and endswith(".exe"))][0]'
-          url=$(gh api "$api" --jq "$installer | .browser_download_url // empty")
-          if [ -n "$url" ]; then
-            mb=$(gh api "$api" --jq "$installer | (.size / 1048576 + 0.5) | floor")
-            version=$(gh api "$api" --jq '.tag_name | ltrimstr("v")')
+          page=site/index.html
+          # One tab-separated line per build found: key, file URL, size in bytes, version. Host archives are
+          # for remote hosts, never the desktop, so they are skipped.
+          lines='.tag_name as $tag | .assets[] | select(.name | startswith("Sotto-host-") | not) | . as $asset
+            | $keys | to_entries[] | select(.value as $pattern | $asset.name | test($pattern))
+            | "\(.key)\t\($asset.browser_download_url)\t\($asset.size)\t\($tag | ltrimstr("v"))"'
+          stable='{"windows-stable": "^Sotto-Setup-[0-9][^/]*[.]exe$", "mac-stable": "^Sotto-[0-9][^/]*-arm64[.]dmg$",
+            "linux-stable": "^sotto-bin-[0-9][^/]*[.]pkg[.]tar[.]zst$", "linux-stable-tar": "^Sotto-[0-9][^/]*-linux-x64[.]tar[.]gz$"}'
+          owl='{"windows-owl": "^Sotto-Owl-Setup-[^/]*[.]exe$", "mac-owl": "^Sotto-Owl-[^/]*-arm64[.]dmg$",
+            "linux-owl": "^sotto-bin-[^/]*owl[^/]*[.]pkg[.]tar[.]zst$", "linux-owl-tar": "^Sotto-Owl-[^/]*-linux-x64[.]tar[.]gz$"}'
+          # The newest Owl is the newest published release whose tag carries -owl.
+          newest_owl='[.[] | select(.draft | not) | select(.tag_name | contains("-owl."))] | max_by(.published_at) | select(. != null)'
+          found=$( {
+            gh api "repos/$REPO/releases/latest" --jq "$stable as \$keys | $lines" || true
+            gh api "repos/$REPO/releases?per_page=100" --jq "$newest_owl | $owl as \$keys | $lines" || true
+          } | tr -d '\r')
+          seen=' '
+          while IFS=$'\t' read -r key url bytes version; do
+            [ -n "$key" ] || continue
+            case "$seen" in *" $key "*) continue ;; esac
+            seen="$seen$key "
+            mb=$(( (bytes + 524288) / 1048576 ))
+            case "$key" in *-owl*) label=Owl ;; *) label=Version ;; esac
             sed -i \
-              -e "s#href=\"https://github.com/millZach/Sotto-releases/releases/latest\" data-latest-installer#href=\"$url\" data-latest-installer#g" \
-              -e "s#<span data-latest-version>[^<]*</span>#<span data-latest-version>Version $version</span>#" \
-              -e "s#<span data-latest-size>[^<]*</span>#<span data-latest-size>$mb MB</span>#" \
-              site/index.html
-            echo "Download buttons: $url (version $version, $mb MB)"
-          else
-            echo "No installer on the latest release; the buttons keep the releases page."
-          fi
-          grep -o 'href="[^"]*" data-latest-installer\|<span data-latest-[a-z]*>[^<]*</span>' site/index.html
+              -e "s#href=\"[^\"]*\" data-download=\"$key\"#href=\"$url\" data-download=\"$key\"#g" \
+              -e "s#data-download=\"$key\" data-version=\"[^\"]*\" data-size=\"[^\"]*\"#data-download=\"$key\" data-version=\"$version\" data-size=\"$mb MB\"#g" \
+              -e "s#<span data-version-of=\"$key\">[^<]*</span>#<span data-version-of=\"$key\">$label $version</span>#g" \
+              -e "s#<span data-size-of=\"$key\">[^<]*</span>#<span data-size-of=\"$key\">$mb MB</span>#g" \
+              "$page"
+            echo "$key: $url ($version, $mb MB)"
+          done <<< "$found"
+          for key in windows-stable mac-stable linux-stable linux-stable-tar windows-owl mac-owl linux-owl linux-owl-tar; do
+            case "$seen" in *" $key "*) ;; *) echo "$key: no file on its release; its links keep the releases page." ;; esac
+          done
+          grep -o 'href="[^"]*" data-download="[^"]*"\( data-version="[^"]*" data-size="[^"]*"\)\?\|<span data-[a-z]*-of="[^"]*">[^<]*</span>' "$page"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
