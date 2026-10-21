@@ -53,10 +53,11 @@ jobs:
             "linux-owl": "^sotto-bin-[^/]*owl[^/]*[.]pkg[.]tar[.]zst$", "linux-owl-tar": "^Sotto-Owl-[^/]*-linux-x64[.]tar[.]gz$"}'
           # The newest Owl is the newest published release whose tag carries -owl.
           newest_owl='[.[] | select(.draft | not) | select(.tag_name | contains("-owl."))] | max_by(.published_at) | select(. != null)'
-          found=$( {
-            gh api "repos/$REPO/releases/latest" --jq "$stable as \$keys | $lines" || true
-            gh api "repos/$REPO/releases?per_page=100" --jq "$newest_owl | $owl as \$keys | $lines" || true
-          } | tr -d '\r')
+          # A failed lookup stops the deploy, so an outage or a rate limit never swaps working links for the
+          # releases page; the site already published stays up. Only a file missing from a release falls back.
+          stable_found=$(gh api "repos/$REPO/releases/latest" --jq "$stable as \$keys | $lines")
+          owl_found=$(gh api "repos/$REPO/releases?per_page=100" --jq "$newest_owl | $owl as \$keys | $lines")
+          found=$(printf '%s\n%s\n' "$stable_found" "$owl_found" | tr -d '\r')
           seen=' '
           while IFS=$'\t' read -r key url bytes version; do
             [ -n "$key" ] || continue

@@ -872,7 +872,7 @@ footer nav a { color: var(--muted); }
     const mac = () => navigator.maxTouchPoints > 1 ? null : 'mac' // iPadOS asks for desktop pages as a Mac
     if (/Windows/.test(ua)) return 'windows'
     if (/Macintosh/.test(ua)) return mac()
-    if (/Linux|X11/.test(ua)) return 'linux'
+    if (/Linux/.test(ua)) return 'linux' // X11 alone is also FreeBSD and Solaris, which get no build
     if (/^Win/.test(platform)) return 'windows'
     if (/^Mac/.test(platform)) return mac()
     if (/Linux/.test(platform)) return 'linux'
