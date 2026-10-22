@@ -386,7 +386,8 @@ svg[data-mark] { fill: currentColor; }
 .stage.is-phone .turns { flex-wrap: wrap; row-gap: 5px; }
 .stage.is-phone .tabs span { padding: 6px 10px 8px; }
 .stage.is-phone .rcpt .p .full, .stage.is-phone .tabs .viz-l { display: none; }
-.stage.is-phone .pill { right: auto; left: 50%; bottom: 150px; margin-left: -116px; }
+.stage.is-phone .pill { right: auto; left: 50%; bottom: 22px; margin-left: -116px; }
+.stage.is-phone[data-m="app"] .pill { bottom: 84px; }
 .stage.is-phone .pill:not(.listening) { margin-left: -65px; }
 .stage.is-phone .hotkey { display: none; }
 
@@ -554,6 +555,95 @@ footer nav a { color: var(--muted); }
   .sotto-mark.is-on .eye { animation: none; transform: none; }
 }
 
+
+/* ---------- The demo on a phone: Watcher's beats one at a time, large, under a band of night ---------- */
+.mob { display: none; }
+.stage.is-phone { height: 440px; }
+.stage.is-phone .app { display: none; }
+.stage.is-phone .mob {
+  position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 22px; background: var(--w-canvas); border: 1px solid var(--w-border); color: var(--w-text);
+  font-size: 16px; line-height: 1.4; opacity: 0; transition: opacity 400ms ease;
+}
+.stage.is-phone .mob.is-on { opacity: 1; }
+.stage.is-phone .cursor { display: none; }
+.m-status, .m-top, .m-tabbar { display: none; }
+.m-sky { display: block; width: 100%; height: 132px; flex: none; }
+.m-panels { position: relative; flex: 1; min-height: 0; }
+.mp { position: absolute; inset: 0; padding: 4px 18px 20px; display: flex; flex-direction: column; justify-content: flex-start; gap: 10px; opacity: 0; visibility: hidden; transition: opacity 300ms, visibility 0s 300ms; }
+.mp > * { flex: none; }
+.mp.is-on { opacity: 1; visibility: visible; transition: opacity 300ms; }
+.m-who { display: flex; align-items: center; gap: 6px; color: var(--w-muted); font-size: 14px; margin-bottom: 2px; }
+.m-who .owl-i { width: 16px; height: 16px; color: var(--w-accent); }
+.m-you { background: var(--w-msg); border: 1px solid var(--w-border); border-radius: 16px; padding: 10px 14px; min-height: 76px; }
+.m-said { font-size: 17px; }
+.m-said.is-typing::after { content: ''; display: inline-block; width: 2px; height: 17px; background: var(--w-accent); margin-left: 2px; vertical-align: -3px; animation: blink 1s steps(2) infinite; }
+.m-reply { opacity: 0; transition: opacity 300ms; margin-top: 4px; }
+.m-reply.is-on { opacity: 1; }
+.m-row { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border: 1px solid var(--w-border); border-radius: 14px; background: var(--w-surface); opacity: 0; transform: translateY(6px); transition: opacity 300ms, transform 300ms, border-color 300ms; }
+.m-row.is-on { opacity: 1; transform: none; }
+.m-row svg[data-mark] { width: 18px; height: 18px; flex: none; }
+.m-row .ring { width: 14px; height: 14px; flex: none; }
+.m-t { font-weight: 600; font-size: 16px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-s { margin-left: auto; color: var(--w-accent); font-size: 14px; white-space: nowrap; }
+.m-row[data-state="quiet"] .m-s { color: var(--w-muted); }
+.m-row[data-state="ready"] .m-s { color: var(--w-success); }
+.m-row[data-state="needs"] { border-color: color-mix(in srgb, var(--w-warn) 55%, var(--w-border)); }
+.m-row[data-state="needs"] .m-s { color: var(--w-warn); }
+.m-row .turn { margin-left: auto; height: 26px; padding: 0 10px; font-size: 12px; flex: none; }
+.turn[data-turn="wait"] { color: var(--w-muted); border-color: var(--w-border); }
+.m-note { color: var(--w-text-2); font-size: 15px; text-align: center; margin-top: 2px; }
+.m-needs { display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-radius: 14px; background: var(--w-warn-surface); font-size: 16px; }
+.m-needs::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--w-warn); flex: none; }
+.m-needs b { font-weight: 600; }
+.m-ask { border: 1px solid var(--w-border); border-left: 4px solid var(--w-warn); border-radius: 14px; padding: 14px; background: var(--w-surface); }
+.m-q { font-weight: 600; font-size: 17px; margin-bottom: 10px; }
+.m-ask pre { margin: 0 0 14px; padding: 9px 11px; border-radius: 9px; background: var(--w-code); border: 1px solid var(--w-border); font: 13.5px ui-monospace, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.m-opts { display: flex; gap: 10px; }
+.m-opts span { flex: 1; text-align: center; padding: 11px 0; border-radius: 999px; border: 1px solid var(--w-border-2); font-size: 16px; transition: background-color 200ms, transform 150ms; }
+.m-opts .allow { background: #f9fafe; color: #16161e; border-color: #f9fafe; font-weight: 600; }
+.m-opts .allow.is-pressed { background: var(--w-success); border-color: var(--w-success); transform: scale(0.96); }
+.m-ask.answered { display: none; }
+.m-done { display: none; align-items: center; gap: 8px; font-size: 16px; color: var(--w-text-2); }
+.m-done::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--w-success); }
+.m-done.is-on { display: flex; }
+
+/* Variant B: the same beats inside Sotto's iPhone app, with its Watcher tab. */
+.stage.is-phone[data-m="app"] { height: 640px; }
+.stage.is-phone[data-m="app"] .mob { border-radius: 40px; border: 8px solid #1b1c20; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6); }
+.stage.is-phone[data-m="app"] .m-status { display: flex; justify-content: space-between; align-items: center; padding: 10px 26px 0; font-size: 14px; font-weight: 600; }
+.m-bat { width: 24px; height: 11px; border-radius: 3px; border: 1.5px solid var(--w-text-2); position: relative; }
+.m-bat::after { content: ''; position: absolute; inset: 1.5px 6px 1.5px 1.5px; background: var(--w-text-2); border-radius: 1px; }
+.stage.is-phone[data-m="app"] .m-top { display: block; padding: 10px 18px 0; }
+.m-top h4 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+.m-top h4 .owl-i { width: 26px; height: 26px; color: var(--w-accent); }
+.m-seg { display: flex; margin-top: 10px; padding: 2px; border-radius: 9px; background: var(--w-raised); }
+.m-seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: 7px; font-size: 14px; font-weight: 500; color: var(--w-text-2); }
+.m-seg span.cur { background: var(--w-overlay); color: var(--w-text); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+.m-seg b { font-weight: 600; }
+.stage.is-phone[data-m="app"] .m-sky { height: 104px; }
+.stage.is-phone[data-m="app"] .m-tabbar { display: flex; justify-content: space-around; padding: 9px 0 16px; border-top: 1px solid var(--w-border); font-size: 12px; color: var(--w-muted); flex: none; }
+.m-tabbar span { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.m-tabbar span::before { content: ''; width: 22px; height: 22px; border-radius: 6px; background: var(--w-raised); }
+.m-tabbar span.cur { color: var(--w-accent); }
+.m-tabbar span.cur::before { display: none; }
+.m-tabbar .owl-i { width: 22px; height: 22px; }
+
+/* ---------- Below the hero: four short beats and three reasons ---------- */
+.beats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 34px 40px; margin-top: 40px; }
+.beat h3 { font-size: clamp(23px, 2.2vw, 28px); line-height: 1.15; margin-top: 14px; }
+.beat p { color: var(--text-2); margin-top: 8px; max-width: 26ch; }
+.bi { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--sidebar); border: 1px solid var(--hairline); }
+.bi-owl .owl-i { width: 22px; height: 22px; color: var(--accent); }
+.bi-ring::after { content: ''; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--accent); border-top-color: transparent; animation: spin 1.5s linear infinite; }
+.bi-ask::after { content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--ask); }
+.bi-merge::after { content: ''; width: 12px; height: 12px; background: #5ad5a6; transform: rotate(45deg); border-radius: 2px; }
+.also { margin-top: 48px; color: var(--text-2); }
+.also b { color: var(--text); font-weight: 500; }
+.whys { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px 28px; }
+.whys li { border-top: 1px solid var(--hairline); padding-top: 16px; font-size: clamp(19px, 1.6vw, 22px); }
+@media (prefers-reduced-motion: reduce) { .bi-ring::after { animation: none; } }
+
 /* PROTOTYPE ONLY: the copy switcher. Removed before the pull request. */
 .proto-bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px; background: #fff; color: #111; font: 600 13px/1 system-ui, sans-serif; box-shadow: 0 8px 30px rgba(0,0,0,.5); }
 .proto-bar button { border: 0; background: #eee; color: #111; border-radius: 999px; padding: 8px 12px; cursor: pointer; font: inherit; }
@@ -583,15 +673,15 @@ footer nav a { color: var(--muted); }
   <div class="field" id="field" aria-hidden="true"><svg class="threads" id="threads"></svg></div>
 
   <div class="hero-copy">
-    <h1 id="heroTitle">Tell Watcher once. It runs your coding agents.</h1>
-    <p class="lede" id="heroLede">Watcher starts threads on your own <b data-mark="codex">Codex</b>, <b data-mark="claude">Claude Code</b> and <b data-mark="grok">Grok Build</b>, keeps them going and lands their pull requests one at a time.<span class="long"> Every question and permission still comes to you.</span></p>
+    <h1 id="heroTitle">Your coding agents, watched.</h1>
+    <p class="lede" id="heroLede">Watcher starts your threads, keeps them going and lands their pull requests one at a time.</p>
     <div class="hero-cta" id="heroDownload">
       <a class="btn primary" href="https://github.com/millZach/Sotto-releases/releases" data-download="windows-owl">
         <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
         Download Owl for Windows
       </a>
       <a class="more" href="#what">See what it does</a>
-      <p class="fine">Watcher is in Owl, the preview build. Windows 10 or 11, x64.</p>
+      <p class="fine">Watcher is in Owl, the preview. Windows 10 or 11, x64.</p>
       <p class="fine">Other systems: <a href="https://github.com/millZach/Sotto-releases/releases" data-download="mac-owl">Mac</a><span class="dot" aria-hidden="true">·</span><a href="https://github.com/millZach/Sotto-releases/releases" data-download="linux-owl">Linux</a><span class="dot" aria-hidden="true">·</span><a href="https://github.com/millZach/Sotto-releases/releases/latest" data-download="windows-stable">Stable for Windows</a><span class="dot" aria-hidden="true">·</span><a href="https://github.com/millZach/Sotto-releases/releases">All downloads</a></p>
     </div>
   </div>
@@ -679,6 +769,46 @@ footer nav a { color: var(--muted); }
           </div>
         </div>
       </div>
+      <!-- The demo on a phone: Watcher's beats one at a time at a size a phone can read, under a band of night. -->
+      <div class="mob" id="mob" aria-hidden="true">
+        <div class="m-status"><span>9:41</span><span class="m-bat"></span></div>
+        <div class="m-top">
+          <h4><svg class="owl-i"><use href="#owl"/></svg>Watcher</h4>
+          <div class="m-seg"><span id="msC" class="cur">Conversation</span><span id="msW">Watched <b id="mWN">0</b></span></div>
+        </div>
+        <svg class="m-sky" id="msky"></svg>
+        <div class="m-panels">
+          <div class="mp is-on" id="mp1">
+            <div class="m-you" id="myou"><div class="m-who">You</div><div id="mtyped" class="m-said"></div></div>
+            <div class="m-reply" id="mreply"><div class="m-who"><svg class="owl-i"><use href="#owl"/></svg>Watcher</div><div class="m-said">Starting three threads.</div></div>
+            <div class="m-row" id="mr1"><svg data-mark="codex"></svg><span class="m-t">Retry failed uploads</span><span class="m-s">Started</span></div>
+            <div class="m-row" id="mr2"><svg data-mark="claude"></svg><span class="m-t">Fix the flaky host test</span><span class="m-s">Started</span></div>
+            <div class="m-row" id="mr3"><svg data-mark="grok"></svg><span class="m-t">Tidy the Settings copy</span><span class="m-s">Started</span></div>
+          </div>
+          <div class="mp" id="mp2">
+            <div class="m-row is-on" id="mw1" data-state="working"><i class="ring"></i><span class="m-t">Retry failed uploads</span><span class="m-s" id="mw1s">Working</span></div>
+            <div class="m-row is-on" id="mw2" data-state="working"><i class="ring"></i><span class="m-t">Fix the flaky host test</span><span class="m-s" id="mw2s">Working</span></div>
+            <div class="m-row is-on" id="mw3" data-state="working"><i class="ring"></i><span class="m-t">Tidy the Settings copy</span><span class="m-s" id="mw3s">Working</span></div>
+            <p class="m-note" id="mnote">&nbsp;</p>
+          </div>
+          <div class="mp" id="mp3">
+            <div class="m-needs"><b>Needs you</b> Tidy the Settings copy</div>
+            <div class="m-ask" id="mask">
+              <div class="m-q">Push its branch?</div>
+              <pre>git push origin sotto/settings-copy</pre>
+              <div class="m-opts"><span class="allow" id="mallow">Allow once</span><span>Deny</span></div>
+            </div>
+            <p class="m-done" id="mdone">You answered. It carries on.</p>
+          </div>
+          <div class="mp" id="mp4">
+            <div class="m-row is-on"><span class="m-t">Retry failed uploads</span><span class="turn" id="mt74" data-turn="ready">READY</span></div>
+            <div class="m-row is-on"><span class="m-t">Fix the flaky host test</span><span class="turn" id="mt75" data-turn="wait">WAITING</span></div>
+            <div class="m-row is-on"><span class="m-t">Tidy the Settings copy</span><span class="turn" id="mt76" data-turn="wait">WAITING</span></div>
+            <p class="m-note" id="mmerged">&nbsp;</p>
+          </div>
+        </div>
+        <div class="m-tabbar"><span>Threads</span><span class="cur"><svg class="owl-i"><use href="#owl"/></svg>Watcher</span><span>Computers</span></div>
+      </div>
       <div class="hotkey" id="hotkey">Ctrl + Shift + Space</div>
       <div class="pill" id="pill"><span class="pi"><img src="icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="pillTime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
       <div class="cursor" id="cursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
@@ -703,95 +833,28 @@ footer nav a { color: var(--muted); }
 
 <main>
   <section id="what">
-    <h2>Give Watcher the work. Keep the decisions.</h2>
-    <p class="sub">It runs on your own accounts, on your own computer. Nothing to sign up for.</p>
-
-    <div class="moment">
-      <div>
-        <span class="tag">Talk to Watcher</span>
-        <h3>Say it once.</h3>
-        <p>Type or dictate what you want. Watcher splits it into threads and starts each one on Codex, Claude Code or Grok Build.</p>
-      </div>
-      <div class="vig vt" id="vt" aria-hidden="true">
-        <div class="msg is-on is-shown"><div class="you"><div class="meta"><b>You</b>9:12 am</div><div class="said">Port pairing to Android and profile main's update path.</div></div></div>
-        <div class="msg is-on is-shown"><div class="meta"><svg class="owl-i"><use href="#owl"/></svg><b>Watcher</b>9:12 am</div><div class="said">Two threads. Starting them now.</div>
-          <div class="receipts">
-            <div class="rcpt" id="vt1"><span class="k">Started</span><svg data-mark="claude"></svg><span class="t">Port pairing to Android</span><span class="p">Claude Code</span></div>
-            <div class="rcpt" id="vt2"><span class="k">Started</span><svg data-mark="codex"></svg><span class="t">Profile main's update path</span><span class="p">Codex</span></div>
-          </div>
-        </div>
-      </div>
+    <h2>What Watcher does.</h2>
+    <div class="beats">
+      <div class="beat"><i class="bi bi-owl"><svg class="owl-i"><use href="#owl"/></svg></i><h3>Say it once.</h3><p>Watcher splits it into threads and starts them.</p></div>
+      <div class="beat"><i class="bi bi-ring"></i><h3>It keeps them going.</h3><p>It follows up when one goes quiet.</p></div>
+      <div class="beat"><i class="bi bi-ask"></i><h3>Only what needs you.</h3><p>Questions and permissions come to you. Watcher never answers them.</p></div>
+      <div class="beat"><i class="bi bi-merge"></i><h3>Merges in turn.</h3><p>Each pull request lands once its checks pass.</p></div>
     </div>
-
-    <div class="moment">
-      <div>
-        <span class="tag">Watching</span>
-        <h3>It keeps them going.</h3>
-        <p>Watcher follows each thread's news, steers a turn that drifts and follows up on one that goes quiet. <b>An owl in the margin stands for each thread it watches.</b></p>
-      </div>
-      <div class="vig vw" id="vw" aria-hidden="true">
-        <div class="wcard" data-state="working"><i class="ring"></i><span class="t">Port pairing to Android</span><span class="st">Working</span><span class="last">Watcher sent to it at 9:12.</span></div>
-        <div class="wcard" id="vw2" data-state="quiet"><i class="ring"></i><span class="t">Profile main's update path</span><span class="st" id="vw2s">Quiet</span><span class="last" id="vw2l">No progress for 20 minutes.</span></div>
-        <div class="wcard" data-state="ready"><i class="ring"></i><span class="t">Retry failed uploads</span><span class="st">Ready for review</span><span class="last">PR #74 open.</span></div>
-      </div>
-    </div>
-
-    <div class="moment">
-      <div>
-        <span class="tag">Needs you</span>
-        <h3>Only what needs you.</h3>
-        <p>A thread's question or permission comes to you on its own card. Everything else stays quiet. <b>Watcher never answers for you.</b></p>
-      </div>
-      <div class="vig vn" id="vn" aria-hidden="true">
-        <div class="glance"><b>1 needs you</b><span>Port pairing to Android, permission</span></div>
-        <div class="ask" id="vnask"><div class="q">Bash: git push <span>Bash</span></div><pre>git push origin sotto/android-pairing</pre><div class="cwd">in sotto</div><div class="opts"><span class="allow" id="vnallow">Allow once</span><span>Deny</span></div></div>
-        <div class="answered-line" id="vnans">You answered Port pairing to Android.</div>
-        <div class="cursor" id="vncursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
-      </div>
-    </div>
-
-    <div class="moment">
-      <div>
-        <span class="tag">PRs land</span>
-        <h3>Pull requests merge in turn.</h3>
-        <p>When a pull request's checks pass, Watcher gives it its turn to merge, one at a time. Visualize shows the order as it happens.</p>
-      </div>
-      <div class="vig vm" id="vm" aria-hidden="true">
-        <div class="turns"><span class="lbl">Merge turns</span><span class="turn" id="vm1" data-turn="ready">READY #74</span><span class="turn" id="vm2" data-turn="ready">READY #75</span><span class="turn" id="vm3" data-turn="ready">READY #76</span></div>
-        <div class="lane">
-          <div><i class="dotc pass" id="vmc1"></i><b>#74</b> Retry failed uploads</div>
-          <div><i class="dotc pass" id="vmc2"></i><b>#75</b> Fix the flaky host test</div>
-          <div><i class="dotc pass" id="vmc3"></i><b>#76</b> Tidy the Settings copy</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="moment minor">
-      <div>
-        <span class="tag">Dictation</span>
-        <h3>And it still types for you.</h3>
-        <p>Press <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, talk, press again. Your names come back spelled right.</p>
-      </div>
-      <div class="vig vd" id="vd" aria-hidden="true">
-        <div class="pill is-on" id="vdpill"><span class="pi"><img src="icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="vdtime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
-        <div class="line" id="vdline"><span>Send</span><span class="hit">Priya</span><span>the</span><span class="hit">Kubernetes</span><span>rollout</span><span>note</span><span>before</span><span>standup.</span></div>
-      </div>
-    </div>
+    <p class="also"><b>Dictation too.</b> Press <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app and talk.</p>
   </section>
 
   <section id="why">
     <h2>Why Sotto.</h2>
-    <div class="pairs">
-      <div class="pair"><p class="else">Six agent apps, six terminals.</p><p class="here">One Watcher, every thread.</p></div>
-      <div class="pair"><p class="else">Babysitting checks and merges.</p><p class="here">Pull requests land one at a time.</p></div>
-      <div class="pair"><p class="else">An agent that answers for you.</p><p class="here">Every permission comes to you.</p></div>
-      <div class="pair"><p class="else">An account and telemetry.</p><p class="here">No account. No analytics. Audio never touches the disk.</p></div>
-    </div>
+    <ul class="whys">
+      <li>One Watcher for every thread.</li>
+      <li>You answer every permission.</li>
+      <li>No account. No analytics.</li>
+    </ul>
   </section>
 
   <section id="download">
-    <h2>Free to download.</h2>
-    <p class="sub">Free, open source, and in beta. Dictation runs on your computer, so it needs no key.</p>
+    <h2>Download.</h2>
+    <p class="sub">Free and open source.</p>
     <div class="get" id="getDownload">
       <div class="body">
         <div class="buttons">
@@ -802,7 +865,7 @@ footer nav a { color: var(--muted); }
         </div>
         <p class="spec"><span data-version-of="windows-owl">Owl 0.1.38-owl.20261021.2</span><span data-size-of="windows-owl"></span><span>Windows 10 or 11, x64</span></p>
         <ul>
-          <li><b>What it costs</b>Nothing for dictation: it runs on this computer. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand cleanups. Your agents bill the way they already do.</li>
+          <li><b>What it costs</b>Free. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand.</li>
           <li><b>First run</b>Owl installs over Sotto and keeps your settings and threads. If SmartScreen asks, choose More info, then Run anyway. Owl updates itself to each new Owl.</li>
           <li><b>Owl or Stable</b>Owl is the preview, with Watcher. <a href="https://github.com/millZach/Sotto-releases/releases/latest" data-download="windows-stable">Stable for Windows</a> is the release most people use; Watcher isn’t in it yet.</li>
           <li><b>Another computer</b><a href="https://github.com/millZach/Sotto-releases/releases" data-download="mac-owl">Mac</a><span class="dot" aria-hidden="true">·</span><a href="https://github.com/millZach/Sotto-releases/releases" data-download="linux-owl">Linux</a>. Every other file is on <a href="https://github.com/millZach/Sotto-releases/releases">the releases page</a>.</li>
@@ -823,7 +886,7 @@ footer nav a { color: var(--muted); }
     </template>
     <div class="oss">
       <svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      <p><b>Open source, MIT licensed.</b> Read the code, file an issue, or star it on GitHub.</p>
+      <p><b>Open source, MIT licensed.</b></p>
       <a class="gh-btn" href="https://github.com/millZach/Sotto"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg>Star on GitHub</a>
     </div>
   </section>
@@ -874,10 +937,10 @@ footer nav a { color: var(--muted); }
   }
   const ORDER = ['windows', 'mac', 'linux']
   const TRACKS = {
-    stable: { label: 'Stable', line: 'The release most people use. Watcher isn’t in it yet.', fine: 'Free and open source. Watcher isn’t in Stable yet.' },
-    owl: { label: 'Owl preview', line: 'The preview: a newer build, daily when anything has merged, with features still being tried out. It installs in place of Stable and keeps your settings and threads.', fine: 'Watcher is in Owl, the preview build.' },
+    stable: { label: 'Stable', line: 'The release most people use. No Watcher yet.', fine: 'Free and open source. No Watcher yet.' },
+    owl: { label: 'Owl preview', line: 'Newer, with Watcher. Installs over Stable and keeps your threads.', fine: 'Watcher is in Owl, the preview.' },
   }
-  const COST = 'Nothing for dictation: it runs on this computer. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand cleanups. Your agents bill the way they already do.'
+  const COST = 'Free. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand.'
 
   // The browser's own answer when it gives one, else its user agent, else its platform. Phones, tablets,
   // Chrome OS and anything unknown get no build. Every Mac browser says "Intel Mac OS X", so a Mac is assumed
@@ -992,26 +1055,15 @@ footer nav a { color: var(--muted); }
 </script>
 
 <script>
-// PROTOTYPE ONLY: switch the hero copy between three drafts. Removed before the pull request.
+// PROTOTYPE ONLY: switch the phone demo between its two variants. Removed before the pull request.
 (() => {
   if (location.hostname === 'saysotto.com') return
-  const COPY = {
-    A: ['Tell Watcher once. It runs your coding agents.', null],
-    B: ['Watcher runs the threads. You make the calls.', 'One instruction starts the work on your own <b data-mark="codex">Codex</b>, <b data-mark="claude">Claude Code</b> and <b data-mark="grok">Grok Build</b>. Watcher follows up and lands each pull request in turn<span class="long">, and brings you only what needs you</span>.'],
-    C: ['Your coding agents, watched.', 'Watcher starts your threads, keeps them going and lands their pull requests one at a time.<span class="long"> You answer only what needs you.</span>'],
-  }
-  const lede = document.getElementById('heroLede').innerHTML
   const bar = document.createElement('div'); bar.className = 'proto-bar'
-  bar.innerHTML = '<span>Prototype · headline</span>' + Object.keys(COPY).map((k) => `<button type="button" data-copy="${k}">${k}</button>`).join('')
+  bar.innerHTML = '<span>Prototype · phone demo</span><button type="button" data-m="focus">A</button><button type="button" data-m="app">B</button>'
   document.body.appendChild(bar)
-  function pick(k) {
-    document.getElementById('heroTitle').textContent = COPY[k][0]
-    document.getElementById('heroLede').innerHTML = COPY[k][1] || lede
-    bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.copy === k)))
-    const u = new URL(location.href); u.searchParams.set('copy', k); history.replaceState(null, '', u)
-  }
-  bar.addEventListener('click', (e) => { const b = e.target.closest('[data-copy]'); if (b) pick(b.dataset.copy) })
-  pick(new URLSearchParams(location.search).get('copy') || 'A')
+  const cur = new URLSearchParams(location.search).get('m') === 'app' ? 'app' : 'focus'
+  bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.m === cur)))
+  bar.addEventListener('click', (e) => { const b = e.target.closest('[data-m]'); if (!b) return; const u = new URL(location.href); u.searchParams.set('m', b.dataset.m); location.replace(u) })
 })()
 </script>
 <script>
@@ -1274,6 +1326,57 @@ footer nav a { color: var(--muted); }
     }
   }
 
+  // ---------- The phone's band of night: the same owls and moon, drawn as shapes at a size a phone shows well ----------
+  const hash = (n) => { const v = Math.sin(n * 12.9898) * 43758.5453; return v - Math.floor(v) }
+  const SKY = Array.from({ length: 22 }, (_, i) => ({ x: hash(i + 1), y: hash(i + 101) * 0.62, s: 0.6 + hash(i + 201) * 1.1, ph: hash(i + 301) * 6.28, acc: hash(i + 401) < 0.2 }))
+  let lastSky = -1
+  function drawSky(t, now) {
+    const svg = $('msky')
+    if (!svg) return
+    const frame = Math.floor(now / 33)
+    if (frame === lastSky) return
+    lastSky = frame
+    const W = svg.clientWidth || 360, H = svg.clientHeight || 132
+    const g = { moon: { x: W - 58, y: H * 0.38, r: 22 }, spots: [0.12, 0.29, 0.46].map((k) => ({ x: W * k, y: H - 16 })) }
+    const m = g.moon, w = reduced ? 0 : whirlAt(t)
+    let s = ''
+    for (const st of SKY) s += `<circle cx="${(st.x * W).toFixed(1)}" cy="${(st.y * H).toFixed(1)}" r="${st.s.toFixed(2)}" fill="${st.acc ? '#56c4b6' : '#f2f2f8'}" opacity="${(0.25 + 0.35 * (reduced ? 1 : 0.5 + 0.5 * Math.sin(now / 900 + st.ph))).toFixed(2)}"/>`
+    s += `<circle cx="${m.x}" cy="${m.y}" r="${m.r * 1.9}" fill="#47b8a9" opacity="0.08"/>
+      <circle cx="${m.x}" cy="${m.y}" r="${m.r}" fill="#f9fafd" fill-opacity="0.14" stroke="#f9fafd" stroke-opacity="0.85" stroke-width="1.5"/>
+      <circle cx="${m.x - m.r * 0.3}" cy="${m.y - m.r * 0.25}" r="${m.r * 0.22}" fill="#f9fafd" fill-opacity="0.12"/>
+      <circle cx="${m.x + m.r * 0.28}" cy="${m.y + m.r * 0.12}" r="${m.r * 0.15}" fill="#f9fafd" fill-opacity="0.12"/>`
+    // The whirlpool: three arms turning in the moon while an owl comes out or goes home.
+    if (w > 0.02) {
+      s += `<circle cx="${m.x}" cy="${m.y}" r="${m.r * 0.96}" fill="#0c3b36" opacity="${(0.9 * w).toFixed(2)}"/><g opacity="${w.toFixed(2)}" transform="rotate(${(-now * 0.3) % 360} ${m.x} ${m.y})">`
+      for (let k = 0; k < 3; k++) {
+        let d = ''
+        for (let i = 0; i <= 16; i++) { const u = i / 16, a = k * 2.094 + u * 3.4, rr = u * m.r * (0.9 + 0.5 * w); d += `${i ? 'L' : 'M'}${(m.x + Math.cos(a) * rr).toFixed(1)} ${(m.y + Math.sin(a) * rr).toFixed(1)}` }
+        s += `<path d="${d}" fill="none" stroke="#56c4b6" stroke-width="2.2" stroke-linecap="round"/>`
+      }
+      s += '</g>'
+    }
+    s += `<path d="M0 ${H - 15.5}H${W}" stroke="#f2f2f8" stroke-opacity="0.28"/>`
+    for (let i = 0; i < OWLS.length; i++) {
+      const o = OWLS[i], p = owlPose(o, t, g)
+      if (!p || p.alpha <= 0.02) continue
+      const state = stateAt(o, t), size = p.fly ? 26 : 32, h = size * 67 / 72
+      const x0 = p.x - size / 2, y0 = p.y - h
+      const tilt = p.fly && !reduced ? Math.sin(now / 90 + i) * 10 : 0
+      const blink = !reduced && !p.fly && state !== 'quiet' && (now / 1000 + i * 1.37) % 6.1 < 0.15
+      const ex = [(36 - 12) / 72 * size, (60.36 - 12) / 72 * size], ey = [(48.96 - 15) / 67 * h, (51.84 - 15) / 67 * h], er = 3.6 / 72 * size
+      let eyes = ''
+      if (state === 'quiet' || blink) eyes = ex.map((x, k) => `<path d="M${x0 + x - er * 1.2} ${y0 + ey[k]}h${er * 2.4}" stroke="#dfe2e8" stroke-width="1.8" stroke-linecap="round"/>`).join('')
+      else {
+        const needs = state === 'needs', pulse = needs && !reduced ? 0.55 + 0.45 * Math.sin(now / 1800 * Math.PI * 2) : 1
+        if (needs) eyes += `<circle cx="${p.x}" cy="${y0 + h * 0.5}" r="${size * 0.75}" fill="#ffb900" opacity="${(0.16 * pulse).toFixed(2)}"/>`
+        eyes += ex.map((x, k) => `<circle cx="${x0 + x}" cy="${y0 + ey[k]}" r="${er}" fill="${needs ? '#ffb900' : '#56c4b6'}"/>`).join('')
+      }
+      s += `<g opacity="${p.alpha.toFixed(2)}" transform="rotate(${tilt.toFixed(1)} ${p.x} ${y0 + h / 2})"><svg x="${x0}" y="${y0}" width="${size}" height="${h}" viewBox="12 15 72 67"><use href="#owl" fill="#dfe2e8"/></svg>${eyes}</g>`
+    }
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+    svg.innerHTML = s
+  }
+
   // ---------- Watcher's picture, drawn for the Visualize tab from the same clock ----------
   const NODES = [
     { x: 70, y: 168, title: 'Retry failed uploads', pr: 74, ready: 0, go: 24400, merged: 25600 },
@@ -1341,7 +1444,7 @@ footer nav a { color: var(--muted); }
   if (wide) at(2600, gatherMotes)
   at(3550, on('sottoMark'))
   at(4400, () => sotto.classList.add('open'))
-  at(4950, on('app'))
+  at(4950, on('app')); at(4950, on('mob'))
   at(5150, () => { sotto.classList.add('gone'); stage.classList.add('is-floating'); $('controls').classList.add('is-on'); $('progress').classList.add('is-on') })
 
   // 1. Talk to Watcher: dictate one instruction; Watcher starts a thread for each part, and an owl comes out of the moon for each.
@@ -1349,7 +1452,11 @@ footer nav a { color: var(--muted); }
   at(5900, on('hotkey'))
   at(6400, () => { $('pill').classList.add('listening'); $('composer').classList.add('is-live'); $('typed').classList.add('is-typing'); $('hotkey').classList.remove('is-on') })
   for (let s = 1; s <= 3; s++) at(6400 + s * 1000, () => { $('pillTime').textContent = `00:0${s}` })
-  const typedEnd = typeInto('typed', 'Retry failed uploads, fix the flaky host test and tidy the Settings copy. One pull request each.', 6600)
+  const SAID = 'Retry failed uploads, fix the flaky host test and tidy the Settings copy. One pull request each.'
+  const typedEnd = typeInto('typed', SAID, 6600)
+  typeInto('mtyped', SAID, 6600)
+  at(6400, () => $('mtyped').classList.add('is-typing'))
+  at(typedEnd + 300, () => $('mtyped').classList.remove('is-typing'))
   at(typedEnd + 300, () => { $('pill').classList.remove('listening'); $('typed').classList.remove('is-typing') })
   at(typedEnd + 500, () => { $('send').classList.add('is-hot'); cursor.classList.add('is-on'); moveCursor('send', 6, 6) })
   at(typedEnd + 1100, press('send'))
@@ -1385,19 +1492,42 @@ footer nav a { color: var(--muted); }
     at(n.merged, turn(n.pr, 'merged', `MERGED #${n.pr}`))
   }
   at(26000, text('watchN', '2')); at(28000, text('watchN', '1')); at(30000, text('watchN', '0'))
+
+  // The same story on a phone, one beat at a time.
+  const panel = (n) => () => { for (let k = 1; k <= 4; k++) $(`mp${k}`).classList.toggle('is-on', k === n) }
+  const seg = (c) => () => { $('msC').classList.toggle('cur', c === 'C'); $('msW').classList.toggle('cur', c === 'W') }
+  const mrow = (id, state, st) => () => { $(id).dataset.state = state; $(`${id}s`).textContent = st }
+  at(10900, on('mreply'))
+  ;[11500, 12200, 12900].forEach((ms, i) => at(ms, () => { $(`mr${i + 1}`).classList.add('is-on'); $('mWN').textContent = String(i + 1) }))
+  at(14600, panel(2)); at(14600, seg('W'))
+  at(15400, mrow('mw1', 'ready', 'PR #74 open'))
+  at(16000, mrow('mw2', 'quiet', 'Quiet')); at(16000, text('mnote', 'One went quiet.'))
+  at(17000, text('mnote', 'Watcher follows up.'))
+  at(17600, mrow('mw2', 'working', 'Working')); at(17600, text('mnote', 'It\u2019s working again.'))
+  at(19200, mrow('mw3', 'needs', 'Needs you')); at(19200, panel(3)); at(19200, seg('C'))
+  at(21600, () => $('mallow').classList.add('is-pressed'))
+  at(21900, () => { $('mask').classList.add('answered'); $('mdone').classList.add('is-on') })
+  at(23600, panel(4)); at(23600, seg('W'))
+  for (const n of NODES) {
+    if (n.ready) at(n.ready, () => { const el = $(`mt${n.pr}`); el.dataset.turn = 'ready'; el.textContent = 'READY' })
+    at(n.go, () => { const el = $(`mt${n.pr}`); el.dataset.turn = 'go'; el.textContent = 'GO MERGE' })
+    at(n.merged, () => { const el = $(`mt${n.pr}`); el.dataset.turn = 'merged'; el.textContent = 'MERGED' })
+  }
+  at(26000, text('mWN', '2')); at(28000, text('mWN', '1')); at(30000, text('mWN', '0'))
+  at(31000, text('mmerged', 'All three merged.'))
   at(END, () => {})
   T.sort((a, b) => a.at - b.at)
 
   // Reset puts the column back as the page shipped it; the night and the picture are drawn from the clock.
-  const colHTML = $('col').innerHTML
+  const colHTML = $('col').innerHTML, mobHTML = $('mob').innerHTML
   let clock = 0, applied = 0, playing = false, last = 0, finished = false
   function reset() {
-    $('col').innerHTML = colHTML
-    for (const id of ['sottoMark', 'app', 'pill', 'hotkey', 'cursor']) $(id).classList.remove('is-on', 'open', 'gone', 'listening', 'press')
+    $('col').innerHTML = colHTML; $('mob').innerHTML = mobHTML
+    for (const id of ['sottoMark', 'app', 'mob', 'pill', 'hotkey', 'cursor']) $(id).classList.remove('is-on', 'open', 'gone', 'listening', 'press')
     stage.classList.remove('is-floating')
     $('pillTime').textContent = '00:00'
     cursor.style.transform = ''
-    lastPic = ''; lastNight = -1
+    lastPic = ''; lastNight = -1; lastSky = -1
     applied = 0; finished = false
   }
   function seek(t, keepPlaying = true) {
@@ -1430,7 +1560,7 @@ footer nav a { color: var(--muted); }
     }
     last = now
     if (!reduced) drift(now)
-    if (clock >= 4950) drawNight(clock, now)
+    if (clock >= 4950) { if (stage.classList.contains('is-phone')) drawSky(clock, now); else drawNight(clock, now) }
     if (clock >= 23600) drawPic(clock)
     requestAnimationFrame(tick)
   }
@@ -1451,6 +1581,7 @@ footer nav a { color: var(--muted); }
   }, { threshold: 0.15 }).observe(stage)
 
   // Phones get the tall single column at full size; wider screens scale the whole window.
+  stage.dataset.m = new URLSearchParams(location.search).get('m') === 'app' ? 'app' : 'focus'
   function fit() {
     const phone = innerWidth <= 760
     stage.classList.toggle('is-phone', phone)
@@ -1473,60 +1604,6 @@ footer nav a { color: var(--muted); }
   } else seek(START, true)
   last = performance.now()
   requestAnimationFrame(tick)
-
-  // ---------- Looping vignettes below the hero, running only while on screen ----------
-  function vignette(root, period, steps, resetFn, restAt = Infinity) {
-    let timers = [], running = false
-    function run() {
-      resetFn()
-      timers = steps.map((s) => setTimeout(s.fn, s.at))
-      timers.push(setTimeout(run, period))
-    }
-    function stop() { timers.forEach(clearTimeout); timers = []; running = false }
-    // At rest each card shows a finished moment, and holds it for a beat on screen before the loop starts.
-    resetFn(); steps.filter((s) => reduced || s.at <= restAt).forEach((s) => s.fn())
-    if (reduced) return
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !running) { running = true; timers = [setTimeout(run, 2600)] }
-      else if (!e.isIntersecting && running) stop()
-    }, { threshold: 0.3 }).observe(root)
-  }
-  const cls = (id, c, onOff) => () => $(id).classList.toggle(c, onOff)
-
-  // Talk to Watcher: the threads it starts arrive under its reply.
-  vignette($('vt'), 6000, [{ at: 700, fn: cls('vt1', 'is-on', true) }, { at: 1400, fn: cls('vt2', 'is-on', true) }], () => { $('vt1').classList.remove('is-on'); $('vt2').classList.remove('is-on') })
-
-  // Watching: a quiet thread gets a follow-up and starts working again.
-  const vw = (state, st, lastLine) => () => { $('vw2').dataset.state = state; $('vw2s').textContent = st; $('vw2l').textContent = lastLine }
-  vignette($('vw'), 7000, [
-    { at: 1600, fn: vw('quiet', 'Quiet', 'Watcher is sending to it now.') },
-    { at: 2600, fn: vw('working', 'Working', 'Watcher sent to it at 9:34.') },
-  ], vw('quiet', 'Quiet', 'No progress for 20 minutes.'))
-
-  // Needs you: the card asks, the cursor answers.
-  const vnc = $('vncursor')
-  vignette($('vn'), 7000, [
-    { at: 1200, fn: () => { const t = $('vnallow').getBoundingClientRect(), r = $('vn').getBoundingClientRect(); vnc.style.transform = `translate(${t.left - r.left + 34}px, ${t.top - r.top + 12}px)`; vnc.classList.add('is-on') } },
-    { at: 2300, fn: () => { $('vnallow').classList.add('is-pressed'); vnc.classList.add('press') } },
-    { at: 2700, fn: () => { $('vnask').classList.add('answered'); $('vnans').classList.add('is-on'); vnc.classList.remove('is-on', 'press') } },
-  ], () => { $('vnask').classList.remove('answered'); $('vnallow').classList.remove('is-pressed'); $('vnans').classList.remove('is-on'); vnc.classList.remove('is-on', 'press'); vnc.style.transform = 'translate(20px, 150px)' }, 0)
-
-  // PRs land: each ready pull request gets its turn, then the next.
-  const vmT = (n, state, label) => () => { const el = $(`vm${n}`); el.dataset.turn = state; el.textContent = label }
-  const vmSteps = []
-  ;[74, 75, 76].forEach((pr, i) => {
-    vmSteps.push({ at: 700 + i * 1700, fn: vmT(i + 1, 'go', `GO MERGE #${pr}`) })
-    vmSteps.push({ at: 1600 + i * 1700, fn: vmT(i + 1, 'merged', `MERGED #${pr}`) })
-  })
-  vignette($('vm'), 7600, vmSteps, () => [74, 75, 76].forEach((pr, i) => vmT(i + 1, 'ready', `READY #${pr}`)()))
-
-  // Dictation: press, listen, stop, words land with the dictionary hits marked.
-  const words = [...$('vdline').children]
-  const vd = [{ at: 600, fn: cls('vdpill', 'listening', true) }]
-  for (let s = 1; s <= 3; s++) vd.push({ at: 600 + s * 1000, fn: () => { $('vdtime').textContent = `00:0${s}` } })
-  vd.push({ at: 3900, fn: cls('vdpill', 'listening', false) })
-  words.forEach((w, i) => vd.push({ at: 4300 + i * 140, fn: () => w.classList.add('is-on') }))
-  vignette($('vd'), 8200, vd, () => { $('vdpill').classList.remove('listening'); $('vdtime').textContent = '00:00'; words.forEach((w) => w.classList.remove('is-on')) })
 
   addEventListener('scroll', () => $('strip').classList.toggle('is-scrolled', scrollY > 8), { passive: true })
 })()
