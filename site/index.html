@@ -483,9 +483,6 @@ kbd { font: inherit; font-size: 11.5px; padding: 1px 6px; border: 1px solid var(
 }
 .btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .btn:hover { text-decoration: none; }
-.btn .under-wave { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; opacity: 0; transition: opacity 250ms; }
-.btn:hover .under-wave, .btn:focus-visible .under-wave { opacity: 1; }
-.btn .under-wave path { fill: none; stroke: currentColor; stroke-width: 1.5; }
 .btn svg.os { width: 18px; height: 18px; fill: currentColor; }
 .fine { color: var(--muted); font-size: 15px; }
 
@@ -777,7 +774,7 @@ footer nav a { color: var(--muted); }
         <div class="buttons">
           <a class="btn primary" href="https://github.com/millZach/Sotto-releases/releases/latest" data-download="windows-stable">
             <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
-            Download for Windows<svg class="under-wave" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 Q 12 0 25 6 T 50 6 T 75 6 T 100 6 T 125 6 T 150 6 T 175 6 T 200 6"/></svg>
+            Download for Windows
           </a>
         </div>
         <p class="spec"><span data-version-of="windows-stable">Version 0.1.39</span><span data-size-of="windows-stable"></span><span>Windows 10 or 11, x64</span></p>
@@ -832,7 +829,6 @@ footer nav a { color: var(--muted); }
     mac: '<svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.1 1.72-3.1 1.8-3.15-.98-1.43-2.5-1.63-3.05-1.65-1.3-.13-2.53.76-3.19.76-.66 0-1.67-.74-2.75-.72-1.41.02-2.72.82-3.45 2.09-1.47 2.55-.38 6.33 1.06 8.4.7 1.01 1.53 2.15 2.62 2.11 1.05-.04 1.45-.68 2.72-.68 1.27 0 1.63.68 2.74.66 1.13-.02 1.85-1.03 2.54-2.05.8-1.17 1.13-2.31 1.15-2.37-.03-.01-2.2-.85-2.22-3.36zM14.3 6.43c.58-.7.97-1.68.86-2.65-.83.03-1.84.55-2.44 1.25-.53.62-1 1.62-.88 2.57.93.07 1.88-.47 2.46-1.17z"/></svg>',
     linux: '<svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c-.9 2.2-1.5 3.7-2.5 5.9.6.6 1.4 1.3 2.6 2.1-1.3-.5-2.2-1.1-2.9-1.7C7.9 11.4 5.7 15.6 2 22c2.9-1.7 5.2-2.7 7.3-3.1-.1-.4-.2-.8-.2-1.3v-.1c.1-1.9 1.1-3.4 2.3-3.3 1.2.1 2.2 1.7 2.1 3.6 0 .4-.1.7-.1 1 2.1.4 4.3 1.4 7.2 3.1-.6-1.1-1.1-2-1.6-2.9-.8-.6-1.6-1.4-3.3-2.3 1.2.3 2 .6 2.7.9C16.3 12.3 14.9 8.2 12 2z"/></svg>',
   }
-  const WAVE = '<svg class="under-wave" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 Q 12 0 25 6 T 50 6 T 75 6 T 100 6 T 125 6 T 150 6 T 175 6 T 200 6"/></svg>'
   // pacman needs the package's own file name; a link still on the releases page gets the pattern instead.
   const pkg = (key, pattern) => /\.pkg\.tar\.zst$/.test(builds[key].href) ? builds[key].href.split('/').pop() : pattern
   const SYSTEMS = {
@@ -885,7 +881,7 @@ footer nav a { color: var(--muted); }
   const button = (system, where) => {
     const key = `${system}-${track}`, s = SYSTEMS[system]
     const label = track === 'owl' ? `Download Owl for ${s.name}` : `Download for ${s.name}`
-    return `<a class="btn primary" data-download="${key}" href="${esc(builds[key].href)}" data-focus="${where}-download">${ICON[system]}${label}${where === 'card' ? WAVE : ''}</a>`
+    return `<a class="btn primary" data-download="${key}" href="${esc(builds[key].href)}" data-focus="${where}-download">${ICON[system]}${label}</a>`
       + (system === 'linux' ? ` <a class="tarball" data-download="${key}-tar" href="${esc(builds[`${key}-tar`].href)}" data-focus="${where}-tarball" aria-label="Or download the ${track === 'owl' ? 'Owl ' : ''}.tar.gz for Linux">or the .tar.gz</a>` : '')
   }
   const spec = (system) => {
@@ -1025,8 +1021,11 @@ footer nav a { color: var(--muted); }
       m.home = [rnd(x0, Math.max(x0, x1)), rnd(y0, Math.max(y0, y1))]
     })
   }
-  // The sky stays dark while the hero is in view, so the first screen shows each provider once.
-  new IntersectionObserver(([e]) => sky.classList.toggle('is-on', e.intersectionRatio < 0.4), { threshold: [0, 0.4, 1] }).observe($('top'))
+  // The sky shows whenever the hero's own marks are not on screen: once they gather into the demo, or once the hero
+  // scrolls away. So the page always has its marks drifting, and the first screen never shows a provider twice.
+  let heroOut = false
+  const updateSky = () => sky.classList.toggle('is-on', heroOut || heroMotes[0].gathered)
+  new IntersectionObserver(([e]) => { heroOut = e.intersectionRatio < 0.4; updateSky() }, { threshold: [0, 0.4, 1] }).observe($('top'))
   let holdUntil = 0
   function drift(now) {
     const W = field.clientWidth, H = field.clientHeight, SW = innerWidth, SH = innerHeight
@@ -1057,6 +1056,7 @@ footer nav a { color: var(--muted); }
       m.el.style.transform = `translate(${cx}px, ${cy}px) scale(0.3)`
     }
     threads.innerHTML = ''
+    updateSky()
   }
   function releaseMotes() {
     for (const m of motes) {
@@ -1067,6 +1067,7 @@ footer nav a { color: var(--muted); }
       setTimeout(() => m.el.classList.remove('return'), 950)
     }
     holdUntil = performance.now() + 900
+    updateSky()
   }
 
   // ---------- Timeline ----------
