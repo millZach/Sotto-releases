@@ -1506,7 +1506,7 @@ footer nav a { color: var(--muted); }
   const WAT = { x: 440, y: 150 }, DOTX = 318
   let lastPic = ''
   function drawPic(t) {
-    const key = NODES.map((n) => [t >= n.ready, t >= n.go, t >= n.merged, t >= n.go && t < n.go + 800 ? Math.round((t - n.go) / 40) : -1].join()).join('|')
+    const key = NODES.map((n) => [t >= n.ready, t >= n.go, t >= n.merged, t >= n.go && t < n.go + 800 ? Math.round((t - n.go) / 40) : -1].join()).join('|') + `|${t >= 31000}`
     if (key === lastPic) return
     lastPic = key
     const working = NODES.filter((n) => t < n.merged).length
@@ -1633,7 +1633,9 @@ footer nav a { color: var(--muted); }
 
   // Reset puts the column and the phone back as the page shipped them; the night and the picture are drawn from the clock.
   const colHTML = $('col').innerHTML, mobHTML = $('mob').innerHTML
-  let clock = 0, applied = 0, playing = false, last = 0, finished = false
+  // The night and the picture paint while the demo plays, and once more after a seek or a resize; a stopped or
+  // hidden demo paints nothing.
+  let clock = 0, applied = 0, playing = false, last = 0, finished = false, needsPaint = true
   function reset() {
     $('col').innerHTML = colHTML; $('mob').innerHTML = mobHTML
     for (const id of ['sottoMark', 'app', 'mob', 'pill', 'hotkey', 'cursor']) $(id).classList.remove('is-on', 'open', 'gone', 'listening', 'press')
@@ -1655,6 +1657,7 @@ footer nav a { color: var(--muted); }
     document.querySelectorAll('#col .msg.is-on').forEach((el) => el.classList.add('is-shown'))
     toEnd()
     playing = keepPlaying
+    needsPaint = true
     updateControls()
   }
   function updateControls() {
@@ -1680,8 +1683,11 @@ footer nav a { color: var(--muted); }
     }
     last = now
     if (!reduced) drift(now)
-    if (clock >= 4950) { if (stage.classList.contains('is-phone')) drawSky(clock, now); else drawNight(clock, now) }
-    if (clock >= 23600) drawPic(clock)
+    if (playing || needsPaint) {
+      if (clock >= 4950) { if (stage.classList.contains('is-phone')) drawSky(clock, now); else drawNight(clock, now) }
+      if (clock >= 23600) drawPic(clock)
+      needsPaint = false
+    }
     requestAnimationFrame(tick)
   }
   document.querySelectorAll('[data-chapter]').forEach((b) => b.addEventListener('click', () => seek(CH[Number(b.dataset.chapter)].at)))
@@ -1708,7 +1714,7 @@ footer nav a { color: var(--muted); }
     document.documentElement.style.setProperty('--stage-scale', scale.toFixed(3))
     sotto.style.setProperty('--open-x', (stage.offsetWidth / 120).toFixed(3))
     sotto.style.setProperty('--open-y', (stage.offsetHeight / 120).toFixed(3))
-    layoutNight(); lastNight = -1
+    layoutNight(); lastNight = -1; lastSky = -1; needsPaint = true
   }
   fit(); addEventListener('resize', fit)
 
