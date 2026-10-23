@@ -573,8 +573,15 @@ footer nav a { color: var(--muted); }
 .vB-words p b { color: var(--text); font-weight: 500; }
 .vB-pic .vd { align-items: flex-start; }
 .vB-pic .vd .line { justify-content: flex-start; }
+.mpic { display: none; }
 @media (max-width: 760px) {
   .vB-row { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
+  /* On a phone each beat shows the iPhone app's own rows, at a size a phone can read. */
+  .vB-pic .vig:not(.vd) { display: none; }
+  .mpic { display: flex; flex-direction: column; gap: 10px; font-size: 16px; line-height: 1.4; color: var(--w-text); }
+  .mpic .m-row { background: #15171c; }
+  .mpic .m-ask { background: #15171c; }
+  .mpic .m-note { text-align: left; }
 }
 
 /* Phones: shorter lines, more room between things, nothing drawn behind words, one column of beats. */
@@ -829,6 +836,12 @@ footer nav a { color: var(--muted); }
             </div>
           </div>
         </div>
+        <div class="mpic">
+          <div class="m-reply is-on"><div class="m-who"><svg class="owl-i"><use href="#owl"/></svg>Watcher</div><div class="m-said">Two threads, one pull request each.</div></div>
+          <div class="m-did is-on">WHAT WATCHER DID</div>
+          <div class="m-row is-on"><svg data-mark="claude"></svg><span class="m-t">Port pairing to Android</span><span class="m-s">Started</span></div>
+          <div class="m-row is-on"><svg data-mark="codex"></svg><span class="m-t">Profile main's update path</span><span class="m-s">Started</span></div>
+        </div>
       </div></div>
       <div class="vB-row"><div class="vB-words"><i>02</i><h3>It keeps them going.</h3><p>It follows up when one goes quiet.</p></div><div class="vB-pic">
         <div class="vig is-bare" id="vw" aria-hidden="true">
@@ -837,6 +850,11 @@ footer nav a { color: var(--muted); }
           <div class="grp" id="vwg" data-g="quiet">Quiet <span class="n">1</span></div>
           <div class="wcard" id="vw2" data-state="quiet"><i class="ring"></i><span class="t">Profile main's update path</span><span class="btns"><span>Stop watching</span></span><span class="sub"><svg data-mark="codex"></svg><svg class="owl-i"><use href="#owl"/></svg>Codex<span class="dot"></span>sotto<span class="dot"></span><span class="st" id="vw2s">Quiet</span></span><span class="last" id="vw2l">No progress for 20 minutes.</span></div>
         </div>
+        <div class="mpic">
+          <div class="m-row is-on" data-state="working"><i class="ring"></i><span class="m-t">Port pairing to Android</span><span class="m-s">Working</span></div>
+          <div class="m-row is-on" data-state="quiet"><i class="ring"></i><span class="m-t">Profile main's update path</span><span class="m-s">Quiet</span></div>
+          <p class="m-note">Watcher is sending to it now.</p>
+        </div>
       </div></div>
       <div class="vB-row"><div class="vB-words"><i>03</i><h3>Only what needs you.</h3><p>Questions and permissions come to you. <b>Watcher never answers them.</b></p></div><div class="vB-pic">
         <div class="vig is-bare" id="vn" aria-hidden="true">
@@ -844,6 +862,10 @@ footer nav a { color: var(--muted); }
           <div class="ask" id="vnask" style="margin-top:0"><div class="q">Permission request<span>Bash</span></div><pre>git push origin sotto/android-pairing</pre><div class="cwd">in sotto</div><div class="opts"><span>Deny</span><span class="allow" id="vnallow">Allow once</span></div></div>
           <div class="answered-line" id="vnans">You answered Port pairing to Android.</div>
           <div class="cursor" id="vncursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
+        </div>
+        <div class="mpic">
+          <div class="m-needs"><b>Needs you</b> Port pairing to Android</div>
+          <div class="m-ask"><div class="m-q">Push its branch?</div><pre>git push origin sotto/android</pre><div class="m-opts"><span>Deny</span><span class="allow">Allow once</span></div></div>
         </div>
       </div></div>
       <div class="vB-row"><div class="vB-words"><i>04</i><h3>Merges in turn.</h3><p>Each pull request lands once its checks pass.</p></div><div class="vB-pic">
@@ -854,6 +876,11 @@ footer nav a { color: var(--muted); }
             <div class="node"><span class="prc" id="vmc2" data-turn="ready">#75 ready</span><span class="nt" id="vmn2">Fix the flaky host test</span></div>
             <div class="node"><span class="prc" id="vmc3" data-turn="ready">#76 ready</span><span class="nt" id="vmn3">Tidy the Settings copy</span></div>
           </div>
+        </div>
+        <div class="mpic">
+          <div class="m-row is-on"><span class="m-t">Retry failed uploads</span><span class="turn" data-turn="merged">MERGED</span></div>
+          <div class="m-row is-on"><span class="m-t">Fix the flaky host test</span><span class="turn" data-turn="go">GO MERGE</span></div>
+          <div class="m-row is-on"><span class="m-t">Tidy the Settings copy</span><span class="turn" data-turn="ready">READY</span></div>
         </div>
       </div></div>
       <div class="vB-row"><div class="vB-words"><i>05</i><h3>Dictation too.</h3><p><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.</p></div><div class="vB-pic">
@@ -879,7 +906,7 @@ footer nav a { color: var(--muted); }
         <p class="spec"><span data-version-of="windows-owl">Owl 0.1.38-owl.20261021.2</span><span data-size-of="windows-owl"></span><span>Windows 10 or 11, x64</span></p>
         <ul>
           <li><b>What it costs</b>Free. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand.</li>
-          <li><b>First run</b>Owl installs over Sotto and keeps your settings and threads. If SmartScreen asks, choose More info, then Run anyway. Owl updates itself to each new Owl.</li>
+          <li><b>First run</b>Installs over Sotto. If SmartScreen asks, choose More info, then Run anyway.</li>
           <li><b>Owl or Stable</b>Owl is the preview, with Watcher. <a href="https://github.com/millZach/Sotto-releases/releases/latest" data-download="windows-stable">Stable for Windows</a> is the release most people use; Watcher isn’t in it yet.</li>
           <li><b>Another computer</b><a href="https://github.com/millZach/Sotto-releases/releases" data-download="mac-owl">Mac</a><span class="dot" aria-hidden="true">·</span><a href="https://github.com/millZach/Sotto-releases/releases" data-download="linux-owl">Linux</a>. Every other file is on <a href="https://github.com/millZach/Sotto-releases/releases">the releases page</a>.</li>
         </ul>
@@ -934,18 +961,18 @@ footer nav a { color: var(--muted); }
   const SYSTEMS = {
     windows: {
       name: 'Windows', needs: 'Windows 10 or 11, x64', fine: 'Windows 10 or 11, x64.',
-      stable: () => 'The installer isn’t code-signed yet, so Windows may show a SmartScreen prompt. Choose More info, then Run anyway. Sotto updates itself after that.',
-      owl: () => 'Owl installs over Sotto and keeps your settings and threads. If SmartScreen asks, choose More info, then Run anyway. Owl updates itself to each new Owl.',
+      stable: () => 'If SmartScreen asks, choose More info, then Run anyway.',
+      owl: () => 'Installs over Sotto. If SmartScreen asks, choose More info, then Run anyway.',
     },
     mac: {
       name: 'Mac', needs: 'Apple silicon, macOS 12 or newer', fine: 'For Macs with Apple silicon, macOS 12 or newer. Intel Macs aren’t supported.',
-      stable: () => 'Drag Sotto into Applications. It isn’t notarized, so macOS blocks the first launch: open System Settings, then Privacy &amp; Security, and press Open Anyway. It doesn’t update itself; download each new version here.',
-      owl: () => 'Drag Sotto into Applications, over Sotto if you have it; your settings and threads stay. Owl is signed and notarized, so it opens like any other app, and it updates itself.',
+      stable: () => 'Drag Sotto into Applications. The first time, allow it under Privacy &amp; Security.',
+      owl: () => 'Drag Sotto into Applications, over Sotto if you have it.',
     },
     linux: {
       name: 'Linux', needs: 'x64, checked on Omarchy', fine: 'An Arch package for x64 Linux, checked on Omarchy.',
-      stable: () => `Install it with <code class="cmd">sudo pacman -U ${esc(pkg('linux-stable', 'sotto-bin-*.pkg.tar.zst'))}</code>, then open Sotto from the application menu. Linux has no updater: install each new package the same way.`,
-      owl: () => `Install it over Sotto with <code class="cmd">sudo pacman -U ${esc(pkg('linux-owl', 'sotto-bin-*owl*.pkg.tar.zst'))}</code>; your settings and threads stay. It doesn’t update itself: install each new Owl the same way, or a Stable package to go back.`,
+      stable: () => `<code class="cmd">sudo pacman -U ${esc(pkg('linux-stable', 'sotto-bin-*.pkg.tar.zst'))}</code>`,
+      owl: () => `<code class="cmd">sudo pacman -U ${esc(pkg('linux-owl', 'sotto-bin-*owl*.pkg.tar.zst'))}</code>, over Sotto.`,
     },
   }
   const ORDER = ['windows', 'mac', 'linux']
@@ -1577,7 +1604,7 @@ footer nav a { color: var(--muted); }
     requestAnimationFrame(tick)
   }
   document.querySelectorAll('[data-chapter]').forEach((b) => b.addEventListener('click', () => seek(CH[Number(b.dataset.chapter)].at)))
-  const START = wide ? 400 : 3000 // a phone has no marks to gather, so its demo opens with the owl
+  const START = wide ? 400 : INTRO_END // a phone has no marks to gather, so its demo opens on the app
   $('replay').addEventListener('click', () => seek(reduced ? INTRO_END : START))
   let userPaused = false
   $('playPause').addEventListener('click', () => {
