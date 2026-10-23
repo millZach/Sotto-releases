@@ -474,12 +474,15 @@ main { position: relative; z-index: 1; max-width: var(--col); margin: 0 auto; pa
 section { padding: clamp(56px, 9vh, 104px) 0; }
 section h2 { font-size: clamp(30px, 3.6vw, 46px); line-height: 1.1; max-width: 20ch; text-wrap: balance; }
 .sub { color: var(--text-2); font-size: clamp(17px, 1.3vw, 19px); max-width: 46ch; margin-top: 14px; }
-.beats { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; margin-top: 36px; }
-.beat { min-width: 0; }
-.beat h3 { font-size: clamp(22px, 2.1vw, 27px); line-height: 1.15; margin-top: 18px; }
+.beats { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1px; margin-top: 40px; background: var(--hairline); }
+.beat { min-width: 0; background: var(--canvas); padding: 34px 36px 38px; display: flex; flex-direction: column; }
+.beat:nth-child(odd) { padding-left: 0; }
+.beat:nth-child(even) { padding-right: 0; }
+.beat h3 { font-size: clamp(22px, 2.1vw, 27px); line-height: 1.15; }
 .beat p { color: var(--text-2); margin-top: 6px; max-width: 36ch; }
 .beat p b { color: var(--text); font-weight: 500; }
-.vig { position: relative; min-width: 0; height: 334px; border-radius: 14px; background: var(--w-canvas); border: 1px solid var(--hairline); overflow: hidden; color: var(--w-text); font-size: 14px; line-height: 1.45; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+/* Each picture is a piece of the app, raised off the page rather than outlined. */
+.vig { position: relative; min-width: 0; height: 334px; margin-top: 24px; border-radius: 14px; background: #0c0e12; overflow: hidden; color: var(--w-text); font-size: 14px; line-height: 1.45; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4); }
 .vig .msg { display: block; opacity: 1; transform: none; }
 .vig .receipts { margin-top: 12px; }
 .vig .wcard, .vig .rcpt, .vig .ask { flex: none; }
@@ -496,9 +499,8 @@ section h2 { font-size: clamp(30px, 3.6vw, 46px); line-height: 1.1; max-width: 2
 .vig .node .prc[data-turn="merged"] { color: var(--w-muted); }
 .vig .node .nt { color: var(--w-text); }
 .vig .node .nt.is-merged { color: var(--w-muted); }
-.beat.wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 28px; align-items: center; }
-.beat.wide h3 { margin-top: 0; }
-.vd { height: 190px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: var(--sidebar); }
+.beat.wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 36px; align-items: center; padding-left: 0; padding-right: 0; }
+.vd { height: 190px; margin-top: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
 .vd .pill { position: static; opacity: 1; transform: none; }
 .vd .line { min-height: 24px; font-size: 16px; color: var(--text); display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
 .vd .line span { opacity: 0; transform: translateY(4px); transition: opacity 250ms, transform 250ms; }
@@ -517,8 +519,8 @@ kbd { font: inherit; font-size: 12.5px; padding: 1px 6px; border: 1px solid var(
 .fine { color: var(--muted); font-size: 15px; }
 
 /* The download card: a Stable or Owl switch over the button, what you are getting, and what to expect. */
-.get { margin-top: 28px; border: 1px solid var(--hairline); border-radius: 14px; background: var(--sidebar); overflow: hidden; }
-.get .head { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px solid var(--hairline); background: var(--canvas); }
+.get { margin-top: 28px; border-radius: 14px; background: #0c0e12; overflow: hidden; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4); }
+.get .head { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px solid var(--hairline); }
 .get .head .track span { font-size: 15px; padding: 7px 20px; }
 .get .head p { flex: 1; min-width: 220px; color: var(--text-2); font-size: 15px; }
 .get .body { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px 28px; align-items: center; padding: 24px; }
@@ -559,7 +561,7 @@ code.cmd { font-family: ui-monospace, Consolas, monospace; font-size: 0.86em; co
 .gh-btn:hover { color: var(--text); border-color: var(--muted); text-decoration: none; }
 .gh-btn .star { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
 .gh-btn:hover .star { fill: var(--ask); stroke: var(--ask); }
-.oss { display: flex; align-items: center; gap: 14px 18px; flex-wrap: wrap; margin-top: 16px; padding: 18px 24px; border: 1px solid var(--hairline); border-radius: 14px; }
+.oss { display: flex; align-items: center; gap: 14px 18px; flex-wrap: wrap; margin-top: 16px; padding: 18px 24px; border-radius: 14px; background: #0c0e12; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 16px 36px rgba(0, 0, 0, 0.45); }
 .oss > .gh { width: 24px; height: 24px; fill: var(--text-2); flex: none; }
 .oss p { flex: 1; min-width: 240px; color: var(--muted); font-size: 15px; }
 .oss p b { color: var(--text); font-weight: 500; }
@@ -583,9 +585,9 @@ footer nav a { color: var(--muted); }
   .controls .sep { display: none; }
   .controls button { min-height: 44px; padding: 8px 10px; font-size: 15px; border-color: var(--hairline); }
   section h2 { max-width: 14ch; }
-  .beats { grid-template-columns: 1fr; gap: 34px; }
-  .beat.wide { grid-template-columns: 1fr; gap: 16px; }
-  .beat.wide h3 { margin-top: 0; }
+  .beats { grid-template-columns: 1fr; }
+  .beat, .beat:nth-child(odd), .beat:nth-child(even) { padding: 28px 0 32px; }
+  .beat.wide { grid-template-columns: 1fr; gap: 18px; }
   .vig { padding: 16px; height: 300px; }
   .vig .wcard .btns, .vig .wlead .watchbtn, .vig .askline .w { display: none; }
   .get .body { grid-template-columns: 1fr; }
@@ -817,6 +819,8 @@ footer nav a { color: var(--muted); }
     <h2>What Watcher does.</h2>
     <div class="beats">
       <div class="beat">
+        <h3>Say it once.</h3>
+        <p>Watcher splits it into threads and starts them.</p>
         <div class="vig" id="vt" aria-hidden="true">
           <div class="msg"><div class="meta"><svg class="owl-i"><use href="#owl"/></svg><b>Watcher</b>9:12 am</div><div class="said">Two threads, one pull request each. I am watching both.</div>
             <div class="receipts">
@@ -825,33 +829,33 @@ footer nav a { color: var(--muted); }
             </div>
           </div>
         </div>
-        <h3>Say it once.</h3>
-        <p>Watcher splits it into threads and starts them.</p>
       </div>
 
       <div class="beat">
+        <h3>It keeps them going.</h3>
+        <p>It follows up when one goes quiet.</p>
         <div class="vig" id="vw" aria-hidden="true">
           <div class="grp" data-g="working">Working <span class="n">1</span></div>
           <div class="wcard" data-state="working"><i class="ring"></i><span class="t">Port pairing to Android</span><span class="btns"><span>Stop watching</span></span><span class="sub"><svg data-mark="claude"></svg><svg class="owl-i"><use href="#owl"/></svg>Claude Code<span class="dot"></span>sotto<span class="dot"></span><span class="st">Working</span></span><span class="last">Watcher sent to it at 9:12.</span></div>
           <div class="grp" id="vwg" data-g="quiet">Quiet <span class="n">1</span></div>
           <div class="wcard" id="vw2" data-state="quiet"><i class="ring"></i><span class="t">Profile main's update path</span><span class="btns"><span>Stop watching</span></span><span class="sub"><svg data-mark="codex"></svg><svg class="owl-i"><use href="#owl"/></svg>Codex<span class="dot"></span>sotto<span class="dot"></span><span class="st" id="vw2s">Quiet</span></span><span class="last" id="vw2l">No progress for 20 minutes.</span></div>
         </div>
-        <h3>It keeps them going.</h3>
-        <p>It follows up when one goes quiet.</p>
       </div>
 
       <div class="beat">
+        <h3>Only what needs you.</h3>
+        <p>Questions and permissions come to you. <b>Watcher never answers them.</b></p>
         <div class="vig" id="vn" aria-hidden="true">
           <div class="needs"><b>1 needs you</b><span class="it"><i></i><u>Port pairing to Android</u>permission</span></div>
           <div class="ask" id="vnask" style="margin-top:0"><div class="q">Permission request<span>Bash</span></div><pre>git push origin sotto/android-pairing</pre><div class="cwd">in sotto</div><div class="opts"><span>Deny</span><span class="allow" id="vnallow">Allow once</span></div></div>
           <div class="answered-line" id="vnans">You answered Port pairing to Android.</div>
           <div class="cursor" id="vncursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
         </div>
-        <h3>Only what needs you.</h3>
-        <p>Questions and permissions come to you. <b>Watcher never answers them.</b></p>
       </div>
 
       <div class="beat">
+        <h3>Merges in turn.</h3>
+        <p>Each pull request lands once its checks pass.</p>
         <div class="vig" id="vm" aria-hidden="true">
           <div class="turns"><span class="lbl">Merge turns</span><span class="turn" id="vm1" data-turn="ready"><b>#74</b>READY TO MERGE</span><span class="sep-turn">›</span><span class="turn" id="vm2" data-turn="ready"><b>#75</b>READY TO MERGE</span><span class="sep-turn">›</span><span class="turn" id="vm3" data-turn="ready"><b>#76</b>READY TO MERGE</span></div>
           <div class="nodes">
@@ -860,8 +864,6 @@ footer nav a { color: var(--muted); }
             <div class="node"><span class="prc" id="vmc3" data-turn="ready">#76 ready</span><span class="nt" id="vmn3">Tidy the Settings copy</span></div>
           </div>
         </div>
-        <h3>Merges in turn.</h3>
-        <p>Each pull request lands once its checks pass.</p>
       </div>
 
       <div class="beat wide">
