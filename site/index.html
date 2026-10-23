@@ -604,7 +604,8 @@ footer nav a { color: var(--muted); }
   .hero-download .cta-row { width: 100%; }
   .btn.send-link { width: 100%; max-width: 300px; height: 52px; justify-content: center; font-size: 17px; font-weight: 600; border-radius: 12px; }
   .hero-download .fine { font-size: 14px; color: var(--muted); padding: 0; }
-  .sky { display: none; }
+  .sky .mote { width: 22px; height: 22px; }
+  .sky .mote.is-born { opacity: 0.18; }
   .mote { width: 26px; height: 26px; }
   .mote svg { filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 55%, transparent)); }
   .stage-wrap { margin-top: 128px; }
@@ -1209,7 +1210,7 @@ footer nav a { color: var(--muted); }
   }
   const shuffled = (list) => list.map((v) => [Math.random(), v]).sort((p, q) => p[0] - q[0]).map(([, v]) => v)
   const heroMotes = shuffled(ids).map((id) => spawn(field, false, id))
-  if (wide) ids.forEach((id) => spawn(sky, true, id))
+  ids.forEach((id) => spawn(sky, true, id))
   function placeMotes() {
     if (!heroMotes.length) return
     const f = field.getBoundingClientRect(), W = f.width, size = wide ? 50 : 30, padX = 90, padY = 64
@@ -1224,7 +1225,7 @@ footer nav a { color: var(--muted); }
       // A phone has no room at the sides: the six marks sit in a row between the copy and the demo.
       const stageTop = stage.getBoundingClientRect().top - f.top
       const y = bottom + (stageTop - bottom - size) / 2, step = 50, x0 = (W - 5 * step - size) / 2
-      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(1, 2); m.home = [x0 + i * step, y] })
+      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(9, 15); m.home = [x0 + i * step, y] })
       return
     }
     if (left - padX - size - 0.03 * W >= 60) {
@@ -1239,7 +1240,7 @@ footer nav a { color: var(--muted); }
     heroMotes.forEach((m, i) => { const [x0, x1, y0, y1] = slots[i]; m.home = [rnd(x0, Math.max(x0, x1)), rnd(y0, Math.max(y0, y1))] })
   }
   let heroOut = false
-  const updateSky = () => sky.classList.toggle('is-on', wide && (heroOut || (heroMotes[0] && heroMotes[0].gathered && !heroMotes[0].hidden)))
+  const updateSky = () => sky.classList.toggle('is-on', heroOut || (heroMotes[0] && heroMotes[0].gathered && !heroMotes[0].hidden))
   // The words are measured again once the page's own font is in, and whenever the window changes size.
   placeMotes()
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!(heroMotes[0] && heroMotes[0].gathered)) placeMotes() })
