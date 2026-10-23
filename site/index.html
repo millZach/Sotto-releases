@@ -435,8 +435,10 @@ svg[data-mark] { fill: currentColor; }
 .m-row .turn { margin-left: auto; height: 26px; padding: 0 10px; font-size: 12px; flex: none; }
 .turn[data-turn="wait"] { color: var(--w-muted); border-color: var(--w-border); }
 .m-note { color: var(--w-text-2); font-size: 15px; text-align: center; margin-top: 2px; }
-.m-needs { display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-radius: 14px; background: var(--w-warn-surface); font-size: 15.5px; }
-.m-needs::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--w-warn); flex: none; }
+.m-needs { display: grid; grid-template-columns: 9px 1fr; column-gap: 10px; row-gap: 2px; align-items: center; padding: 11px 14px; border-radius: 14px; background: var(--w-warn-surface); }
+.m-needs b { grid-column: 2; font-size: 13px; font-weight: 600; color: var(--w-warn); }
+.m-needs span { grid-column: 2; font-size: 15.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-needs::before { content: ''; grid-row: 1 / span 2; width: 9px; height: 9px; border-radius: 50%; background: var(--w-warn); }
 .m-needs b { font-weight: 600; }
 .m-ask { border-radius: 16px; padding: 14px; background: #1c1c1e; box-shadow: inset 3px 0 0 var(--w-warn); }
 .m-q { font-weight: 600; font-size: 17px; margin-bottom: 10px; }
@@ -613,10 +615,10 @@ footer nav a { color: var(--muted); }
   .controls button[data-chapter] { border: 0; background: none; padding: 0; font-size: 0; color: var(--muted); border-radius: 0; }
   .controls button[data-chapter]::before { content: ''; display: block; height: 3px; border-radius: 2px; background: linear-gradient(to right, var(--accent) calc(var(--p, 0) * 100%), var(--hairline) 0); margin-bottom: 8px; }
   .controls button[data-chapter]::after { content: attr(data-short); font-size: 13px; font-weight: 500; line-height: 1; display: block; white-space: nowrap; }
-  .controls button[data-chapter][aria-current="true"] { color: var(--text); background: none; }
-  .controls button[data-chapter]:not([aria-current="true"])::before { background: var(--hairline); }
-  .controls #playPause { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 1px solid var(--border); font-size: 0; display: grid; place-items: center; color: var(--text); }
-  .controls #playPause::before { font-size: 13px; line-height: 1; }
+  .controls button[data-chapter][aria-current="true"] { color: var(--accent-text); background: none; }
+  .controls button[data-chapter]:not([aria-current="true"])::before { background: color-mix(in srgb, var(--accent) calc(var(--p, 0) * 45%), var(--hairline)); }
+  .controls #playPause { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 0; background: #1b1d23; font-size: 0; display: grid; place-items: center; color: var(--text); align-self: center; }
+  .controls #playPause::before { font-size: 14px; line-height: 1; }
   .controls #playPause[data-state="playing"]::before { content: '\2590\2590'; letter-spacing: -2px; font-size: 11px; }
   .controls #playPause[data-state="paused"]::before { content: '\25B6'; }
   .controls #playPause[data-state="finished"]::before { content: '\21BB'; font-size: 16px; }
@@ -643,7 +645,11 @@ footer nav a { color: var(--muted); }
   .vd .pill:not(.listening) { width: 232px; height: 40px; padding: 0 10px 0 8px; border-color: var(--hairline); background: var(--canvas); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
   .vd .pill:not(.listening) > * { visibility: visible; }
   .vd .line { justify-content: flex-start; font-size: 20px; line-height: 1.4; color: var(--text); }
+  kbd { border: 0; background: #1b1d23; }
   .vB-words kbd { display: inline-block; font-size: 15px; padding: 3px 9px; border-radius: 7px; margin-top: 8px; }
+  .gh-btn { border: 0; padding: 0; color: var(--accent-text); }
+  .pill .esc { font-size: 12px; }
+  #mp1 { justify-content: center; }
   /* The download card: one button, three tiles, one link. */
   .get { margin-top: 24px; }
   .get .body { grid-template-columns: 1fr; padding: 20px; }
@@ -651,18 +657,18 @@ footer nav a { color: var(--muted); }
   .get .none .away, .get .none > p:not(.all) { display: none; }
   .get .none .btn.send-link { width: 100%; max-width: none; height: 52px; justify-content: center; font-size: 17px; font-weight: 600; border-radius: 12px; }
   .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .tile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; border-radius: 12px; background: #12141a; color: var(--text); text-align: center; }
+  .tile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 6px; border-radius: 12px; background: #12141a; color: var(--text); text-align: center; }
   .tile:hover { text-decoration: none; }
   .tile svg.os { width: 20px; height: 20px; fill: currentColor; }
   .tile b { font-size: 15px; font-weight: 600; }
-  .tile span { font-size: 13px; color: var(--muted); }
+  .tile span { font-size: 14px; color: var(--muted); }
   .get .none .all { display: block; text-align: center; font-size: 15px; }
   .oss { background: none; box-shadow: none; border-radius: 0; border-top: 1px solid var(--hairline); padding: 20px 0; margin-top: 24px; flex-wrap: nowrap; gap: 14px; }
   .oss > .gh { display: none; }
   .oss p { min-width: 0; font-size: 15px; }
   .oss p b { color: var(--muted); font-weight: 400; }
   .oss .gh-btn { flex: none; }
-  footer { font-size: 13px; }
+  footer { font-size: 14px; flex-direction: column; gap: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -835,7 +841,7 @@ footer nav a { color: var(--muted); }
               <p class="m-note" id="mnote">&nbsp;</p>
             </div>
             <div class="mp" id="mp3">
-              <div class="m-needs"><b>Needs you</b> Tidy the Settings copy</div>
+              <div class="m-needs"><b>Needs you</b><span>Tidy the Settings copy</span></div>
               <div class="m-ask" id="mask">
                 <div class="m-q">Push its branch?</div>
                 <pre>git push origin sotto/settings</pre>
@@ -1216,8 +1222,8 @@ footer nav a { color: var(--muted); }
     if (!wide) {
       // A phone has no room at the sides: the six marks sit in a row between the copy and the demo.
       const stageTop = stage.getBoundingClientRect().top - f.top
-      const y = bottom + (stageTop - bottom - size) / 2, step = 48, x0 = (W - 5 * step - size) / 2
-      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(2, 4); m.home = [x0 + i * step, y - 4 + (i % 2) * 8] })
+      const y = bottom + (stageTop - bottom - size) / 2, step = 50, x0 = (W - 5 * step - size) / 2
+      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(1, 2); m.home = [x0 + i * step, y] })
       return
     }
     if (left - padX - size - 0.03 * W >= 60) {
@@ -1471,19 +1477,19 @@ footer nav a { color: var(--muted); }
     for (let i = 0; i < OWLS.length; i++) {
       const o = OWLS[i], p = owlPose(o, t, spots, m)
       if (!p || p.alpha <= 0.02) continue
-      const state = stateAt(o, t), size = p.fly ? 24 : 30, h = size * 67 / 72
+      const state = stateAt(o, t), size = p.fly ? 20 : 22, h = size * 67 / 72
       const x0 = p.x - size / 2, y0 = p.y - h
       const tilt = p.fly && !reduced ? Math.sin(now / 90 + i) * 10 : 0
       const blink = !reduced && !p.fly && state !== 'quiet' && (now / 1000 + i * 1.37) % 6.1 < 0.15
       const ex = [(36 - 12) / 72 * size, (60.36 - 12) / 72 * size], ey = [(48.96 - 15) / 67 * h, (51.84 - 15) / 67 * h], er = 3.6 / 72 * size
       let eyes = ''
-      if (state === 'quiet' || blink) eyes = ex.map((x, k) => `<path d="M${x0 + x - er * 1.2} ${y0 + ey[k]}h${er * 2.4}" stroke="#b9bec8" stroke-width="1.8" stroke-linecap="round"/>`).join('')
+      if (state === 'quiet' || blink) eyes = ex.map((x, k) => `<path d="M${x0 + x - er * 1.2} ${y0 + ey[k]}h${er * 2.4}" stroke="#47b8a9" stroke-opacity="0.8" stroke-width="1.8" stroke-linecap="round"/>`).join('')
       else {
         const needs = state === 'needs', pulse = needs && !reduced ? 0.55 + 0.45 * Math.sin(now / 1800 * Math.PI * 2) : 1
         if (needs) eyes += `<circle cx="${p.x}" cy="${y0 + h * 0.5}" r="${size * 0.75}" fill="#ffb900" opacity="${(0.16 * pulse).toFixed(2)}"/>`
         eyes += ex.map((x, k) => `<circle cx="${x0 + x}" cy="${y0 + ey[k]}" r="${er}" fill="${needs ? '#ffb900' : '#56c4b6'}"/>`).join('')
       }
-      s += `<g opacity="${p.alpha.toFixed(2)}" transform="rotate(${tilt.toFixed(1)} ${p.x} ${y0 + h / 2})"><svg x="${x0}" y="${y0}" width="${size}" height="${h}" viewBox="12 15 72 67"><use href="#owl" fill="#b9bec8"/></svg>${eyes}</g>`
+      s += `<g opacity="${p.alpha.toFixed(2)}" transform="rotate(${tilt.toFixed(1)} ${p.x} ${y0 + h / 2})"><svg x="${x0}" y="${y0}" width="${size}" height="${h}" viewBox="12 15 72 67"><use href="#owl" fill="#47b8a9" fill-opacity="0.6"/></svg>${eyes}</g>`
     }
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
     svg.innerHTML = s
@@ -1564,11 +1570,11 @@ footer nav a { color: var(--muted); }
   const CH = [{ name: 'Talk to Watcher', at: 5400 }, { name: 'Watching', at: 14600 }, { name: 'Needs you', at: 19200 }, { name: 'PRs land', at: 23600 }]
   const INTRO_END = 5200, END = 33000
 
-  if (heroMotes.length) at(2600, gatherMotes)
+  if (wide && heroMotes.length) at(2600, gatherMotes)
   at(3550, on('sottoMark'))
   at(4400, () => sotto.classList.add('open'))
   at(4950, on('app')); at(4950, on('mob'))
-  at(5150, () => { sotto.classList.add('gone'); stage.classList.add('is-floating'); $('controls').classList.add('is-on'); $('progress').classList.add('is-on'); if (!wide) releaseMotes() })
+  at(5150, () => { sotto.classList.add('gone'); stage.classList.add('is-floating'); $('controls').classList.add('is-on'); $('progress').classList.add('is-on') })
 
   // 1. Talk to Watcher: dictate one instruction; Watcher starts a thread for each part, and an owl comes out of the moon for each.
   at(5400, on('pill'))
@@ -1677,7 +1683,7 @@ footer nav a { color: var(--muted); }
     requestAnimationFrame(tick)
   }
   document.querySelectorAll('[data-chapter]').forEach((b) => b.addEventListener('click', () => seek(CH[Number(b.dataset.chapter)].at)))
-  const START = 400
+  const START = wide ? 400 : INTRO_END // a phone skips the opening: its demo is on screen at load
   $('replay').addEventListener('click', () => seek(reduced ? INTRO_END : START))
   let userPaused = false
   $('playPause').addEventListener('click', () => {
