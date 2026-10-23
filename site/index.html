@@ -1225,7 +1225,7 @@ footer nav a { color: var(--muted); }
       // A phone has no room at the sides: the six marks sit in a row between the copy and the demo.
       const stageTop = stage.getBoundingClientRect().top - f.top
       const y = bottom + (stageTop - bottom - size) / 2, step = 50, x0 = (W - 5 * step - size) / 2
-      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(9, 15); m.home = [x0 + i * step, y] })
+      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(6, 9); m.home = [x0 + i * step, y] })
       return
     }
     if (left - padX - size - 0.03 * W >= 60) {
