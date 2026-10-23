@@ -438,7 +438,7 @@ svg[data-mark] { fill: currentColor; }
 .m-needs { display: grid; grid-template-columns: 9px 1fr; column-gap: 10px; row-gap: 2px; align-items: center; padding: 11px 14px; border-radius: 14px; background: var(--w-warn-surface); }
 .m-needs b { grid-column: 2; font-size: 13px; font-weight: 600; color: var(--w-warn); }
 .m-needs span { grid-column: 2; font-size: 15.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.m-needs::before { content: ''; grid-row: 1 / span 2; width: 9px; height: 9px; border-radius: 50%; background: var(--w-warn); }
+.m-needs::before { content: ''; grid-row: 1 / span 2; align-self: start; margin-top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--w-warn); }
 .m-needs b { font-weight: 600; }
 .m-ask { border-radius: 16px; padding: 14px; background: #1c1c1e; box-shadow: inset 3px 0 0 var(--w-warn); }
 .m-q { font-weight: 600; font-size: 17px; margin-bottom: 10px; }
@@ -617,7 +617,7 @@ footer nav a { color: var(--muted); }
   .controls button[data-chapter]::after { content: attr(data-short); font-size: 13px; font-weight: 500; line-height: 1; display: block; white-space: nowrap; }
   .controls button[data-chapter][aria-current="true"] { color: var(--accent-text); background: none; }
   .controls button[data-chapter]:not([aria-current="true"])::before { background: color-mix(in srgb, var(--accent) calc(var(--p, 0) * 45%), var(--hairline)); }
-  .controls #playPause { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 0; background: #1b1d23; font-size: 0; display: grid; place-items: center; color: var(--text); align-self: center; }
+  .controls #playPause { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 0; background: #1b1d23; font-size: 0; line-height: 0; display: grid; place-items: center; color: var(--text); align-self: center; }
   .controls #playPause::before { font-size: 14px; line-height: 1; }
   .controls #playPause[data-state="playing"]::before { content: '\2590\2590'; letter-spacing: -2px; font-size: 11px; }
   .controls #playPause[data-state="paused"]::before { content: '\25B6'; }
@@ -649,7 +649,8 @@ footer nav a { color: var(--muted); }
   .vB-words kbd { display: inline-block; font-size: 15px; padding: 3px 9px; border-radius: 7px; margin-top: 8px; }
   .gh-btn { border: 0; padding: 0; color: var(--accent-text); }
   .pill .esc { font-size: 12px; }
-  #mp1 { justify-content: center; }
+  #mp1 { justify-content: flex-start; padding-top: 24px; }
+  footer > span { text-wrap: balance; }
   /* The download card: one button, three tiles, one link. */
   .get { margin-top: 24px; }
   .get .body { grid-template-columns: 1fr; padding: 20px; }
