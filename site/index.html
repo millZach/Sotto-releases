@@ -118,6 +118,7 @@ svg[data-mark] { fill: currentColor; }
 .hero { position: relative; z-index: 1; padding: clamp(24px, 5vh, 56px) var(--gutter) 0; overflow: hidden; }
 .hero-copy { position: relative; z-index: 3; max-width: calc(var(--col) - 2 * var(--gutter)); margin: 0 auto; text-align: center; }
 .hero h1 { font-size: clamp(36px, 4.6vw, 58px); line-height: 1.05; max-width: 20ch; margin-inline: auto; text-wrap: balance; }
+.lede-short { display: none; }
 .hero .lede { margin: 18px auto 0; font-size: clamp(17px, 1.35vw, 19px); color: var(--text-2); max-width: 46ch; text-wrap: balance; }
 .hero-cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 18px; margin-top: 30px; }
 .hero-cta .btn { padding: 12px 20px; }
@@ -372,38 +373,38 @@ svg[data-mark] { fill: currentColor; }
 
 /* ---------- The demo on a phone: Watcher's tab in Sotto's iPhone app, on an iPhone ---------- */
 .mob { display: none; }
-.stage.is-phone { width: min(360px, calc(100vw - 40px)); height: auto; aspect-ratio: 9 / 18.6; transform: none; margin-bottom: 0; }
+.stage.is-phone { width: min(320px, calc(100vw - 40px)); height: auto; aspect-ratio: 9 / 18.6; transform: none; margin-bottom: 0; }
 .stage.is-phone.is-floating { animation: none; }
 .stage.is-phone .app, .stage.is-phone .cursor, .stage.is-phone .pill, .stage.is-phone .hotkey { display: none; }
 .stage.is-phone .mob {
-  position: absolute; inset: 0; display: block; padding: 3px; border-radius: 58px;
-  background: linear-gradient(150deg, #8a8d93 0%, #3b3d42 18%, #6c6f75 45%, #2c2d31 72%, #7b7e84 100%);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 40px 80px rgba(0, 0, 0, 0.55), 0 10px 24px rgba(0, 0, 0, 0.4);
+  position: absolute; inset: 0; display: block; padding: 2px; border-radius: 52px;
+  background: #2a2c31;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55), 0 10px 24px rgba(0, 0, 0, 0.4);
   opacity: 0; transition: opacity 400ms ease;
 }
 .stage.is-phone .mob.is-on { opacity: 1; }
-.m-bezel { position: absolute; inset: 3px; border-radius: 55px; background: #050506; padding: 9px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }
-.m-screen { position: relative; height: 100%; border-radius: 46px; overflow: hidden; display: flex; flex-direction: column; background: #000; color: var(--w-text); font-size: 16px; line-height: 1.4; }
-.m-island { position: absolute; top: 11px; left: 50%; width: 31%; height: 30px; margin-left: -15.5%; border-radius: 20px; background: #000; z-index: 3; box-shadow: 0 0 0 1px #0a0a0b; }
-.m-btn { position: absolute; width: 4px; border-radius: 2px; background: linear-gradient(90deg, #4a4c51, #8a8d93); }
+.m-bezel { position: absolute; inset: 2px; border-radius: 50px; background: #050506; padding: 8px; }
+.m-screen { position: relative; height: 100%; border-radius: 42px; overflow: hidden; display: flex; flex-direction: column; background: #000; color: var(--w-text); font-size: 16px; line-height: 1.4; }
+.m-island { position: absolute; top: 10px; left: 50%; width: 31%; height: 26px; margin-left: -15.5%; border-radius: 20px; background: #000; z-index: 3; box-shadow: 0 0 0 1px #0a0a0b; }
+.m-btn { display: none; position: absolute; width: 4px; border-radius: 2px; background: linear-gradient(90deg, #4a4c51, #8a8d93); }
 .m-btn.a { left: -2px; top: 17%; height: 4.5%; }
 .m-btn.v1 { left: -2px; top: 25%; height: 8%; }
 .m-btn.v2 { left: -2px; top: 35%; height: 8%; }
 .m-btn.p { right: -2px; top: 28%; height: 12%; background: linear-gradient(270deg, #4a4c51, #8a8d93); }
 .m-home { position: absolute; bottom: 7px; left: 50%; width: 36%; height: 5px; margin-left: -18%; border-radius: 3px; background: rgba(249, 250, 253, 0.85); z-index: 3; }
-.m-status { display: flex; justify-content: space-between; align-items: center; height: 52px; padding: 4px 30px 0 34px; font-size: 15px; font-weight: 600; flex: none; }
+.m-status { display: flex; justify-content: space-between; align-items: center; height: 44px; padding: 4px 28px 0 30px; font-size: 14px; font-weight: 600; flex: none; }
 .m-status .ic { display: flex; gap: 6px; align-items: center; }
 .m-status svg { display: block; fill: var(--w-text); }
 .m-top { padding: 2px 18px 0; flex: none; }
-.m-top h4 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
-.m-top h4 .owl-i { width: 28px; height: 28px; color: var(--w-accent); }
-.m-seg { display: flex; margin-top: 12px; padding: 2px; border-radius: 9px; background: #1c1c1e; }
+.m-top h4 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+.m-top h4 .owl-i { width: 24px; height: 24px; color: var(--w-accent); }
+.m-seg { display: flex; margin-top: 10px; padding: 2px; border-radius: 9px; background: #1c1c1e; }
 .m-seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: 7px; font-size: 14px; font-weight: 500; color: var(--w-text-2); transition: background-color 250ms, color 250ms; }
 .m-seg span.cur { background: #3a3a3c; color: var(--w-text); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
 .m-seg b { font-weight: 600; }
-.m-sky { display: block; width: 100%; height: 104px; flex: none; }
+.m-sky { display: block; width: 100%; height: 72px; flex: none; }
 .m-panels { position: relative; flex: 1; min-height: 0; }
-.mp { position: absolute; inset: 0; padding: 2px 16px 16px; display: flex; flex-direction: column; justify-content: flex-start; gap: 10px; opacity: 0; visibility: hidden; transition: opacity 300ms, visibility 0s 300ms; }
+.mp { position: absolute; inset: 0; padding: 2px 12px 12px; display: flex; flex-direction: column; justify-content: flex-start; gap: 10px; opacity: 0; visibility: hidden; transition: opacity 300ms, visibility 0s 300ms; }
 .mp > * { flex: none; }
 .mp.is-on { opacity: 1; visibility: visible; transition: opacity 300ms; }
 .m-who { display: flex; align-items: center; gap: 6px; color: var(--w-muted); font-size: 14px; margin-bottom: 2px; }
@@ -417,7 +418,7 @@ svg[data-mark] { fill: currentColor; }
 .m-reply.is-on { opacity: 1; }
 .m-did { font-size: 13px; color: var(--w-muted); margin: 4px 0 -4px; font-weight: 600; letter-spacing: 0.02em; opacity: 0; transition: opacity 300ms; }
 .m-did.is-on { opacity: 1; }
-.m-row { display: flex; align-items: center; gap: 11px; padding: 12px 14px; border-radius: 14px; background: #1c1c1e; opacity: 0; transform: translateY(6px); transition: opacity 300ms, transform 300ms, box-shadow 300ms; }
+.m-row { display: flex; align-items: center; gap: 11px; padding: 11px 12px; border-radius: 14px; background: #1c1c1e; opacity: 0; transform: translateY(6px); transition: opacity 300ms, transform 300ms, box-shadow 300ms; }
 .m-row.is-on { opacity: 1; transform: none; }
 .m-row svg[data-mark] { width: 18px; height: 18px; flex: none; }
 .m-row .ring { width: 14px; height: 14px; flex: none; border-radius: 50%; border: 1.6px solid var(--w-faint); box-sizing: border-box; }
@@ -425,7 +426,7 @@ svg[data-mark] { fill: currentColor; }
 .m-row[data-state="quiet"] .ring { border-style: dashed; border-color: var(--w-muted); }
 .m-row[data-state="needs"] .ring { border: 2px solid var(--w-warn); }
 .m-row[data-state="ready"] .ring { border-color: var(--w-success); }
-.m-t { font-weight: 600; font-size: 15.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-t { font-weight: 600; font-size: 15px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .m-s { margin-left: auto; color: var(--w-accent); font-size: 14px; white-space: nowrap; }
 .m-row[data-state="quiet"] .m-s { color: var(--w-muted); }
 .m-row[data-state="ready"] .m-s { color: var(--w-success); }
@@ -448,9 +449,9 @@ svg[data-mark] { fill: currentColor; }
 .m-done { display: none; align-items: center; gap: 8px; font-size: 16px; color: var(--w-text-2); }
 .m-done::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--w-success); }
 .m-done.is-on { display: flex; }
-.m-askbox { margin: auto 16px 8px; padding: 12px 14px; border-radius: 22px; background: #1c1c1e; color: var(--w-muted); font-size: 15px; display: flex; align-items: center; gap: 8px; flex: none; }
+.m-askbox { margin: auto 12px 8px; padding: 12px 14px; border-radius: 22px; background: #1c1c1e; color: var(--w-muted); font-size: 15px; display: flex; align-items: center; gap: 8px; flex: none; }
 .m-askbox .mic { margin-left: auto; width: 26px; height: 26px; border-radius: 50%; background: var(--w-accent); }
-.m-tabbar { display: flex; justify-content: space-around; padding: 8px 6px 26px; border-top: 1px solid #2a2a2c; background: #0d0d0f; font-size: 10.5px; color: var(--w-muted); flex: none; }
+.m-tabbar { display: flex; justify-content: space-around; padding: 8px 6px 18px; border-top: 1px solid #2a2a2c; background: #0d0d0f; font-size: 10.5px; color: var(--w-muted); flex: none; }
 .m-tabbar span { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 58px; }
 .m-tabbar svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .m-tabbar .owl-i { fill: currentColor; stroke: none; }
@@ -553,6 +554,8 @@ code.cmd { font-family: ui-monospace, Consolas, monospace; font-size: 0.86em; co
 .gh-btn:hover { color: var(--text); border-color: var(--muted); text-decoration: none; }
 .gh-btn .star { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
 .gh-btn:hover .star { fill: var(--ask); stroke: var(--ask); }
+.tiles { display: none; }
+.get .none .all { display: none; }
 .oss { display: flex; align-items: center; gap: 14px 18px; flex-wrap: wrap; margin-top: 16px; padding: 18px 24px; border-radius: 14px; background: #0c0e12; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 16px 36px rgba(0, 0, 0, 0.45); }
 .oss > .gh { width: 24px; height: 24px; fill: var(--text-2); flex: none; }
 .oss p { flex: 1; min-width: 240px; color: var(--muted); font-size: 15px; }
@@ -584,25 +587,82 @@ footer nav a { color: var(--muted); }
   .mpic .m-note { text-align: left; }
 }
 
-/* Phones: shorter lines, more room between things, nothing drawn behind words, one column of beats. */
+/* Phones: one thing first on each screen, two greys, and the app's own rows under each step. */
 @media (max-width: 760px) {
   .strip nav a:not(.cta) { display: none; }
-  .hero { padding-top: 30px; }
-  .hero h1 { font-size: clamp(34px, 9.6vw, 44px); max-width: 13ch; }
-  .hero .lede { max-width: 30ch; font-size: 17px; line-height: 1.5; }
-  .hero-cta { margin-top: 26px; }
-  .hero-cta .more { display: none; }
+  .hero { padding-top: 44px; }
+  .hero h1 { font-size: 40px; line-height: 1.04; font-weight: 400; letter-spacing: -0.03em; max-width: 13ch; }
+  .lede-full { display: none; }
+  .lede-short { display: inline; }
+  .hero .lede { margin-top: 16px; max-width: 34ch; font-size: 17px; line-height: 1.45; color: var(--muted); }
+  .hero-cta { margin-top: 28px; gap: 12px; }
+  .hero-cta .more, .hero-cta .fine.others { display: none; }
+  .hero-download { gap: 12px; }
+  .hero-download .away { display: none; }
+  .hero-download .cta-row { width: 100%; }
+  .btn.send-link { width: 100%; max-width: 300px; height: 52px; justify-content: center; font-size: 17px; font-weight: 600; border-radius: 12px; }
+  .hero-download .fine { font-size: 14px; color: var(--muted); padding: 0; }
   .sky { display: none; }
-  .mote { width: 30px; height: 30px; }
-  .stage-wrap { margin-top: 92px; }
-  .progress { width: min(420px, 100%); }
-  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: min(420px, 100%); margin-top: 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
-  .controls .sep { display: none; }
-  .controls button { min-height: 44px; padding: 8px 10px; font-size: 15px; border-color: var(--hairline); }
-  section h2 { max-width: 14ch; }
-  .vig .wcard .btns, .vig .wlead .watchbtn, .vig .askline .w { display: none; }
-  .get .body { grid-template-columns: 1fr; }
-  .get .head, .get .body { padding: 18px; }
+  .mote { width: 26px; height: 26px; }
+  .mote svg { filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 55%, transparent)); }
+  .stage-wrap { margin-top: 128px; }
+  .progress { display: none; }
+  /* One row of chapters, each with a bar that fills as it plays, and one round button for pause, play and replay. */
+  .controls { display: grid; grid-template-columns: repeat(4, 1fr) 40px; gap: 6px; width: min(320px, 100%); align-items: end; margin-top: 18px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+  .controls .sep, .controls .replay { display: none; }
+  .controls button[data-chapter] { border: 0; background: none; padding: 0; font-size: 0; color: var(--muted); border-radius: 0; }
+  .controls button[data-chapter]::before { content: ''; display: block; height: 3px; border-radius: 2px; background: linear-gradient(to right, var(--accent) calc(var(--p, 0) * 100%), var(--hairline) 0); margin-bottom: 8px; }
+  .controls button[data-chapter]::after { content: attr(data-short); font-size: 13px; font-weight: 500; line-height: 1; display: block; white-space: nowrap; }
+  .controls button[data-chapter][aria-current="true"] { color: var(--text); background: none; }
+  .controls button[data-chapter]:not([aria-current="true"])::before { background: var(--hairline); }
+  .controls #playPause { width: 40px; height: 40px; padding: 0; border-radius: 50%; border: 1px solid var(--border); font-size: 0; display: grid; place-items: center; color: var(--text); }
+  .controls #playPause::before { font-size: 13px; line-height: 1; }
+  .controls #playPause[data-state="playing"]::before { content: '\2590\2590'; letter-spacing: -2px; font-size: 11px; }
+  .controls #playPause[data-state="paused"]::before { content: '\25B6'; }
+  .controls #playPause[data-state="finished"]::before { content: '\21BB'; font-size: 16px; }
+  section { padding: 64px 0; }
+  section h2 { font-size: 34px; font-weight: 400; max-width: 14ch; }
+  .vB { margin-top: 8px; }
+  .vB-row { grid-template-columns: 1fr; gap: 18px; padding: 40px 0; }
+  .vB-row + .vB-row { border-top: 1px solid var(--hairline); }
+  .vB-row:last-child { padding-bottom: 0; }
+  .vB-words i { font-size: 12px; letter-spacing: 0.16em; }
+  .vB-words h3 { font-size: 28px; font-weight: 400; line-height: 1.12; margin-top: 6px; }
+  .vB-words p { font-size: 17px; line-height: 1.45; color: var(--muted); text-wrap: pretty; max-width: 34ch; }
+  /* Each step shows the iPhone app's own rows, grouped the way the app groups them. */
+  .vB-pic .vig:not(.vd) { display: none; }
+  .mpic { display: flex; flex-direction: column; gap: 0; font-size: 16px; line-height: 1.4; color: var(--w-text); background: #0d0f13; border-radius: 16px; overflow: hidden; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04); }
+  .mpic .m-row { background: none; border-radius: 0; padding: 14px 16px; min-height: 52px; opacity: 1; transform: none; }
+  .mpic .m-row + .m-row { border-top: 1px solid var(--hairline); }
+  .mpic .m-ask { background: none; border-radius: 0; box-shadow: inset 3px 0 0 var(--w-warn); padding: 16px; }
+  .mpic .m-ask pre { background: #15171c; }
+  .mpic .m-opts span { background: #1c1e24; }
+  .mpic .m-opts .allow { background: var(--w-accent); color: var(--w-on-accent); }
+  /* Dictation: the keys on their own line, the widget awake, and the sentence large. */
+  .vd { height: auto; align-items: flex-start; gap: 18px; }
+  .vd .pill:not(.listening) { width: 232px; height: 40px; padding: 0 10px 0 8px; border-color: var(--hairline); background: var(--canvas); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+  .vd .pill:not(.listening) > * { visibility: visible; }
+  .vd .line { justify-content: flex-start; font-size: 20px; line-height: 1.4; color: var(--text); }
+  .vB-words kbd { display: inline-block; font-size: 15px; padding: 3px 9px; border-radius: 7px; margin-top: 8px; }
+  /* The download card: one button, three tiles, one link. */
+  .get { margin-top: 24px; }
+  .get .body { grid-template-columns: 1fr; padding: 20px; }
+  .get .none { gap: 14px; justify-items: stretch; }
+  .get .none .away, .get .none > p:not(.all) { display: none; }
+  .get .none .btn.send-link { width: 100%; max-width: none; height: 52px; justify-content: center; font-size: 17px; font-weight: 600; border-radius: 12px; }
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; border-radius: 12px; background: #12141a; color: var(--text); text-align: center; }
+  .tile:hover { text-decoration: none; }
+  .tile svg.os { width: 20px; height: 20px; fill: currentColor; }
+  .tile b { font-size: 15px; font-weight: 600; }
+  .tile span { font-size: 13px; color: var(--muted); }
+  .get .none .all { display: block; text-align: center; font-size: 15px; }
+  .oss { background: none; box-shadow: none; border-radius: 0; border-top: 1px solid var(--hairline); padding: 20px 0; margin-top: 24px; flex-wrap: nowrap; gap: 14px; }
+  .oss > .gh { display: none; }
+  .oss p { min-width: 0; font-size: 15px; }
+  .oss p b { color: var(--muted); font-weight: 400; }
+  .oss .gh-btn { flex: none; }
+  footer { font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -636,7 +696,7 @@ footer nav a { color: var(--muted); }
 
   <div class="hero-copy">
     <h1 id="heroTitle">Your coding agents, watched.</h1>
-    <p class="lede" id="heroLede">Watcher starts your threads, keeps them going and lands their pull requests one at a time.</p>
+    <p class="lede" id="heroLede"><span class="lede-full">Watcher starts your threads, keeps them going and lands their pull requests one at a time.</span><span class="lede-short">Watcher starts your threads and lands their pull requests one at a time.</span></p>
     <div class="hero-cta" id="heroDownload">
       <a class="btn primary" href="https://github.com/millZach/Sotto-releases/releases" data-download="windows-owl">
         <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>
@@ -747,7 +807,6 @@ footer nav a { color: var(--muted); }
 
       <!-- The demo on a phone: Watcher's tab in Sotto's iPhone app, one beat at a time at a size a phone can read. -->
       <div class="mob" id="mob" aria-hidden="true">
-        <i class="m-btn a"></i><i class="m-btn v1"></i><i class="m-btn v2"></i><i class="m-btn p"></i>
         <div class="m-bezel"><div class="m-screen">
           <i class="m-island"></i>
           <div class="m-status"><span>9:41</span><span class="ic">
@@ -810,10 +869,10 @@ footer nav a { color: var(--muted); }
     <div class="progress" id="progress" aria-hidden="true"><i id="bar"></i></div>
     <div class="controls" id="controls" role="group" aria-label="Demo chapters">
       <span class="chapters">
-        <button type="button" data-chapter="0">Talk to Watcher</button>
-        <button type="button" data-chapter="1">Watching</button>
-        <button type="button" data-chapter="2">Needs you</button>
-        <button type="button" data-chapter="3">PRs land</button>
+        <button type="button" data-chapter="0" data-short="Ask">Talk to Watcher</button>
+        <button type="button" data-chapter="1" data-short="Watch">Watching</button>
+        <button type="button" data-chapter="2" data-short="Needs you">Needs you</button>
+        <button type="button" data-chapter="3" data-short="Merge">PRs land</button>
       </span>
       <span class="sep"></span>
       <span class="playback">
@@ -838,8 +897,6 @@ footer nav a { color: var(--muted); }
           </div>
         </div>
         <div class="mpic">
-          <div class="m-reply is-on"><div class="m-who"><svg class="owl-i"><use href="#owl"/></svg>Watcher</div><div class="m-said">Two threads, one pull request each.</div></div>
-          <div class="m-did is-on">WHAT WATCHER DID</div>
           <div class="m-row is-on"><svg data-mark="claude"></svg><span class="m-t">Port pairing to Android</span><span class="m-s">Started</span></div>
           <div class="m-row is-on"><svg data-mark="codex"></svg><span class="m-t">Profile main's update path</span><span class="m-s">Started</span></div>
         </div>
@@ -854,7 +911,6 @@ footer nav a { color: var(--muted); }
         <div class="mpic">
           <div class="m-row is-on" data-state="working"><i class="ring"></i><span class="m-t">Port pairing to Android</span><span class="m-s">Working</span></div>
           <div class="m-row is-on" data-state="quiet"><i class="ring"></i><span class="m-t">Profile main's update path</span><span class="m-s">Quiet</span></div>
-          <p class="m-note">Watcher is sending to it now.</p>
         </div>
       </div></div>
       <div class="vB-row"><div class="vB-words"><i>03</i><h3>Only what needs you.</h3><p>Questions and permissions come to you. <b>Watcher never answers them.</b></p></div><div class="vB-pic">
@@ -865,7 +921,6 @@ footer nav a { color: var(--muted); }
           <div class="cursor" id="vncursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
         </div>
         <div class="mpic">
-          <div class="m-needs"><b>Needs you</b> Port pairing to Android</div>
           <div class="m-ask"><div class="m-q">Push its branch?</div><pre>git push origin sotto/android</pre><div class="m-opts"><span>Deny</span><span class="allow">Allow once</span></div></div>
         </div>
       </div></div>
@@ -1027,14 +1082,17 @@ footer nav a { color: var(--muted); }
   const releases = (text) => `<a class="nowrap" href="${RELEASES}" data-focus="releases">${text}</a>`
   const AWAY = 'Sotto is a desktop app for Windows, Mac and Linux.'
   // Phones and other systems can send the page to themselves, through the system's own share sheet or the clipboard.
-  const sendLink = (where) => `<button type="button" class="btn" data-send-link data-focus="${where}-send">Send this link to yourself</button>`
+  const sendLink = (where) => `<button type="button" class="btn primary send-link" data-send-link data-focus="${where}-send">Send this link to yourself</button>`
+  const SHORT = { windows: '10 or 11, x64', mac: 'Apple silicon', linux: 'x64' }
+  const tiles = () => `<div class="tiles">${ORDER.map((o) => `<a class="tile" href="${esc(builds[`${o}-${track}`].href)}" data-download="${o}-${track}">${ICON[o]}<b>${SYSTEMS[o].name}</b><span>${SHORT[o]}</span></a>`).join('')}</div>`
 
   function hero() {
     if (!shown) {
       return `<div class="hero-download">
         <p class="away">${AWAY}</p>
         <div class="cta-row">${sendLink('hero')}</div>
-        <p class="fine">${others('hero', 'Or get it for')}</p>
+        <p class="fine">A desktop app for Windows, Mac and Linux.</p>
+        <p class="fine others">${others('hero', 'Or get it for')}</p>
       </div>`
     }
     return `<div class="hero-download">
@@ -1050,7 +1108,9 @@ footer nav a { color: var(--muted); }
         <p class="away">${AWAY}</p>
         <p>Windows 10 or 11 (x64), Macs with Apple silicon on macOS 12 or newer, and x64 Linux, checked on Omarchy.</p>
         ${sendLink('card')}
+        ${tiles()}
         <p>${others('card', 'Or get it for')}. ${releases('All downloads')}</p>
+        <p class="all">${releases('All downloads')}</p>
       </div></div>`
     }
     return `<div class="head">${switcher('card')}<p>${TRACKS[track].line}</p></div>
@@ -1156,8 +1216,8 @@ footer nav a { color: var(--muted); }
     if (!wide) {
       // A phone has no room at the sides: the six marks sit in a row between the copy and the demo.
       const stageTop = stage.getBoundingClientRect().top - f.top
-      const y = bottom + (stageTop - bottom - size) / 2, step = (W - 2 * 24 - size) / 5
-      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(3, 6); m.home = [24 + i * step, y - 6] })
+      const y = bottom + (stageTop - bottom - size) / 2, step = 48, x0 = (W - 5 * step - size) / 2
+      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(2, 4); m.home = [x0 + i * step, y - 4 + (i % 2) * 8] })
       return
     }
     if (left - padX - size - 0.03 * W >= 60) {
@@ -1417,13 +1477,13 @@ footer nav a { color: var(--muted); }
       const blink = !reduced && !p.fly && state !== 'quiet' && (now / 1000 + i * 1.37) % 6.1 < 0.15
       const ex = [(36 - 12) / 72 * size, (60.36 - 12) / 72 * size], ey = [(48.96 - 15) / 67 * h, (51.84 - 15) / 67 * h], er = 3.6 / 72 * size
       let eyes = ''
-      if (state === 'quiet' || blink) eyes = ex.map((x, k) => `<path d="M${x0 + x - er * 1.2} ${y0 + ey[k]}h${er * 2.4}" stroke="#dfe2e8" stroke-width="1.8" stroke-linecap="round"/>`).join('')
+      if (state === 'quiet' || blink) eyes = ex.map((x, k) => `<path d="M${x0 + x - er * 1.2} ${y0 + ey[k]}h${er * 2.4}" stroke="#b9bec8" stroke-width="1.8" stroke-linecap="round"/>`).join('')
       else {
         const needs = state === 'needs', pulse = needs && !reduced ? 0.55 + 0.45 * Math.sin(now / 1800 * Math.PI * 2) : 1
         if (needs) eyes += `<circle cx="${p.x}" cy="${y0 + h * 0.5}" r="${size * 0.75}" fill="#ffb900" opacity="${(0.16 * pulse).toFixed(2)}"/>`
         eyes += ex.map((x, k) => `<circle cx="${x0 + x}" cy="${y0 + ey[k]}" r="${er}" fill="${needs ? '#ffb900' : '#56c4b6'}"/>`).join('')
       }
-      s += `<g opacity="${p.alpha.toFixed(2)}" transform="rotate(${tilt.toFixed(1)} ${p.x} ${y0 + h / 2})"><svg x="${x0}" y="${y0}" width="${size}" height="${h}" viewBox="12 15 72 67"><use href="#owl" fill="#dfe2e8"/></svg>${eyes}</g>`
+      s += `<g opacity="${p.alpha.toFixed(2)}" transform="rotate(${tilt.toFixed(1)} ${p.x} ${y0 + h / 2})"><svg x="${x0}" y="${y0}" width="${size}" height="${h}" viewBox="12 15 72 67"><use href="#owl" fill="#b9bec8"/></svg>${eyes}</g>`
     }
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
     svg.innerHTML = s
@@ -1508,7 +1568,7 @@ footer nav a { color: var(--muted); }
   at(3550, on('sottoMark'))
   at(4400, () => sotto.classList.add('open'))
   at(4950, on('app')); at(4950, on('mob'))
-  at(5150, () => { sotto.classList.add('gone'); stage.classList.add('is-floating'); $('controls').classList.add('is-on'); $('progress').classList.add('is-on') })
+  at(5150, () => { sotto.classList.add('gone'); stage.classList.add('is-floating'); $('controls').classList.add('is-on'); $('progress').classList.add('is-on'); if (!wide) releaseMotes() })
 
   // 1. Talk to Watcher: dictate one instruction; Watcher starts a thread for each part, and an owl comes out of the moon for each.
   at(5400, on('pill'))
@@ -1532,7 +1592,7 @@ footer nav a { color: var(--muted); }
   const seg = (c) => () => { $('msC').classList.toggle('cur', c === 'C'); $('msW').classList.toggle('cur', c === 'W') }
   const mrow = (id, state, st) => () => { $(id).dataset.state = state; $(`${id}s`).textContent = st }
   at(14600, tab('W')); at(14600, panel(2)); at(14600, seg('W'))
-  at(15400, place(1, 'ready', 'Ready for review', 'PR #74 open.')); at(15400, mrow('mw1', 'ready', 'PR #74 open'))
+  at(15400, place(1, 'ready', 'Ready for review', 'PR #74 open.')); at(15400, mrow('mw1', 'ready', '#74 open'))
   at(16000, place(2, 'quiet', 'Quiet', 'No progress for 20 minutes.')); at(16000, mrow('mw2', 'quiet', 'Quiet')); at(16000, text('mnote', 'One went quiet.'))
   at(17000, place(2, 'quiet', null, 'Watcher is sending to it now.')); at(17000, text('mnote', 'Watcher follows up.'))
   at(17600, place(2, 'working', 'Working', 'Watcher sent to it at 5:59.')); at(17600, mrow('mw2', 'working', 'Working')); at(17600, text('mnote', 'It\u2019s working again.'))
@@ -1592,8 +1652,13 @@ footer nav a { color: var(--muted); }
   function updateControls() {
     let cur = -1
     CH.forEach((c, i) => { if (clock >= c.at) cur = i })
-    document.querySelectorAll('[data-chapter]').forEach((b, i) => b.setAttribute('aria-current', String(i === cur)))
+    document.querySelectorAll('[data-chapter]').forEach((b, i) => {
+      b.setAttribute('aria-current', String(i === cur))
+      const from = CH[i].at, to = i + 1 < CH.length ? CH[i + 1].at : END
+      b.style.setProperty('--p', i < cur ? 1 : i > cur ? 0 : Math.max(0, Math.min(1, (clock - from) / (to - from))).toFixed(3))
+    })
     const pp = $('playPause')
+    pp.dataset.state = playing ? 'playing' : finished ? 'finished' : 'paused'
     pp.textContent = playing ? 'Pause' : (finished ? 'Play again' : 'Play')
     pp.setAttribute('aria-label', playing ? 'Pause the demo' : 'Play the demo')
     $('bar').style.width = `${Math.max(0, Math.min(1, (clock - INTRO_END) / (END - INTRO_END))) * 100}%`
