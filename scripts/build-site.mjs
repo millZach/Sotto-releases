@@ -5,6 +5,7 @@
 //   node scripts/build-site.mjs --check          writes nothing; fails when a page in site/ is not what the build writes
 //   node scripts/build-site.mjs --lint <path>    checks one language's strings, writing nothing
 //   node scripts/build-site.mjs --messages       prints every English message, in page order, as JSON
+//   node scripts/build-site.mjs --self-test      tries the checks and escaping on strings made to break them
 //
 // site-src/index.html is the page in English. Each message in its markup is marked {{like this}}, and each one its
 // scripts write is a tr('like this') call; {{=name}} is a value the build fills in for each language. A message is
@@ -57,10 +58,69 @@ function fail(problems) {
   process.exit(1)
 }
 
-const tags = (s) => [...new Set(s.match(/<[^>]*>/g) || [])].sort()
+const markup = (s) => s.match(/<[^<>]*>/g) || []
 const placeholders = (s) => [...new Set(s.match(/\{\w+\}/g) || [])].sort()
 const same = (a, b) => a.length === b.length && a.every((v, i) => v === b[i])
-const kept = (s) => KEEP.filter((name) => new RegExp(`(^|[^A-Za-z])${name}`).test(s))
+const tally = (list) => list.reduce((counts, item) => counts.set(item, (counts.get(item) || 0) + 1), new Map())
+
+// A name counts only whole: no Latin letter or digit touching it on either side, so "Owlbert" is not Owl. Chinese,
+// Japanese, Arabic and Indic text runs straight into a name, and a hyphen or apostrophe may join a suffix to it
+// ("Windows-এর", "Sotto'yu"); those still count. Polish, Czech, Finnish and Hungarian write a case ending straight
+// onto a name ("Windowsille", "Linuxra"), so a language may list its endings in locales.json as nameEndings, and a
+// name with exactly one of them still counts.
+const EDGE = '[\\p{Script=Latin}0-9]'
+const literal = (s) => s.replace(/[.*+?^$()|[\]\\{}]/g, '\\$&')
+function hasName(name, s, endings = []) {
+  const ending = endings.length ? `(?:${[...endings].sort((a, b) => b.length - a.length).map(literal).join('|')})?` : ''
+  return new RegExp(`(?<!${EDGE})${literal(name)}${ending}(?!${EDGE})`, 'u').test(s)
+}
+const kept = (s) => KEEP.filter((name) => hasName(name, s))
+
+// A line the demo types out word by word, one <span> per word: a translation has as many words as its language needs.
+const wordByWord = (message) => /^(?:<span[^<>]*>[^<>]*<\/span>)+$/.test(message)
+
+// What is wrong with a translation's markup. Every < must begin one of the English message's own tags, whole; the
+// tags must open and close in order; and each tag appears as often as in English, except the plain word spans of a
+// word-by-word line.
+function markupProblems(message, text) {
+  const allowed = new Set(markup(message))
+  for (let at = text.indexOf('<'); at !== -1; at = text.indexOf('<', at + 1)) {
+    const end = text.indexOf('>', at), tag = end === -1 ? '' : text.slice(at, end + 1)
+    if (!allowed.has(tag)) return [`has markup the English does not: "${text.slice(at, at + 40)}". It may use only ${[...allowed].join(' ') || 'no markup'}`]
+  }
+  const problems = [], open = []
+  for (const tag of markup(text)) {
+    const closing = tag.match(/^<\/([a-z]+)>$/)
+    if (!closing) { open.push(tag.match(/^<([a-z]+)/)[1]); continue }
+    if (open.pop() !== closing[1]) { problems.push(`closes ${tag} where it is not the tag open`); break }
+  }
+  if (!problems.length && open.length) problems.push(`leaves <${open.join('>, <')}> open`)
+  const english = tally(markup(message)), translated = tally(markup(text)), loose = wordByWord(message)
+  if (loose && !wordByWord(text)) problems.push('must stay one <span> per word, with nothing between them')
+  for (const tag of new Set([...english.keys(), ...translated.keys()])) {
+    if (loose && (tag === '<span>' || tag === '</span>')) continue
+    const want = english.get(tag) || 0, got = translated.get(tag) || 0
+    if (want !== got) problems.push(`has ${tag} ${got} times where the English has it ${want}`)
+  }
+  return problems
+}
+
+// A translation as HTML. Its tags passed markupProblems; everything between them is text, so a bare &, < or >
+// becomes an entity, and in an attribute so does ". Entities the translation wrote, as &amp; in "Privacy &amp;
+// Security", stay as they are.
+function asHtml(text, attribute) {
+  return text.split(/(<[^<>]*>)/).map((part, i) => (i % 2 && !attribute) ? part : part
+    .replace(/&(?![a-zA-Z]+;|#[0-9]+;|#x[0-9a-fA-F]+;)/g, '&amp;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, attribute ? '&quot;' : '"')).join('')
+}
+
+// The script strings as JSON safe inside a <script> element: no <, > or & at all, so no </script>, <!-- or <script
+// can change how the page parses, and no line or paragraph separator. JSON.parse reads the escapes back.
+const BACKSLASH = String.fromCharCode(92)
+const UNSAFE_IN_SCRIPT = new RegExp(`[<>&${String.fromCharCode(0x2028, 0x2029)}]`, 'g')
+const scriptJson = (strings) => JSON.stringify(strings)
+  .replace(UNSAFE_IN_SCRIPT, (c) => `${BACKSLASH}u${c.charCodeAt(0).toString(16).padStart(4, '0')}`)
 
 // What is wrong with one language's strings, as plain sentences; none when it is ready to build.
 function lint(locale, all) {
@@ -72,9 +132,9 @@ function lint(locale, all) {
   for (const [message, use] of all) {
     const text = strings[message]
     if (typeof text !== 'string' || !text.trim()) { problems.push(`${file}: no translation for "${message}"`); continue }
-    if (!same(tags(message), tags(text))) problems.push(`${file}: "${message}" must keep its markup exactly: ${tags(message).join(' ') || 'none'}`)
+    for (const problem of markupProblems(message, text)) problems.push(`${file}: the translation of "${message}" ${problem}`)
     if (!same(placeholders(message), placeholders(text))) problems.push(`${file}: "${message}" must keep its placeholders: ${placeholders(message).join(' ') || 'none'}`)
-    for (const name of kept(message)) if (!text.includes(name)) problems.push(`${file}: "${message}" must keep the name ${name}`)
+    for (const name of kept(message)) if (!hasName(name, text, locale.nameEndings)) problems.push(`${file}: "${message}" must keep the name ${name}, whole`)
     if (/\{\{|\}\}/.test(text)) problems.push(`${file}: the translation of "${message}" has {{ or }} in it`)
     if (use.attribute && /[<>]/.test(text)) problems.push(`${file}: the translation of "${message}" is an attribute and cannot hold markup`)
   }
@@ -86,7 +146,6 @@ const pageHref = (l) => `/${l.path ? `${l.path}/` : ''}`
 
 function render(locale, all) {
   const strings = locale.path ? JSON.parse(read(`site-src/strings/${locale.path}.json`)) : {}
-  const say = (message) => (locale.path ? strings[message] : message)
   const scriptStrings = {}
   if (locale.path) for (const [message, use] of all) if (use.script) scriptStrings[message] = strings[message]
   const values = {
@@ -100,18 +159,80 @@ function render(locale, all) {
       `<link rel="alternate" hreflang="x-default" href="${origin}/">`,
     ].join('\n'),
     languages: locales.map((l) => `\n        <li><a href="${pageHref(l)}" hreflang="${l.lang}" lang="${l.lang}"${l === locale ? ' aria-current="page"' : ''}>${l.name}</a></li>`).join('') + '\n      ',
-    // A closing tag inside the JSON would end its script element early.
-    strings: JSON.stringify(scriptStrings).replace(/<\//g, '<\\/'),
+    strings: scriptJson(scriptStrings),
   }
   return template.replace(MARKER, (marker, isValue, body, offset) => {
     if (isValue) {
       if (!(body in values)) fail([`The template asks for {{=${body}}}, which the build does not fill in.`])
       return values[body]
     }
-    const text = say(body)
-    return inTag(offset) ? text.replace(/"/g, '&quot;') : text
+    // English is the template's own markup, written as the page is; a translation is escaped as text around its tags.
+    return locale.path ? asHtml(strings[body], inTag(offset)) : body
   })
 }
+
+// Every tr() a script writes into an attribute value, as in aria-label="${...}", must go through esc(), so a translated
+// " cannot end the attribute and start another. Returns each attribute expression that does not.
+function unescapedAttributes(source) {
+  const bad = []
+  for (let at = source.indexOf('="${'); at !== -1; at = source.indexOf('="${', at + 1)) {
+    let depth = 0, end = at + 3
+    for (; end < source.length; end++) {
+      if (source[end] === '{') depth++
+      else if (source[end] === '}' && --depth === 0) break
+    }
+    const expression = source.slice(at + 4, end).trim()
+    if (/\btr\(/.test(expression) && !(expression.startsWith('esc(') && expression.endsWith(')'))) bad.push(expression)
+  }
+  return bad
+}
+
+// The build's own checks, tried on strings made to break them. node scripts/build-site.mjs --self-test
+function selfTest() {
+  const kbd = '<kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.'
+  const lead = 'Watcher keeps these <b id="wleadN">3</b> threads going.'
+  const words = '<span>Send</span><span class="hit">Priya</span><span>the</span><span class="hit">Kubernetes</span><span>note.</span>'
+  const separators = String.fromCharCode(0x2028, 0x2029)
+  const cases = [
+    // 1. Markup a translation may not bring in, finished or not, and text that is escaped around the tags it may.
+    ['an unfinished tag is refused', markupProblems('Ask <b>now</b>', 'Ask <b>now</b> <img src=x onerror="alert(1)" ').length > 0],
+    ['a finished tag the English lacks is refused', markupProblems('Ask <b>now</b>', 'Ask <b>now</b><img src=x onerror="alert(1)">').length > 0],
+    ['a bare < is refused', markupProblems('Ask now', 'Ask < now').length > 0],
+    ['the English message\'s own tags are allowed', markupProblems('Ask <b>now</b>', '<b>Maintenant</b>, demandez').length === 0],
+    ['text is escaped and tags are kept', asHtml('a & b > c "q" <b>d</b>', false) === 'a &amp; b &gt; c "q" <b>d</b>'],
+    ['entities a translation wrote are kept', asHtml('Privacy &amp; Security &#39; &#x2019;', false) === 'Privacy &amp; Security &#39; &#x2019;'],
+    ['an attribute escapes quotes and angle brackets', asHtml('say "hi" <x', true) === 'say &quot;hi&quot; &lt;x'],
+    // 2. A script's attribute values escape what tr() gives them, in the template as it stands.
+    ['the scanner finds a bare tr() in an attribute', unescapedAttributes('<a aria-label="${tr(\'x\')}">').length === 1],
+    ['the scanner accepts esc(tr())', unescapedAttributes('<a aria-label="${esc(ok ? tr(\'x\', { a }) : tr(\'y\'))}">').length === 0],
+    ['the template escapes every tr() in an attribute', unescapedAttributes(template).length === 0],
+    // 3. The script strings cannot change how the page parses.
+    ['the script strings hold no < > & or separators', !/[<>&]/.test(scriptJson({ a: `<!--<script></script>&${separators}` })) && !new RegExp(`[${separators}]`).test(scriptJson({ a: separators }))],
+    ['the script strings read back the same', JSON.parse(scriptJson({ a: `<!--<script>&${separators}` })).a === `<!--<script>&${separators}`],
+    // 4. Tags open and close in order and keep their count, except the words of a word-by-word line.
+    ['a dropped </kbd> is refused', markupProblems(kbd, '<kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space dans une app.').length > 0],
+    ['tags closed out of order are refused', markupProblems('<b>a</b> <u>b</u>', '<b>a <u>b</b></u>').length > 0],
+    ['a duplicated <b id> is refused', markupProblems(lead, 'Watcher garde ces <b id="wleadN">3</b> fils, <b id="wleadN">3</b>.').length > 0],
+    ['a missing <b id> is refused', markupProblems(lead, 'Watcher garde ces 3 fils.').length > 0],
+    ['a word-by-word line may have more or fewer words', markupProblems(words, '<span>Envoie</span><span>à</span><span class="hit">Priya</span><span>la</span><span>note</span><span class="hit">Kubernetes</span><span>.</span>').length === 0],
+    ['a word-by-word line keeps every marked name', markupProblems(words, '<span>Envoie</span><span class="hit">Priya</span><span>la note.</span>').length > 0],
+    ['a word-by-word line has nothing between its words', markupProblems(words, '<span>Envoie</span> <span class="hit">Priya</span><span class="hit">Kubernetes</span>').length > 0],
+    // 5. Names count only whole.
+    ['"Owlbert" is not Owl', !hasName('Owl', 'Owlbert')],
+    ['"MacBook" is not Mac', !hasName('Mac', 'Téléchargez pour MacBook')],
+    ['a name runs into Chinese text', hasName('Owl', '下载Owl的版本')],
+    ['a name runs into Arabic text', hasName('Watcher', 'يبدأWatcher')],
+    ['a hyphen or apostrophe joins a suffix', hasName('Windows', 'Windows-এর') && hasName('Sotto', "Sotto'yu")],
+    ['a case ending counts only where the language lists it', !hasName('Linux', 'Linuxra') && hasName('Linux', 'Linuxra', ['ra'])],
+    ['a listed ending does not let any word through', !hasName('Owl', 'Owlbert', ['ra', 'a'])],
+  ]
+  const failed = cases.filter(([, ok]) => !ok)
+  for (const [name, ok] of cases) console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}`)
+  if (failed.length) fail([`${failed.length} of ${cases.length} self-test cases failed.`])
+  console.log(`All ${cases.length} self-test cases pass.`)
+}
+
+if (args[0] === '--self-test') { selfTest(); process.exit(0) }
 
 const all = messages()
 

@@ -21,5 +21,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Test the build's own checks and escaping
+        run: node scripts/build-site.mjs --self-test
+
       - name: Check the site is built from site-src
         run: node scripts/build-site.mjs --check

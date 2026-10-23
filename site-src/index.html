@@ -1154,7 +1154,7 @@ const tr = (message, values = {}) => (STRINGS[message] || message).replace(/\{(\
     const key = `${system}-${track}`, s = SYSTEMS[system]
     const label = track === 'owl' ? tr('Download Owl for {system}', { system: s.name }) : tr('Download for {system}', { system: s.name })
     return `<a class="btn primary" data-download="${key}" href="${esc(builds[key].href)}" data-focus="${where}-download">${ICON[system]}${label}</a>`
-      + (system === 'linux' ? ` <a class="tarball" data-download="${key}-tar" href="${esc(builds[`${key}-tar`].href)}" data-focus="${where}-tarball" aria-label="${track === 'owl' ? tr('Or download the Owl .tar.gz for Linux') : tr('Or download the .tar.gz for Linux')}">${tr('or the .tar.gz')}</a>` : '')
+      + (system === 'linux' ? ` <a class="tarball" data-download="${key}-tar" href="${esc(builds[`${key}-tar`].href)}" data-focus="${where}-tarball" aria-label="${esc(track === 'owl' ? tr('Or download the Owl .tar.gz for Linux') : tr('Or download the .tar.gz for Linux'))}">${tr('or the .tar.gz')}</a>` : '')
   }
   const spec = (system) => {
     const b = builds[`${system}-${track}`]
@@ -1165,7 +1165,7 @@ const tr = (message, values = {}) => (STRINGS[message] || message).replace(/\{(\
   // Other systems swap the offer in place: people download on one computer for another.
   const others = (where, lead) => ORDER.filter((o) => o !== shown).map((o) => {
     const system = SYSTEMS[o].name, mine = o === here
-    return `<button type="button" class="linkbtn" data-show="${o}" data-focus="${where}-show-${o}" aria-label="${mine ? tr('Show the {system} downloads, this computer', { system }) : tr('Show the {system} downloads', { system })}">${mine ? tr('{system} (this computer)', { system }) : system}</button>`
+    return `<button type="button" class="linkbtn" data-show="${o}" data-focus="${where}-show-${o}" aria-label="${esc(mine ? tr('Show the {system} downloads, this computer', { system }) : tr('Show the {system} downloads', { system }))}">${mine ? tr('{system} (this computer)', { system }) : system}</button>`
   }).join('<span class="dot" aria-hidden="true">·</span>').replace(/^/, lead ? `${lead} ` : '')
   const releases = (text) => `<a class="nowrap" href="${RELEASES}" data-focus="releases">${text}</a>`
   const AWAY = tr('Sotto is a desktop app for Windows, Mac and Linux.')
