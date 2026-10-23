@@ -1137,7 +1137,7 @@ footer nav a { color: var(--muted); }
     heroMotes.forEach((m, i) => { const [x0, x1, y0, y1] = slots[i]; m.home = [rnd(x0, Math.max(x0, x1)), rnd(y0, Math.max(y0, y1))] })
   }
   let heroOut = false
-  const updateSky = () => sky.classList.toggle('is-on', wide && (heroOut || (heroMotes[0] && (heroMotes[0].gathered || heroMotes[0].hidden))))
+  const updateSky = () => sky.classList.toggle('is-on', wide && (heroOut || (heroMotes[0] && heroMotes[0].gathered && !heroMotes[0].hidden)))
   // The words are measured again once the page's own font is in, and whenever the window changes size.
   placeMotes()
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!(heroMotes[0] && heroMotes[0].gathered)) placeMotes() })
