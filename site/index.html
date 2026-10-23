@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -10,19 +10,60 @@
 <meta property="og:title" content="Sotto: your coding agents, watched.">
 <meta property="og:description" content="Watcher starts threads on your own Codex, Claude Code and Grok Build, keeps them going and lands their pull requests one at a time. You answer every question and permission. Free for Windows, Mac and Linux.">
 <meta property="og:url" content="https://saysotto.com/">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://saysotto.com/card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://saysotto.com/">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate" hreflang="en" href="https://saysotto.com/">
+<link rel="alternate" hreflang="es-MX" href="https://saysotto.com/es-mx/">
+<link rel="alternate" hreflang="es-ES" href="https://saysotto.com/es-es/">
+<link rel="alternate" hreflang="fr" href="https://saysotto.com/fr/">
+<link rel="alternate" hreflang="de" href="https://saysotto.com/de/">
+<link rel="alternate" hreflang="it" href="https://saysotto.com/it/">
+<link rel="alternate" hreflang="pt-BR" href="https://saysotto.com/pt-br/">
+<link rel="alternate" hreflang="pt-PT" href="https://saysotto.com/pt-pt/">
+<link rel="alternate" hreflang="nl" href="https://saysotto.com/nl/">
+<link rel="alternate" hreflang="pl" href="https://saysotto.com/pl/">
+<link rel="alternate" hreflang="sv" href="https://saysotto.com/sv/">
+<link rel="alternate" hreflang="da" href="https://saysotto.com/da/">
+<link rel="alternate" hreflang="nb" href="https://saysotto.com/nb/">
+<link rel="alternate" hreflang="fi" href="https://saysotto.com/fi/">
+<link rel="alternate" hreflang="cs" href="https://saysotto.com/cs/">
+<link rel="alternate" hreflang="ro" href="https://saysotto.com/ro/">
+<link rel="alternate" hreflang="hu" href="https://saysotto.com/hu/">
+<link rel="alternate" hreflang="el" href="https://saysotto.com/el/">
+<link rel="alternate" hreflang="uk" href="https://saysotto.com/uk/">
+<link rel="alternate" hreflang="tr" href="https://saysotto.com/tr/">
+<link rel="alternate" hreflang="ar" href="https://saysotto.com/ar/">
+<link rel="alternate" hreflang="zh-Hans" href="https://saysotto.com/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://saysotto.com/zh-hant/">
+<link rel="alternate" hreflang="ja" href="https://saysotto.com/ja/">
+<link rel="alternate" hreflang="hi" href="https://saysotto.com/hi/">
+<link rel="alternate" hreflang="bn" href="https://saysotto.com/bn/">
+<link rel="alternate" hreflang="mr" href="https://saysotto.com/mr/">
+<link rel="alternate" hreflang="te" href="https://saysotto.com/te/">
+<link rel="alternate" hreflang="ta" href="https://saysotto.com/ta/">
+<link rel="alternate" hreflang="ur" href="https://saysotto.com/ur/">
+<link rel="alternate" hreflang="x-default" href="https://saysotto.com/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <style>
 @font-face {
   font-family: 'Figtree';
   font-style: normal;
   font-weight: 300 900;
   font-display: swap;
-  src: url('fonts/figtree-latin.woff2') format('woff2');
+  src: url('/fonts/figtree-latin.woff2') format('woff2');
+}
+/* Figtree's accented Latin letters, as in Polish, Czech, Romanian, Hungarian and Turkish. A page loads them only when it shows one. */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('/fonts/figtree-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 :root {
@@ -113,6 +154,17 @@ svg[data-mark] { fill: currentColor; }
 .strip nav { display: flex; align-items: center; gap: 22px; font-size: 15px; }
 .strip nav a { color: var(--text-2); }
 .strip nav a.cta { color: var(--accent-text); }
+
+/* The language menu: plain links to the page in each language, each named in its own script. */
+.lang { position: relative; }
+.lang summary { display: flex; align-items: center; gap: 7px; padding: 4px 2px; border-radius: 6px; color: var(--text-2); cursor: pointer; list-style: none; white-space: nowrap; }
+.lang summary::-webkit-details-marker { display: none; }
+.lang summary:hover, .lang[open] summary { color: var(--text); }
+.lang summary .globe { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.3; flex: none; }
+.lang ul { position: absolute; top: calc(100% + 12px); inset-inline-end: -14px; z-index: 30; margin: 0; padding: 8px; list-style: none; display: grid; grid-template-columns: repeat(3, auto); gap: 2px 4px; max-height: calc(100vh - 80px); overflow-y: auto; background: var(--sidebar); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5); }
+.lang li a { display: block; padding: 6px 12px; border-radius: 8px; color: var(--text-2); white-space: nowrap; }
+.lang li a:hover { background: var(--card); color: var(--text); text-decoration: none; }
+.lang li a[aria-current="page"] { background: var(--selected); color: var(--text); }
 
 /* Hero */
 .hero { position: relative; z-index: 1; padding: clamp(24px, 5vh, 56px) var(--gutter) 0; overflow: hidden; }
@@ -592,6 +644,9 @@ footer nav a { color: var(--muted); }
 /* Phones: one thing first on each screen, two greys, and the app's own rows under each step. */
 @media (max-width: 760px) {
   .strip nav a:not(.cta) { display: none; }
+  .strip nav .lang li a { display: block; }
+  .lang ul { position: fixed; top: 58px; inset-inline: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: calc(100vh - 76px); }
+  [dir="rtl"] .controls button[data-chapter][aria-current="true"]::before { background: linear-gradient(to left, var(--accent) calc(var(--p, 0) * 100%), var(--hairline) 0); }
   .hero { padding-top: 44px; }
   .hero h1 { font-size: 40px; line-height: 1.04; font-weight: 400; letter-spacing: -0.03em; max-width: 13ch; }
   .lede-full { display: none; }
@@ -678,6 +733,37 @@ footer nav a { color: var(--muted); }
   .mote, .sotto-mark, .app, .mob, .msg, .rcpt, .view, .pill, .hotkey, .cursor, .controls, .progress, .turn, .vd .line span, .mp, .m-row { transition: none; }
   .sotto-mark.is-on .eye { animation: none; transform: none; }
 }
+
+/* Scripts Figtree does not draw take the computer's own faces, chosen by the page's language, and Figtree keeps the
+   Latin words among them. Figtree's tight tracking would break joined and dense scripts, so it is off for them. */
+:lang(ar) { --script: 'Segoe UI', 'Geeza Pro', 'Noto Sans Arabic'; }
+:lang(ur) { --script: 'Noto Nastaliq Urdu', 'Urdu Typesetting', 'Segoe UI', 'Geeza Pro', 'Noto Sans Arabic'; }
+:lang(zh-Hans) { --script: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans SC'; }
+:lang(zh-Hant) { --script: 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans CJK TC', 'Noto Sans TC'; }
+:lang(ja) { --script: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Noto Sans CJK JP', 'Noto Sans JP'; }
+:lang(hi), :lang(mr) { --script: 'Nirmala UI', 'Kohinoor Devanagari', 'Noto Sans Devanagari'; }
+:lang(bn) { --script: 'Nirmala UI', 'Kohinoor Bangla', 'Noto Sans Bengali'; }
+:lang(te) { --script: 'Nirmala UI', 'Kohinoor Telugu', 'Noto Sans Telugu'; }
+:lang(ta) { --script: 'Nirmala UI', 'Tamil Sangam MN', 'Noto Sans Tamil'; }
+:is(body, .pic text, .lang a):is(:lang(ar), :lang(ur), :lang(zh), :lang(ja), :lang(hi), :lang(mr), :lang(bn), :lang(te), :lang(ta)) { font-family: 'Figtree', var(--script), ui-sans-serif, system-ui, sans-serif; }
+:is(:lang(ar), :lang(ur), :lang(zh), :lang(ja), :lang(hi), :lang(mr), :lang(bn), :lang(te), :lang(ta)) :is(h1, h2, h3, h4, .m-did, .vB-words i) { letter-spacing: normal; }
+:is(h1, h2, h3):is(:lang(ar), :lang(zh), :lang(ja)) { line-height: 1.3; }
+/* A heading's 20ch holds about eleven Chinese or Japanese characters, so theirs are measured in characters instead,
+   and Japanese lines break between phrases rather than inside a word. */
+:is(.hero h1, section h2):is(:lang(zh), :lang(ja)) { max-width: 16em; }
+:is(h1, h2, h3, .lede, .sub, .vB-words p):lang(ja) { word-break: auto-phrase; }
+:is(h1, h2, h3):is(:lang(hi), :lang(mr), :lang(bn), :lang(te), :lang(ta)) { line-height: 1.4; }
+body:is(:lang(hi), :lang(mr), :lang(bn), :lang(te), :lang(ta)) { line-height: 1.7; }
+/* Nastaliq stacks each word on a slant, so Urdu needs the most room between lines. */
+body:lang(ur) { line-height: 2.1; }
+:is(h1, h2, h3):lang(ur) { line-height: 1.9; }
+:is(.hero .lede, .vB-words p, .sub, .fine, .get, .oss p, footer):lang(ur) { line-height: 2.1; }
+
+/* A page in Arabic or Urdu reads right to left as a whole. The demo and the pictures under it show Sotto's own window,
+   which keeps its English layout in those languages (ADR-0122): only its text runs right to left. */
+[dir="rtl"] .hero-cta .more::after { content: ' \2190'; }
+[dir="rtl"] :is(.stage, .vB-pic) { direction: ltr; }
+[dir="rtl"] :is(.said, .m-said, .wlead p, .answered-line, .m-note, .m-done, .last, .composer .text) { unicode-bidi: plaintext; }
 </style>
 </head>
 <body>
@@ -691,10 +777,45 @@ footer nav a { color: var(--muted); }
 <div class="sky" id="sky" aria-hidden="true"></div>
 
 <header class="strip" id="strip">
-  <a class="brand" href="#top" aria-label="Sotto, top of page"><img src="icon.svg" alt="">Sotto</a>
+  <a class="brand" href="#top" aria-label="Sotto, top of page"><img src="/icon.svg" alt="">Sotto</a>
   <nav>
     <a href="#what">What it does</a>
     <a href="https://github.com/millZach/Sotto" class="gh-btn"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg>Star on GitHub</a>
+    <details class="lang" id="lang">
+      <summary><svg class="globe" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3"/><path d="M1.7 8h12.6M8 1.7c1.9 1.8 2.8 3.9 2.8 6.3S9.9 12.5 8 14.3M8 1.7C6.1 3.5 5.2 5.6 5.2 8s.9 4.5 2.8 6.3"/></svg><span class="vh">Language: </span>English</summary>
+      <ul>
+        <li><a href="/" hreflang="en" lang="en" aria-current="page">English</a></li>
+        <li><a href="/es-mx/" hreflang="es-MX" lang="es-MX">Español (México)</a></li>
+        <li><a href="/es-es/" hreflang="es-ES" lang="es-ES">Español (España)</a></li>
+        <li><a href="/fr/" hreflang="fr" lang="fr">Français</a></li>
+        <li><a href="/de/" hreflang="de" lang="de">Deutsch</a></li>
+        <li><a href="/it/" hreflang="it" lang="it">Italiano</a></li>
+        <li><a href="/pt-br/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a></li>
+        <li><a href="/pt-pt/" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a></li>
+        <li><a href="/nl/" hreflang="nl" lang="nl">Nederlands</a></li>
+        <li><a href="/pl/" hreflang="pl" lang="pl">Polski</a></li>
+        <li><a href="/sv/" hreflang="sv" lang="sv">Svenska</a></li>
+        <li><a href="/da/" hreflang="da" lang="da">Dansk</a></li>
+        <li><a href="/nb/" hreflang="nb" lang="nb">Norsk bokmål</a></li>
+        <li><a href="/fi/" hreflang="fi" lang="fi">Suomi</a></li>
+        <li><a href="/cs/" hreflang="cs" lang="cs">Čeština</a></li>
+        <li><a href="/ro/" hreflang="ro" lang="ro">Română</a></li>
+        <li><a href="/hu/" hreflang="hu" lang="hu">Magyar</a></li>
+        <li><a href="/el/" hreflang="el" lang="el">Ελληνικά</a></li>
+        <li><a href="/uk/" hreflang="uk" lang="uk">Українська</a></li>
+        <li><a href="/tr/" hreflang="tr" lang="tr">Türkçe</a></li>
+        <li><a href="/ar/" hreflang="ar" lang="ar">العربية</a></li>
+        <li><a href="/zh-hans/" hreflang="zh-Hans" lang="zh-Hans">简体中文</a></li>
+        <li><a href="/zh-hant/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a></li>
+        <li><a href="/ja/" hreflang="ja" lang="ja">日本語</a></li>
+        <li><a href="/hi/" hreflang="hi" lang="hi">हिन्दी</a></li>
+        <li><a href="/bn/" hreflang="bn" lang="bn">বাংলা</a></li>
+        <li><a href="/mr/" hreflang="mr" lang="mr">मराठी</a></li>
+        <li><a href="/te/" hreflang="te" lang="te">తెలుగు</a></li>
+        <li><a href="/ta/" hreflang="ta" lang="ta">தமிழ்</a></li>
+        <li><a href="/ur/" hreflang="ur" lang="ur">اردو</a></li>
+      </ul>
+    </details>
     <a href="#download" class="cta">Download</a>
   </nav>
 </header>
@@ -725,7 +846,7 @@ footer nav a { color: var(--muted); }
 
       <div class="app" id="app" aria-hidden="true">
         <div class="wtop">
-          <img class="tile" src="icon.svg" alt="">
+          <img class="tile" src="/icon.svg" alt="">
           <span class="name">Watcher</span>
           <span class="all"><svg class="ico" viewBox="0 0 16 16"><path d="M5 4h9M5 8h9M5 12h9M2 4h.01M2 8h.01M2 12h.01"/></svg>All threads <b id="allN">0</b><svg class="ico" viewBox="0 0 16 16" style="width:11px;height:11px"><path d="M4 6l4 4 4-4"/></svg></span>
           <span class="tabpill"><span id="tabC" class="cur">Conversation</span><span id="tabW">Watched <i class="n" id="watchN">0</i></span><span id="tabV">Visualize</span></span>
@@ -870,7 +991,7 @@ footer nav a { color: var(--muted); }
       </div>
 
       <div class="hotkey" id="hotkey">Ctrl + Shift + Space</div>
-      <div class="pill" id="pill"><span class="pi"><img src="icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="pillTime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
+      <div class="pill" id="pill"><span class="pi"><img src="/icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="pillTime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
       <div class="cursor" id="cursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
     </div>
 
@@ -949,7 +1070,7 @@ footer nav a { color: var(--muted); }
       </div></div>
       <div class="vB-row"><div class="vB-words"><i>05</i><h3>Dictation too.</h3><p><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.</p></div><div class="vB-pic">
         <div class="vig vd is-bare" id="vd" aria-hidden="true">
-          <div class="pill is-on" id="vdpill"><span class="pi"><img src="icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="vdtime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
+          <div class="pill is-on" id="vdpill"><span class="pi"><img src="/icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="vdtime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
           <div class="line" id="vdline"><span>Send</span><span class="hit">Priya</span><span>the</span><span class="hit">Kubernetes</span><span>rollout</span><span>note</span><span>before</span><span>standup.</span></div>
         </div>
       </div></div>
@@ -1004,6 +1125,26 @@ footer nav a { color: var(--muted); }
   </nav>
 </footer>
 
+<script type="application/json" id="strings">{}</script>
+<script>
+// The words the scripts below write, in the page's language: each English message keyed to its translation. The
+// English page carries none, and a message without a translation stays in English.
+const STRINGS = JSON.parse(document.getElementById('strings').textContent)
+const tr = (message, values = {}) => (STRINGS[message] || message).replace(/\{(\w+)\}/g, (all, key) => key in values ? values[key] : all)
+
+// The language menu closes on Escape, handing focus back to its button, and on a press anywhere outside it.
+;(() => {
+  const menu = document.getElementById('lang')
+  addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !menu.open) return
+    const inside = menu.contains(document.activeElement)
+    menu.open = false
+    if (inside) menu.querySelector('summary').focus()
+  })
+  addEventListener('click', (e) => { if (menu.open && !menu.contains(e.target)) menu.open = false })
+})()
+</script>
+
 <script>
 // Downloads. The page reads which system the browser runs on and offers that system's Stable and Owl builds,
 // with a switch between the two in the hero and the card, kept in step. Without this script the markup above
@@ -1024,27 +1165,27 @@ footer nav a { color: var(--muted); }
   const pkg = (key, pattern) => /\.pkg\.tar\.zst$/.test(builds[key].href) ? builds[key].href.split('/').pop() : pattern
   const SYSTEMS = {
     windows: {
-      name: 'Windows', needs: 'Windows 10 or 11, x64', fine: 'Windows 10 or 11, x64.',
-      stable: () => 'If SmartScreen asks, choose More info, then Run anyway.',
-      owl: () => 'Installs over Sotto. If SmartScreen asks, choose More info, then Run anyway.',
+      name: 'Windows', needs: tr('Windows 10 or 11, x64'), fine: tr('Windows 10 or 11, x64.'),
+      stable: () => tr('If SmartScreen asks, choose More info, then Run anyway.'),
+      owl: () => tr('Installs over Sotto. If SmartScreen asks, choose More info, then Run anyway.'),
     },
     mac: {
-      name: 'Mac', needs: 'Apple silicon, macOS 12 or newer', fine: 'For Macs with Apple silicon, macOS 12 or newer. Intel Macs aren’t supported.',
-      stable: () => 'Drag Sotto into Applications. The first time, allow it under Privacy &amp; Security.',
-      owl: () => 'Drag Sotto into Applications, over Sotto if you have it.',
+      name: 'Mac', needs: tr('Apple silicon, macOS 12 or newer'), fine: tr('For Macs with Apple silicon, macOS 12 or newer. Intel Macs aren’t supported.'),
+      stable: () => tr('Drag Sotto into Applications. The first time, allow it under Privacy &amp; Security.'),
+      owl: () => tr('Drag Sotto into Applications, over Sotto if you have it.'),
     },
     linux: {
-      name: 'Linux', needs: 'x64, checked on Omarchy', fine: 'An Arch package for x64 Linux, checked on Omarchy.',
+      name: 'Linux', needs: tr('x64, checked on Omarchy'), fine: tr('An Arch package for x64 Linux, checked on Omarchy.'),
       stable: () => `<code class="cmd">sudo pacman -U ${esc(pkg('linux-stable', 'sotto-bin-*.pkg.tar.zst'))}</code>`,
-      owl: () => `<code class="cmd">sudo pacman -U ${esc(pkg('linux-owl', 'sotto-bin-*owl*.pkg.tar.zst'))}</code>, over Sotto.`,
+      owl: () => tr('{command}, over Sotto.', { command: `<code class="cmd">sudo pacman -U ${esc(pkg('linux-owl', 'sotto-bin-*owl*.pkg.tar.zst'))}</code>` }),
     },
   }
   const ORDER = ['windows', 'mac', 'linux']
   const TRACKS = {
-    stable: { label: 'Stable', line: 'The release most people use. No Watcher yet.', fine: 'Free and open source. No Watcher yet.' },
-    owl: { label: 'Owl preview', line: 'Newer, with Watcher. Installs over Stable and keeps your threads.', fine: 'Watcher is in Owl, the preview.' },
+    stable: { label: tr('Stable'), line: tr('The release most people use. No Watcher yet.'), fine: tr('Free and open source. No Watcher yet.') },
+    owl: { label: tr('Owl preview'), line: tr('Newer, with Watcher. Installs over Stable and keeps your threads.'), fine: tr('Watcher is in Owl, the preview.') },
   }
-  const COST = 'Free. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand.'
+  const COST = tr('Free. Optional AI cleanup uses your own OpenRouter key, about $0.20 per thousand.')
 
   // The browser's own answer when it gives one, else its user agent, else its platform. Phones, tablets,
   // Chrome OS and anything unknown get no build. Every Mac browser says "Intel Mac OS X", so a Mac is assumed
@@ -1072,26 +1213,26 @@ footer nav a { color: var(--muted); }
 
   const button = (system, where) => {
     const key = `${system}-${track}`, s = SYSTEMS[system]
-    const label = track === 'owl' ? `Download Owl for ${s.name}` : `Download for ${s.name}`
+    const label = track === 'owl' ? tr('Download Owl for {system}', { system: s.name }) : tr('Download for {system}', { system: s.name })
     return `<a class="btn primary" data-download="${key}" href="${esc(builds[key].href)}" data-focus="${where}-download">${ICON[system]}${label}</a>`
-      + (system === 'linux' ? ` <a class="tarball" data-download="${key}-tar" href="${esc(builds[`${key}-tar`].href)}" data-focus="${where}-tarball" aria-label="Or download the ${track === 'owl' ? 'Owl ' : ''}.tar.gz for Linux">or the .tar.gz</a>` : '')
+      + (system === 'linux' ? ` <a class="tarball" data-download="${key}-tar" href="${esc(builds[`${key}-tar`].href)}" data-focus="${where}-tarball" aria-label="${track === 'owl' ? tr('Or download the Owl .tar.gz for Linux') : tr('Or download the .tar.gz for Linux')}">${tr('or the .tar.gz')}</a>` : '')
   }
   const spec = (system) => {
     const b = builds[`${system}-${track}`]
-    return `<p class="spec"><span>${track === 'owl' ? 'Owl' : 'Version'} ${esc(b.version)}</span>${b.size ? `<span>${esc(b.size)}</span>` : ''}<span>${SYSTEMS[system].needs}</span></p>`
+    return `<p class="spec"><span>${track === 'owl' ? `Owl ${esc(b.version)}` : tr('Version {version}', { version: esc(b.version) })}</span>${b.size ? `<span>${esc(b.size)}</span>` : ''}<span>${SYSTEMS[system].needs}</span></p>`
   }
-  const switcher = (where) => `<fieldset class="track"><legend class="vh">Which build to download</legend>${Object.keys(TRACKS).map((t) =>
+  const switcher = (where) => `<fieldset class="track"><legend class="vh">${tr('Which build to download')}</legend>${Object.keys(TRACKS).map((t) =>
     `<label><input type="radio" name="track-${where}" value="${t}" data-focus="${where}-${t}"${t === track ? ' checked' : ''}><span>${TRACKS[t].label}</span></label>`).join('')}</fieldset>`
   // Other systems swap the offer in place: people download on one computer for another.
   const others = (where, lead) => ORDER.filter((o) => o !== shown).map((o) => {
-    const mine = o === here ? ' (this computer)' : ''
-    return `<button type="button" class="linkbtn" data-show="${o}" data-focus="${where}-show-${o}" aria-label="Show the ${SYSTEMS[o].name} downloads${mine ? ', this computer' : ''}">${SYSTEMS[o].name}${mine}</button>`
+    const system = SYSTEMS[o].name, mine = o === here
+    return `<button type="button" class="linkbtn" data-show="${o}" data-focus="${where}-show-${o}" aria-label="${mine ? tr('Show the {system} downloads, this computer', { system }) : tr('Show the {system} downloads', { system })}">${mine ? tr('{system} (this computer)', { system }) : system}</button>`
   }).join('<span class="dot" aria-hidden="true">·</span>').replace(/^/, lead ? `${lead} ` : '')
   const releases = (text) => `<a class="nowrap" href="${RELEASES}" data-focus="releases">${text}</a>`
-  const AWAY = 'Sotto is a desktop app for Windows, Mac and Linux.'
+  const AWAY = tr('Sotto is a desktop app for Windows, Mac and Linux.')
   // Phones and other systems can send the page to themselves, through the system's own share sheet or the clipboard.
-  const sendLink = (where) => `<button type="button" class="btn primary send-link" data-send-link data-focus="${where}-send">Send this link to yourself</button>`
-  const SHORT = { windows: '10 or 11, x64', mac: 'Apple silicon', linux: 'x64' }
+  const sendLink = (where) => `<button type="button" class="btn primary send-link" data-send-link data-focus="${where}-send">${tr('Send this link to yourself')}</button>`
+  const SHORT = { windows: tr('10 or 11, x64'), mac: tr('Apple silicon'), linux: 'x64' }
   const tiles = () => `<div class="tiles">${ORDER.map((o) => `<a class="tile" href="${esc(builds[`${o}-${track}`].href)}" data-download="${o}-${track}">${ICON[o]}<b>${SYSTEMS[o].name}</b><span>${SHORT[o]}</span></a>`).join('')}</div>`
 
   function hero() {
@@ -1099,26 +1240,26 @@ footer nav a { color: var(--muted); }
       return `<div class="hero-download">
         <p class="away">${AWAY}</p>
         <div class="cta-row">${sendLink('hero')}</div>
-        <p class="fine">A desktop app for Windows, Mac and Linux.</p>
-        <p class="fine others">${others('hero', 'Or get it for')}</p>
+        <p class="fine">${tr('A desktop app for Windows, Mac and Linux.')}</p>
+        <p class="fine others">${others('hero', tr('Or get it for'))}</p>
       </div>`
     }
     return `<div class="hero-download">
       ${switcher('hero')}
-      <div class="cta-row">${button(shown, 'hero')}<a class="more" href="#what">See what it does</a></div>
+      <div class="cta-row">${button(shown, 'hero')}<a class="more" href="#what">${tr('See what it does')}</a></div>
       <p class="fine">${TRACKS[track].fine} ${SYSTEMS[shown].fine}</p>
-      <p class="fine">${others('hero', 'Other systems:')}</p>
+      <p class="fine">${others('hero', tr('Other systems:'))}</p>
     </div>`
   }
   function card() {
     if (!shown) {
       return `<div class="body"><div class="none">
         <p class="away">${AWAY}</p>
-        <p>Windows 10 or 11 (x64), Macs with Apple silicon on macOS 12 or newer, and x64 Linux, checked on Omarchy.</p>
+        <p>${tr('Windows 10 or 11 (x64), Macs with Apple silicon on macOS 12 or newer, and x64 Linux, checked on Omarchy.')}</p>
         ${sendLink('card')}
         ${tiles()}
-        <p>${others('card', 'Or get it for')}. ${releases('All downloads')}</p>
-        <p class="all">${releases('All downloads')}</p>
+        <p>${others('card', tr('Or get it for'))}. ${releases(tr('All downloads'))}</p>
+        <p class="all">${releases(tr('All downloads'))}</p>
       </div></div>`
     }
     return `<div class="head">${switcher('card')}<p>${TRACKS[track].line}</p></div>
@@ -1126,9 +1267,9 @@ footer nav a { color: var(--muted); }
         <div class="buttons">${button(shown, 'card')}</div>
         ${spec(shown)}
         <ul>
-          <li><b>What it costs</b>${COST}</li>
-          <li><b>First run</b>${SYSTEMS[shown][track]()}</li>
-          <li><b>Another computer</b>${others('card', '')}. Or see ${releases('all downloads')}.</li>
+          <li><b>${tr('What it costs')}</b>${COST}</li>
+          <li><b>${tr('First run')}</b>${SYSTEMS[shown][track]()}</li>
+          <li><b>${tr('Another computer')}</b>${others('card', '')}${tr('. Or see {link}.', { link: releases(tr('all downloads')) })}</li>
         </ul>
       </div>`
   }
@@ -1149,9 +1290,9 @@ footer nav a { color: var(--muted); }
       if (b) { shown = b.dataset.show; render() }
       const send = e.target.closest('[data-send-link]')
       if (send) {
-        const url = 'https://saysotto.com/'
+        const url = document.querySelector('link[rel="canonical"]').href // this page, in this language
         if (navigator.share) navigator.share({ title: 'Sotto', url }).catch(() => {})
-        else if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => { send.textContent = 'Link copied' }, () => { send.textContent = url })
+        else if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => { send.textContent = tr('Link copied') }, () => { send.textContent = url })
         else send.textContent = url
       }
     })
@@ -1499,10 +1640,12 @@ footer nav a { color: var(--muted); }
 
   // ---------- Watcher's picture, drawn for the Visualize tab from the same clock, after the app's own ----------
   const NODES = [
-    { y: 118, title: 'Retry failed uploads', pr: 74, ready: 0, go: 24400, merged: 25600 },
-    { y: 160, title: 'Fix the flaky host test', pr: 75, ready: 24800, go: 26400, merged: 27600 },
-    { y: 202, title: 'Tidy the Settings copy', pr: 76, ready: 27000, go: 28400, merged: 29600 },
+    { y: 118, title: tr('Retry failed uploads'), pr: 74, ready: 0, go: 24400, merged: 25600 },
+    { y: 160, title: tr('Fix the flaky host test'), pr: 75, ready: 24800, go: 26400, merged: 27600 },
+    { y: 202, title: tr('Tidy the Settings copy'), pr: 76, ready: 27000, go: 28400, merged: 29600 },
   ]
+  // How many Latin letters' width a label takes: a Chinese or Japanese character takes about two.
+  const span = (s) => [...s].reduce((n, c) => n + (c.codePointAt(0) >= 0x2e80 ? 2 : 1), 0)
   const WAT = { x: 440, y: 150 }, DOTX = 318
   let lastPic = ''
   function drawPic(t) {
@@ -1511,7 +1654,7 @@ footer nav a { color: var(--muted); }
     lastPic = key
     const working = NODES.filter((n) => t < n.merged).length
     let s = `<rect x="30" y="66" width="310" height="170" rx="12" fill="rgba(16,18,22,.55)" stroke="#262b34"/>
-      <text x="326" y="88" font-size="12.5" text-anchor="end" fill="#a0a5ae"><tspan font-weight="700" fill="#f9fafd">sotto</tspan> · This computer</text>`
+      <text x="326" y="88" font-size="12.5" text-anchor="end" fill="#a0a5ae"><tspan font-weight="700" fill="#f9fafd">sotto</tspan> · ${tr('This computer')}</text>`
     for (const n of NODES) {
       const lit = t >= n.go && t < n.go + 800
       s += `<path d="M${WAT.x - 27} ${WAT.y} L${DOTX} ${n.y}" stroke="${lit ? '#47b8a9' : 'rgba(160,165,174,.45)'}" stroke-width="${lit ? 1.6 : 1.1}"/>`
@@ -1519,12 +1662,14 @@ footer nav a { color: var(--muted); }
     s += `<circle cx="${WAT.x}" cy="${WAT.y}" r="34" fill="none" stroke="rgba(71,184,169,.22)" stroke-width="8"/>
       <circle cx="${WAT.x}" cy="${WAT.y}" r="27" fill="#0b1416" stroke="#47b8a9" stroke-width="1.5"/>
       <svg x="${WAT.x - 14}" y="${WAT.y - 13}" width="28" height="26" viewBox="12 15 72 67"><use href="#owl" fill="#47b8a9"/></svg>
-      <text x="${WAT.x - 44}" y="${WAT.y + 56}" font-size="12.5" fill="#cfd3db">Watcher · ${working} working</text>`
+      <text x="${WAT.x - 44}" y="${WAT.y + 56}" font-size="12.5" fill="#cfd3db">${tr('Watcher · {count} working', { count: working })}</text>`
     for (const n of NODES) {
       const merged = t >= n.merged, ready = t >= n.ready, go = t >= n.go
-      const label = merged ? `#${n.pr} merged` : go ? `#${n.pr} GO` : ready ? `#${n.pr} ready` : `#${n.pr}`
-      const tw = n.title.length * 6.6, cw = label.length * 6.4 + 26
-      s += `<text x="${DOTX - 14}" y="${n.y + 4}" font-size="13" text-anchor="end" fill="${merged ? '#a0a5ae' : '#f9fafd'}">${n.title}</text>`
+      const label = merged ? tr('#{pr} merged', { pr: n.pr }) : go ? tr('#{pr} GO', { pr: n.pr }) : ready ? tr('#{pr} ready', { pr: n.pr }) : `#${n.pr}`
+      // A title too long to sit beside its chip inside the computer's box is set smaller until it fits.
+      const cw = span(label) * 6.4 + 26, room = DOTX - 14 - 10 - 36 - cw
+      const size = Math.max(10, Math.min(13, 13 * room / (span(n.title) * 6.6))), tw = span(n.title) * 6.6 * size / 13
+      s += `<text x="${DOTX - 14}" y="${n.y + 4}" font-size="${size === 13 ? 13 : size.toFixed(1)}" text-anchor="end" fill="${merged ? '#a0a5ae' : '#f9fafd'}">${n.title}</text>`
       s += `<circle cx="${DOTX}" cy="${n.y}" r="4.5" fill="none" stroke="${merged ? '#5ad5a6' : '#47b8a9'}" stroke-width="1.4"/>`
       const cx = DOTX - 14 - tw - 10 - cw
       s += `<rect x="${cx}" y="${n.y - 9}" width="${cw}" height="18" rx="9" fill="${go && !merged ? 'rgba(90,213,166,.18)' : 'none'}" stroke="${merged ? '#393c42' : ready ? '#5ad5a6' : '#393c42'}"/>
@@ -1535,7 +1680,7 @@ footer nav a { color: var(--muted); }
         s += `<rect x="${x - 5}" y="${y - 5}" width="10" height="10" fill="#5ad5a6" transform="rotate(45 ${x} ${y})"/>`
       }
     }
-    if (t >= 31000) s += `<text x="${WAT.x - 44}" y="${WAT.y + 76}" font-size="12.5" fill="#a0a5ae">All three merged and settled.</text>`
+    if (t >= 31000) s += `<text x="${WAT.x - 44}" y="${WAT.y + 76}" font-size="12.5" fill="#a0a5ae">${tr('All three merged and settled.')}</text>`
     $('pic').innerHTML = s
   }
 
@@ -1558,10 +1703,12 @@ footer nav a { color: var(--muted); }
     for (const k of ['C', 'W', 'V']) { $(`tab${k}`).classList.toggle('cur', k === which); $(`view${k}`).classList.toggle('is-on', k === which) }
     $('composer').classList.toggle('is-line', which === 'V')
   }
-  function typeInto(id, value, start, cps = 42) {
-    const step = 1000 / cps
-    for (let i = 1; i <= value.length; i++) at(start + i * step, () => { $(id).textContent = value.slice(0, i) })
-    return start + value.length * step
+  // The sentence takes as long to type in every language as the English one does at 42 characters a second, so the
+  // timeline after it holds.
+  function typeInto(id, value, start, ms = 98 / 42 * 1000) {
+    const chars = [...value], step = ms / chars.length
+    for (let i = 1; i <= chars.length; i++) at(start + i * step, () => { $(id).textContent = chars.slice(0, i).join('') })
+    return start + ms
   }
   let scale = 1
   function moveCursor(targetId, dx = 10, dy = 8) {
@@ -1583,7 +1730,7 @@ footer nav a { color: var(--muted); }
   at(5900, on('hotkey'))
   at(6400, () => { $('pill').classList.add('listening'); $('composer').classList.add('is-live'); $('typed').classList.add('is-typing'); $('mtyped').classList.add('is-typing'); $('hotkey').classList.remove('is-on') })
   for (let s = 1; s <= 3; s++) at(6400 + s * 1000, () => { $('pillTime').textContent = `00:0${s}` })
-  const SAID = 'Retry failed uploads, fix the flaky host test and tidy the Settings copy. One pull request each.'
+  const SAID = tr('Retry failed uploads, fix the flaky host test and tidy the Settings copy. One pull request each.')
   const typedEnd = typeInto('typed', SAID, 6600)
   typeInto('mtyped', SAID, 6600)
   at(typedEnd + 300, () => { $('pill').classList.remove('listening'); $('typed').classList.remove('is-typing'); $('mtyped').classList.remove('is-typing') })
@@ -1600,34 +1747,34 @@ footer nav a { color: var(--muted); }
   const seg = (c) => () => { $('msC').classList.toggle('cur', c === 'C'); $('msW').classList.toggle('cur', c === 'W') }
   const mrow = (id, state, st) => () => { $(id).dataset.state = state; $(`${id}s`).textContent = st }
   at(14600, tab('W')); at(14600, panel(2)); at(14600, seg('W'))
-  at(15400, place(1, 'ready', 'Ready for review', 'PR #74 open.')); at(15400, mrow('mw1', 'ready', '#74 open'))
-  at(16000, place(2, 'quiet', 'Quiet', 'No progress for 20 minutes.')); at(16000, mrow('mw2', 'quiet', 'Quiet')); at(16000, text('mnote', 'One went quiet.'))
-  at(17000, place(2, 'quiet', null, 'Watcher is sending to it now.')); at(17000, text('mnote', 'Watcher follows up.'))
-  at(17600, place(2, 'working', 'Working', 'Watcher sent to it at 5:59.')); at(17600, mrow('mw2', 'working', 'Working')); at(17600, text('mnote', 'It\u2019s working again.'))
+  at(15400, place(1, 'ready', tr('Ready for review'), tr('PR #{pr} open.', { pr: 74 }))); at(15400, mrow('mw1', 'ready', tr('#{pr} open', { pr: 74 })))
+  at(16000, place(2, 'quiet', tr('Quiet'), tr('No progress for 20 minutes.'))); at(16000, mrow('mw2', 'quiet', tr('Quiet'))); at(16000, text('mnote', tr('One went quiet.')))
+  at(17000, place(2, 'quiet', null, tr('Watcher is sending to it now.'))); at(17000, text('mnote', tr('Watcher follows up.')))
+  at(17600, place(2, 'working', tr('Working'), tr('Watcher sent to it at 5:59.'))); at(17600, mrow('mw2', 'working', tr('Working'))); at(17600, text('mnote', tr('It’s working again.')))
 
   // 3. Needs you: one thread asks to push. Its card comes to you; the others carry on quietly.
-  at(19200, place(3, 'needs', 'Needs your approval', 'Waits for your answer.')); at(19200, mrow('mw3', 'needs', 'Needs you'))
+  at(19200, place(3, 'needs', tr('Needs your approval'), tr('Waits for your answer.'))); at(19200, mrow('mw3', 'needs', tr('Needs you')))
   at(19200, () => $('needs').classList.remove('is-empty'))
   at(19200, panel(3)); at(19200, seg('C'))
   at(19900, tab('C')); at(19900, show('m3'))
   at(20800, () => { cursor.classList.add('is-on'); moveCursor('allow', 40, 14) })
   at(21600, press('allow')); at(21600, () => $('mallow').classList.add('is-pressed'))
   at(21900, () => { $('ask').classList.add('answered'); $('answered').classList.add('is-on'); $('needs').classList.add('is-empty'); cursor.classList.remove('is-on'); $('mask').classList.add('answered'); $('mdone').classList.add('is-on') })
-  at(21900, place(3, 'working', 'Working', 'You answered it at 6:02.'))
+  at(21900, place(3, 'working', tr('Working'), tr('You answered it at 6:02.')))
   at(22000, toEnd)
-  at(22600, place(2, 'ready', 'Ready for review', 'PR #75 open.'))
+  at(22600, place(2, 'ready', tr('Ready for review'), tr('PR #{pr} open.', { pr: 75 })))
 
   // 4. PRs land: Visualize. Each pull request gets its merge turn in order; a settled thread's owl flies home.
   const turn = (pr, state, label) => () => { const el = $(`t${pr}`); el.dataset.turn = state; el.innerHTML = `<b>#${pr}</b>${label}`; const sep = $(`s${pr}`); if (sep) sep.dataset.turn = state }
   const mturn = (pr, state, label) => () => { const el = $(`mt${pr}`); el.dataset.turn = state; el.textContent = label }
   at(23600, tab('V')); at(23600, panel(4)); at(23600, seg('W'))
   for (const n of NODES) {
-    if (n.ready) { at(n.ready, turn(n.pr, 'ready', 'READY TO MERGE')); at(n.ready, mturn(n.pr, 'ready', 'READY')) }
-    at(n.go, turn(n.pr, 'go', 'GO MERGE')); at(n.go, mturn(n.pr, 'go', 'GO MERGE'))
-    at(n.merged, turn(n.pr, 'merged', 'MERGED')); at(n.merged, mturn(n.pr, 'merged', 'MERGED'))
+    if (n.ready) { at(n.ready, turn(n.pr, 'ready', tr('READY TO MERGE'))); at(n.ready, mturn(n.pr, 'ready', tr('READY'))) }
+    at(n.go, turn(n.pr, 'go', tr('GO MERGE'))); at(n.go, mturn(n.pr, 'go', tr('GO MERGE')))
+    at(n.merged, turn(n.pr, 'merged', tr('MERGED'))); at(n.merged, mturn(n.pr, 'merged', tr('MERGED')))
   }
   ;[[26000, '2'], [28000, '1'], [30000, '0']].forEach(([ms, v]) => { at(ms, text('watchN', v)); at(ms, text('mWN', v)) })
-  at(31000, text('mmerged', 'All three merged.'))
+  at(31000, text('mmerged', tr('All three merged.')))
   at(END, () => {})
   T.sort((a, b) => a.at - b.at)
 
@@ -1670,8 +1817,8 @@ footer nav a { color: var(--muted); }
     })
     const pp = $('playPause')
     pp.dataset.state = playing ? 'playing' : finished ? 'finished' : 'paused'
-    pp.textContent = playing ? 'Pause' : (finished ? 'Play again' : 'Play')
-    pp.setAttribute('aria-label', playing ? 'Pause the demo' : 'Play the demo')
+    pp.textContent = playing ? tr('Pause') : (finished ? tr('Play again') : tr('Play'))
+    pp.setAttribute('aria-label', playing ? tr('Pause the demo') : tr('Play the demo'))
     $('bar').style.width = `${Math.max(0, Math.min(1, (clock - INTRO_END) / (END - INTRO_END))) * 100}%`
   }
   function tick(now) {
@@ -1749,11 +1896,11 @@ footer nav a { color: var(--muted); }
   vignette($('vt'), 6000, [{ at: 700, fn: cls('vt1', 'is-on', true) }, { at: 1400, fn: cls('vt2', 'is-on', true) }], () => { $('vt1').classList.remove('is-on'); $('vt2').classList.remove('is-on') })
 
   // It keeps them going: a quiet thread gets a follow-up and starts working again.
-  const vw = (state, st, lastLine, grp) => () => { $('vw2').dataset.state = state; $('vw2s').textContent = st; $('vw2l').textContent = lastLine; $('vwg').dataset.g = grp; $('vwg').innerHTML = `${grp === 'quiet' ? 'Quiet' : 'Working'} <span class="n">1</span>` }
+  const vw = (state, st, lastLine, grp) => () => { $('vw2').dataset.state = state; $('vw2s').textContent = st; $('vw2l').textContent = lastLine; $('vwg').dataset.g = grp; $('vwg').innerHTML = `${grp === 'quiet' ? tr('Quiet') : tr('Working')} <span class="n">1</span>` }
   vignette($('vw'), 7000, [
-    { at: 1600, fn: vw('quiet', 'Quiet', 'Watcher is sending to it now.', 'quiet') },
-    { at: 2600, fn: vw('working', 'Working', 'Watcher sent to it at 9:34.', 'working') },
-  ], vw('quiet', 'Quiet', 'No progress for 20 minutes.', 'quiet'))
+    { at: 1600, fn: vw('quiet', tr('Quiet'), tr('Watcher is sending to it now.'), 'quiet') },
+    { at: 2600, fn: vw('working', tr('Working'), tr('Watcher sent to it at 9:34.'), 'working') },
+  ], vw('quiet', tr('Quiet'), tr('No progress for 20 minutes.'), 'quiet'))
 
   // Only what needs you: the card asks, the cursor answers.
   const vnc = $('vncursor')
@@ -1767,10 +1914,10 @@ footer nav a { color: var(--muted); }
   const vmT = (n, state, label, chip) => () => { const el = $(`vm${n}`); el.dataset.turn = state; el.innerHTML = `<b>#${73 + n}</b>${label}`; const c = $(`vmc${n}`); c.dataset.turn = state; c.textContent = chip; $(`vmn${n}`).classList.toggle('is-merged', state === 'merged') }
   const vmSteps = []
   ;[74, 75, 76].forEach((pr, i) => {
-    vmSteps.push({ at: 700 + i * 1700, fn: vmT(i + 1, 'go', 'GO MERGE', `#${pr} GO`) })
-    vmSteps.push({ at: 1600 + i * 1700, fn: vmT(i + 1, 'merged', 'MERGED', `#${pr} merged`) })
+    vmSteps.push({ at: 700 + i * 1700, fn: vmT(i + 1, 'go', tr('GO MERGE'), tr('#{pr} GO', { pr })) })
+    vmSteps.push({ at: 1600 + i * 1700, fn: vmT(i + 1, 'merged', tr('MERGED'), tr('#{pr} merged', { pr })) })
   })
-  vignette($('vm'), 7600, vmSteps, () => [74, 75, 76].forEach((pr, i) => vmT(i + 1, 'ready', 'READY TO MERGE', `#${pr} ready`)()))
+  vignette($('vm'), 7600, vmSteps, () => [74, 75, 76].forEach((pr, i) => vmT(i + 1, 'ready', tr('READY TO MERGE'), tr('#{pr} ready', { pr }))()))
 
   // Dictation: press, listen, stop, words land with the dictionary hits marked.
   const words = [...$('vdline').children]
