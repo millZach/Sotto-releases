@@ -1,0 +1,28 @@
+name: Check site
+
+# site/ is built from site-src/ by scripts/build-site.mjs and committed, so GitHub Pages publishes it as it is. A pull
+# request that changes the template, a language's strings or the build without rebuilding, or leaves a message
+# untranslated, fails here rather than at deploy.
+on:
+  pull_request:
+    paths:
+      - 'site/**'
+      - 'site-src/**'
+      - 'scripts/build-site.mjs'
+      - '.github/workflows/check-site.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test the build's own checks and escaping
+        run: node scripts/build-site.mjs --self-test
+
+      - name: Check the site is built from site-src
+        run: node scripts/build-site.mjs --check
