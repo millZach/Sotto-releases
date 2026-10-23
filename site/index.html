@@ -570,6 +570,73 @@ footer { position: relative; z-index: 1; max-width: var(--col); margin: 0 auto; 
 footer nav { display: flex; gap: 20px; }
 footer nav a { color: var(--muted); }
 
+
+/* ---------- PROTOTYPE: three layouts of "What Watcher does" ---------- */
+section[data-variant] { display: none; }
+section[data-variant].is-on { display: block; }
+.vig.is-bare { background: none; box-shadow: none; padding: 0; height: auto; margin: 0; overflow: visible; }
+.raised { background: #0c0e12; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4); }
+.dict-strip { display: flex; align-items: center; gap: 28px; margin-top: 30px; color: var(--text-2); font-size: 16px; }
+.dict-strip b { color: var(--text); font-weight: 500; }
+.dict-strip .vd { flex-direction: row; gap: 18px; justify-content: flex-start; flex: none; }
+.dict-strip .vd .line { justify-content: flex-start; font-size: 15px; }
+
+/* A. Storyboard: one raised surface, the four beats listed at the left, the chosen one's picture at the right. */
+.vA { margin-top: 36px; display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 44px; padding: 32px 36px; border-radius: 18px; min-height: 470px; }
+.vA-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; align-self: center; }
+.vA-list li { padding: 14px 16px 14px 18px; border-left: 2px solid transparent; border-radius: 0 10px 10px 0; cursor: pointer; color: var(--muted); transition: background-color 250ms, border-color 250ms, color 250ms; }
+.vA-list li b { display: block; font-weight: 500; font-size: 19px; color: var(--text-2); transition: color 250ms; }
+.vA-list li span { display: block; font-size: 15px; margin-top: 3px; line-height: 1.4; }
+.vA-list li.cur { border-left-color: var(--accent); background: rgba(255, 255, 255, 0.035); color: var(--text-2); }
+.vA-list li.cur b { color: var(--text); }
+.vA-stage { position: relative; min-height: 380px; }
+.vA-pane { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 350ms, visibility 0s 350ms; display: flex; flex-direction: column; justify-content: center; }
+.vA-pane.is-on { opacity: 1; visibility: visible; transition: opacity 350ms; }
+
+/* B. Rows: big words at the left, the app's own cards floating on the page at the right, no surface and no box. */
+.vB { margin-top: 10px; display: flex; flex-direction: column; }
+.vB-row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: center; padding: 52px 0; }
+.vB-words i { font-style: normal; color: var(--accent-text); font-size: 13px; font-weight: 600; letter-spacing: 0.1em; }
+.vB-words h3 { font-size: clamp(26px, 2.8vw, 36px); margin-top: 8px; line-height: 1.12; }
+.vB-words p { color: var(--text-2); font-size: 18px; margin-top: 10px; max-width: 32ch; }
+.vB-words p b { color: var(--text); font-weight: 500; }
+.vB-pic .vd { align-items: flex-start; }
+.vB-pic .vd .line { justify-content: flex-start; }
+
+/* C. One continuous column of the app, the way Watcher's room stacks them, with each beat noted beside it. */
+.vC { margin-top: 40px; display: flex; flex-direction: column; }
+.vC-row { display: grid; grid-template-columns: minmax(0, 1fr) 620px minmax(0, 1fr); gap: 36px; align-items: center; }
+.vC-col { padding: 26px 26px 30px; background: #0c0e12; box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.04), inset -1px 0 0 rgba(255, 255, 255, 0.02), 0 24px 48px rgba(0, 0, 0, 0.45); }
+.vC-row:first-child .vC-col { border-radius: 18px 18px 0 0; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.45); }
+.vC-row:last-child .vC-col { border-radius: 0 0 18px 18px; }
+.vC-note h3 { font-size: clamp(22px, 2.1vw, 26px); line-height: 1.15; }
+.vC-note p { color: var(--text-2); margin-top: 6px; }
+.vC-note p b { color: var(--text); font-weight: 500; }
+.vC-note.l { text-align: right; }
+.vC-note.l h3::after, .vC-note.r h3::before { content: ''; display: inline-block; width: 26px; height: 1.5px; background: var(--accent); vertical-align: middle; }
+.vC-note.l h3::after { margin-left: 14px; }
+.vC-note.r h3::before { margin-right: 14px; }
+
+@media (max-width: 1000px) {
+  .vC-row { grid-template-columns: 1fr; gap: 16px; }
+  .vC-gap { display: none; }
+  .vC-note.l { text-align: left; }
+  .vC-note.l h3::after { display: none; }
+  .vC-note.r h3::before { display: none; }
+  .vC-row:not(:first-child) .vC-note { margin-top: 28px; }
+}
+@media (max-width: 760px) {
+  .vA { grid-template-columns: 1fr; gap: 24px; padding: 20px; min-height: 0; }
+  .vA-stage { min-height: 320px; }
+  .vA-list li { padding: 10px 12px 10px 14px; }
+  .vB-row { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
+  .dict-strip { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .dict-strip .vd { flex-direction: column; align-items: flex-start; }
+}
+.proto-bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 4px; padding: 6px; border-radius: 999px; background: #fff; color: #111; font: 600 13px/1 system-ui, sans-serif; box-shadow: 0 8px 30px rgba(0,0,0,.5); white-space: nowrap; }
+.proto-bar button { border: 0; background: #eee; color: #111; border-radius: 999px; padding: 8px 12px; cursor: pointer; font: inherit; }
+.proto-bar span { padding: 0 10px; }
+
 /* Phones: shorter lines, more room between things, nothing drawn behind words, one column of beats. */
 @media (max-width: 760px) {
   .strip nav a:not(.cta) { display: none; }
@@ -615,7 +682,6 @@ footer nav a { color: var(--muted); }
   <a class="brand" href="#top" aria-label="Sotto, top of page"><img src="icon.svg" alt="">Sotto</a>
   <nav>
     <a href="#what">What it does</a>
-    <a href="#why">Why Sotto</a>
     <a href="https://github.com/millZach/Sotto" class="gh-btn"><svg class="star" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.5l-4 2.2.85-4.45-3.3-3.1 4.5-.55z"/></svg>Star on GitHub</a>
     <a href="#download" class="cta">Download</a>
   </nav>
@@ -815,12 +881,9 @@ footer nav a { color: var(--muted); }
 </section>
 
 <main>
-  <section id="what">
-    <h2>What Watcher does.</h2>
-    <div class="beats">
-      <div class="beat">
-        <h3>Say it once.</h3>
-        <p>Watcher splits it into threads and starts them.</p>
+  <!-- PROTOTYPE: three layouts of this section, chosen with ?variant=A|B|C. The pieces below are shared and moved into
+       the chosen layout's slots when the page loads. One layout stays in the pull request. -->
+  <div id="pieces" hidden>
         <div class="vig" id="vt" aria-hidden="true">
           <div class="msg"><div class="meta"><svg class="owl-i"><use href="#owl"/></svg><b>Watcher</b>9:12 am</div><div class="said">Two threads, one pull request each. I am watching both.</div>
             <div class="receipts">
@@ -829,33 +892,18 @@ footer nav a { color: var(--muted); }
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="beat">
-        <h3>It keeps them going.</h3>
-        <p>It follows up when one goes quiet.</p>
         <div class="vig" id="vw" aria-hidden="true">
           <div class="grp" data-g="working">Working <span class="n">1</span></div>
           <div class="wcard" data-state="working"><i class="ring"></i><span class="t">Port pairing to Android</span><span class="btns"><span>Stop watching</span></span><span class="sub"><svg data-mark="claude"></svg><svg class="owl-i"><use href="#owl"/></svg>Claude Code<span class="dot"></span>sotto<span class="dot"></span><span class="st">Working</span></span><span class="last">Watcher sent to it at 9:12.</span></div>
           <div class="grp" id="vwg" data-g="quiet">Quiet <span class="n">1</span></div>
           <div class="wcard" id="vw2" data-state="quiet"><i class="ring"></i><span class="t">Profile main's update path</span><span class="btns"><span>Stop watching</span></span><span class="sub"><svg data-mark="codex"></svg><svg class="owl-i"><use href="#owl"/></svg>Codex<span class="dot"></span>sotto<span class="dot"></span><span class="st" id="vw2s">Quiet</span></span><span class="last" id="vw2l">No progress for 20 minutes.</span></div>
         </div>
-      </div>
-
-      <div class="beat">
-        <h3>Only what needs you.</h3>
-        <p>Questions and permissions come to you. <b>Watcher never answers them.</b></p>
         <div class="vig" id="vn" aria-hidden="true">
           <div class="needs"><b>1 needs you</b><span class="it"><i></i><u>Port pairing to Android</u>permission</span></div>
           <div class="ask" id="vnask" style="margin-top:0"><div class="q">Permission request<span>Bash</span></div><pre>git push origin sotto/android-pairing</pre><div class="cwd">in sotto</div><div class="opts"><span>Deny</span><span class="allow" id="vnallow">Allow once</span></div></div>
           <div class="answered-line" id="vnans">You answered Port pairing to Android.</div>
           <div class="cursor" id="vncursor"><svg viewBox="0 0 14 14"><path d="M1 1l4.5 12 1.8-4.7L12 6.5z" fill="#fff" stroke="#000" stroke-width="1"/></svg></div>
         </div>
-      </div>
-
-      <div class="beat">
-        <h3>Merges in turn.</h3>
-        <p>Each pull request lands once its checks pass.</p>
         <div class="vig" id="vm" aria-hidden="true">
           <div class="turns"><span class="lbl">Merge turns</span><span class="turn" id="vm1" data-turn="ready"><b>#74</b>READY TO MERGE</span><span class="sep-turn">›</span><span class="turn" id="vm2" data-turn="ready"><b>#75</b>READY TO MERGE</span><span class="sep-turn">›</span><span class="turn" id="vm3" data-turn="ready"><b>#76</b>READY TO MERGE</span></div>
           <div class="nodes">
@@ -864,28 +912,51 @@ footer nav a { color: var(--muted); }
             <div class="node"><span class="prc" id="vmc3" data-turn="ready">#76 ready</span><span class="nt" id="vmn3">Tidy the Settings copy</span></div>
           </div>
         </div>
-      </div>
-
-      <div class="beat wide">
-        <div>
-          <h3>Dictation too.</h3>
-          <p><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.</p>
-        </div>
         <div class="vig vd" id="vd" aria-hidden="true">
           <div class="pill is-on" id="vdpill"><span class="pi"><img src="icon.svg" alt=""></span><span class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="time" id="vdtime">00:00</span><span class="stop"></span><span class="esc">esc</span></div>
           <div class="line" id="vdline"><span>Send</span><span class="hit">Priya</span><span>the</span><span class="hit">Kubernetes</span><span>rollout</span><span>note</span><span>before</span><span>standup.</span></div>
         </div>
+  </div>
+
+  <section id="what" data-variant="A">
+    <h2>What Watcher does.</h2>
+    <div class="vA">
+      <ol class="vA-list">
+        <li data-beat="t" class="cur"><b>Say it once.</b><span>Watcher splits it into threads and starts them.</span></li>
+        <li data-beat="w"><b>It keeps them going.</b><span>It follows up when one goes quiet.</span></li>
+        <li data-beat="n"><b>Only what needs you.</b><span>Questions and permissions come to you. Watcher never answers them.</span></li>
+        <li data-beat="m"><b>Merges in turn.</b><span>Each pull request lands once its checks pass.</span></li>
+      </ol>
+      <div class="vA-stage">
+        <div class="vA-pane is-on" data-slot="vt"></div>
+        <div class="vA-pane" data-slot="vw"></div>
+        <div class="vA-pane" data-slot="vn"></div>
+        <div class="vA-pane" data-slot="vm"></div>
       </div>
+    </div>
+    <div class="vA-dict"><div data-slot="vd"></div><p><b>Dictation too.</b> <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.</p></div>
+  </section>
+
+  <section id="whatB" data-variant="B">
+    <h2>What Watcher does.</h2>
+    <div class="vB">
+      <div class="vB-row"><div class="vB-words"><i>01</i><h3>Say it once.</h3><p>Watcher splits it into threads and starts them.</p></div><div class="vB-pic" data-slot="vt"></div></div>
+      <div class="vB-row"><div class="vB-words"><i>02</i><h3>It keeps them going.</h3><p>It follows up when one goes quiet.</p></div><div class="vB-pic" data-slot="vw"></div></div>
+      <div class="vB-row"><div class="vB-words"><i>03</i><h3>Only what needs you.</h3><p>Questions and permissions come to you. <b>Watcher never answers them.</b></p></div><div class="vB-pic" data-slot="vn"></div></div>
+      <div class="vB-row"><div class="vB-words"><i>04</i><h3>Merges in turn.</h3><p>Each pull request lands once its checks pass.</p></div><div class="vB-pic" data-slot="vm"></div></div>
+      <div class="vB-row"><div class="vB-words"><i>05</i><h3>Dictation too.</h3><p><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.</p></div><div class="vB-pic" data-slot="vd"></div></div>
     </div>
   </section>
 
-  <section id="why">
-    <h2>Why Sotto.</h2>
-    <ul class="whys">
-      <li>One Watcher for every thread.</li>
-      <li>You answer every permission.</li>
-      <li>No account. No analytics.</li>
-    </ul>
+  <section id="whatC" data-variant="C">
+    <h2>What Watcher does.</h2>
+    <div class="vC">
+      <div class="vC-row"><div class="vC-note l"><h3>Say it once.</h3><p>Watcher splits it into threads and starts them.</p></div><div class="vC-col" data-slot="vt"></div><div class="vC-gap"></div></div>
+      <div class="vC-row"><div class="vC-gap"></div><div class="vC-col" data-slot="vw"></div><div class="vC-note r"><h3>It keeps them going.</h3><p>It follows up when one goes quiet.</p></div></div>
+      <div class="vC-row"><div class="vC-note l"><h3>Only what needs you.</h3><p>Questions and permissions come to you. <b>Watcher never answers them.</b></p></div><div class="vC-col" data-slot="vn"></div><div class="vC-gap"></div></div>
+      <div class="vC-row"><div class="vC-gap"></div><div class="vC-col" data-slot="vm"></div><div class="vC-note r"><h3>Merges in turn.</h3><p>Each pull request lands once its checks pass.</p></div></div>
+    </div>
+    <div class="vC-dict"><div data-slot="vd"></div><p><b>Dictation too.</b> <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Space</kbd> in any app, then talk.</p></div>
   </section>
 
   <section id="download">
@@ -1090,6 +1161,41 @@ footer nav a { color: var(--muted); }
 })()
 </script>
 
+<script>
+// PROTOTYPE ONLY: three layouts of "What Watcher does", chosen with ?variant=. Removed before the pull request.
+(() => {
+  const NAMES = { A: 'Storyboard', B: 'Rows, no boxes', C: 'One column, noted' }
+  const keys = Object.keys(NAMES)
+  const cur = (new URLSearchParams(location.search).get('variant') || 'A').toUpperCase()
+  const v = keys.includes(cur) ? cur : 'A'
+  const section = document.querySelector(`section[data-variant="${v}"]`)
+  section.classList.add('is-on')
+  // The shared pieces go into this layout's slots.
+  for (const slot of section.querySelectorAll('[data-slot]')) {
+    const piece = document.getElementById(slot.dataset.slot)
+    piece.classList.add('is-bare')
+    slot.appendChild(piece)
+  }
+  for (const el of section.querySelectorAll('.vA')) el.classList.add('raised')
+  for (const el of section.querySelectorAll('.vA-dict, .vC-dict')) el.classList.add('dict-strip')
+  // A: the list picks the picture, and the pictures take turns on their own.
+  if (v === 'A') {
+    const items = [...section.querySelectorAll('.vA-list li')], panes = [...section.querySelectorAll('.vA-pane')]
+    let i = 0, timer
+    const pick = (k) => { i = k; items.forEach((el, j) => el.classList.toggle('cur', j === k)); panes.forEach((el, j) => el.classList.toggle('is-on', j === k)) }
+    const arm = () => { clearInterval(timer); timer = setInterval(() => pick((i + 1) % items.length), 5500) }
+    items.forEach((el, k) => el.addEventListener('click', () => { pick(k); arm() }))
+    arm()
+  }
+  const bar = document.createElement('div'); bar.className = 'proto-bar'
+  const go = (k) => { const u = new URL(location.href); u.searchParams.set('variant', k); u.hash = 'what'; location.replace(u) }
+  const prev = keys[(keys.indexOf(v) + 2) % 3], next = keys[(keys.indexOf(v) + 1) % 3]
+  bar.innerHTML = `<button type="button" data-go="${prev}" aria-label="Previous layout">←</button><span>${v} · ${NAMES[v]}</span><button type="button" data-go="${next}" aria-label="Next layout">→</button>`
+  document.body.appendChild(bar)
+  bar.addEventListener('click', (e) => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go) })
+  addEventListener('keydown', (e) => { if (e.target.closest('input, textarea, [contenteditable]')) return; if (e.key === 'ArrowRight') go(next); if (e.key === 'ArrowLeft') go(prev) })
+})()
+</script>
 <script>
 (() => {
   // Provider marks, the same paths the app draws (ProviderMark.tsx).
