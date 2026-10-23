@@ -592,8 +592,9 @@ footer nav a { color: var(--muted); }
   .hero .lede { max-width: 30ch; font-size: 17px; line-height: 1.5; }
   .hero-cta { margin-top: 26px; }
   .hero-cta .more { display: none; }
-  .field, .sky { display: none; }
-  .stage-wrap { margin-top: 34px; }
+  .sky { display: none; }
+  .mote { width: 30px; height: 30px; }
+  .stage-wrap { margin-top: 92px; }
   .progress { width: min(420px, 100%); }
   .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: min(420px, 100%); margin-top: 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
   .controls .sep { display: none; }
@@ -1140,11 +1141,11 @@ footer nav a { color: var(--muted); }
     return m
   }
   const shuffled = (list) => list.map((v) => [Math.random(), v]).sort((p, q) => p[0] - q[0]).map(([, v]) => v)
-  const heroMotes = wide ? shuffled(ids).map((id) => spawn(field, false, id)) : []
+  const heroMotes = shuffled(ids).map((id) => spawn(field, false, id))
   if (wide) ids.forEach((id) => spawn(sky, true, id))
   function placeMotes() {
     if (!heroMotes.length) return
-    const f = field.getBoundingClientRect(), W = f.width, size = 50, padX = 90, padY = 64
+    const f = field.getBoundingClientRect(), W = f.width, size = wide ? 50 : 30, padX = 90, padY = 64
     const range = document.createRange()
     const words = [...document.querySelectorAll('.hero h1, .hero .lede, .hero-cta .track, .hero-cta .btn, .hero-cta .more, .hero-cta .fine, .hero-cta .away')].map((el) => { range.selectNodeContents(el); return range.getBoundingClientRect() }).filter((r) => r.width)
     const left = Math.min(...words.map((r) => r.left)) - f.left, right = Math.max(...words.map((r) => r.right)) - f.left
@@ -1152,6 +1153,13 @@ footer nav a { color: var(--muted); }
     const top = 28, floor = Math.max(bottom + padY + 2 * size + 170, Math.min(f.height, innerHeight - f.top) - size - 28)
     // Three marks down each side of the copy, clear of the words and the window; where the sides are too narrow, none.
     const slots = []
+    if (!wide) {
+      // A phone has no room at the sides: the six marks sit in a row between the copy and the demo.
+      const stageTop = stage.getBoundingClientRect().top - f.top
+      const y = bottom + (stageTop - bottom - size) / 2, step = (W - 2 * 24 - size) / 5
+      heroMotes.forEach((m, i) => { m.hidden = false; m.el.style.display = ''; m.r = rnd(3, 6); m.home = [24 + i * step, y - 6] })
+      return
+    }
     if (left - padX - size - 0.03 * W >= 60) {
       const band = (floor - top) / 3
       for (const [x0, x1] of [[0.03 * W, left - padX - size], [right + padX, 0.97 * W - size]]) for (let k = 0; k < 3; k++) slots.push([x0, x1, top + k * band, top + (k + 1) * band - size])
@@ -1187,7 +1195,7 @@ footer nav a { color: var(--muted); }
     let d = ''
     for (let i = 0; i < near.length; i++) for (let j = i + 1; j < near.length; j++) {
       const a = near[i], b = near[j]
-      if (Math.hypot(a.x - b.x, a.y - b.y) < 260) d += `M${a.x + 25} ${a.y + 25}L${b.x + 25} ${b.y + 25}`
+      if (wide && Math.hypot(a.x - b.x, a.y - b.y) < 260) d += `M${a.x + 25} ${a.y + 25}L${b.x + 25} ${b.y + 25}`
     }
     threads.innerHTML = d ? `<path d="${d}" stroke="#ffffff" fill="none" opacity=".18"/>` : ''
   }
@@ -1604,7 +1612,7 @@ footer nav a { color: var(--muted); }
     requestAnimationFrame(tick)
   }
   document.querySelectorAll('[data-chapter]').forEach((b) => b.addEventListener('click', () => seek(CH[Number(b.dataset.chapter)].at)))
-  const START = wide ? 400 : INTRO_END // a phone has no marks to gather, so its demo opens on the app
+  const START = 400
   $('replay').addEventListener('click', () => seek(reduced ? INTRO_END : START))
   let userPaused = false
   $('playPause').addEventListener('click', () => {
