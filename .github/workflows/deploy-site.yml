@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'site-src/**'
+      - 'scripts/build-site.mjs'
       - '.github/workflows/deploy-site.yml'
   release:
     types: [published]
@@ -29,19 +31,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # site/ is built from site-src/ and committed. A page that does not match its template and strings stops
+      # the deploy before anything is published, so the site already up stays up.
+      - name: Check the site is built from site-src
+        run: node scripts/build-site.mjs --check
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       # Each build's file is named per version, so the page cannot hard-code direct links. Look up the newest
       # stable release and the newest Owl, and write each build's file URL, version and size into every link
-      # and spec line marked with its data-download key. A build its release lacks keeps the releases page,
-      # its committed version and no size.
+      # and spec line marked with its data-download key, on the English page and on every language's. A build
+      # its release lacks keeps the releases page, its committed version and no size.
       - name: Point the download links at the newest builds
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: |
-          page=site/index.html
+          mapfile -t pages < <(find site -name index.html | sort)
           # One tab-separated line per build found: key, file URL, size in bytes, version. Host archives are
           # for remote hosts, never the desktop, so they are skipped.
           lines='.tag_name as $tag | .assets[] | select(.name | startswith("Sotto-host-") | not) | . as $asset
@@ -70,13 +77,16 @@ jobs:
               -e "s#data-download=\"$key\" data-version=\"[^\"]*\" data-size=\"[^\"]*\"#data-download=\"$key\" data-version=\"$version\" data-size=\"$mb MB\"#g" \
               -e "s#<span data-version-of=\"$key\">[^<]*</span>#<span data-version-of=\"$key\">$label $version</span>#g" \
               -e "s#<span data-size-of=\"$key\">[^<]*</span>#<span data-size-of=\"$key\">$mb MB</span>#g" \
-              "$page"
+              "${pages[@]}"
             echo "$key: $url ($version, $mb MB)"
           done <<< "$found"
           for key in windows-stable mac-stable linux-stable linux-stable-tar windows-owl mac-owl linux-owl linux-owl-tar; do
             case "$seen" in *" $key "*) ;; *) echo "$key: no file on its release; its links keep the releases page." ;; esac
           done
-          grep -o 'href="[^"]*" data-download="[^"]*"\( data-version="[^"]*" data-size="[^"]*"\)\?\|<span data-[a-z]*-of="[^"]*">[^<]*</span>' "$page"
+          for page in "${pages[@]}"; do
+            echo "$page:"
+            grep -o 'href="[^"]*" data-download="[^"]*"\( data-version="[^"]*" data-size="[^"]*"\)\?\|<span data-[a-z]*-of="[^"]*">[^<]*</span>' "$page"
+          done
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
