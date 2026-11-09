@@ -1,0 +1,2 @@
+# The capture patch is applied byte for byte, so no line-ending conversion.
+site-src/capture/*.patch -text

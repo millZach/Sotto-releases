@@ -1,0 +1,517 @@
+diff --git c/src/shared/e2e.ts w/src/shared/e2e.ts
+index ae0d254..a24e545 100644
+--- c/src/shared/e2e.ts
++++ w/src/shared/e2e.ts
+@@ -114,7 +114,7 @@ export interface SottoE2EBridge {
+  * scenario, so "Finished today", "Yesterday" and the clock times in its
+  * captures never move. Same fixture era as the history entry above.
+  */
+-export const E2E_THREADS_NOW = Date.UTC(2026, 6, 12, 19, 41)
++export const E2E_THREADS_NOW = Date.UTC(2026, 6, 13, 1, 40)
+ 
+ // Kept between 14:00 and 20:00 UTC so day grouping holds from UTC-7 (the pinned capture zone) to UTC+3.
+ const fixtureAt = (dayOffset: number, hour: number, minute: number): string =>
+@@ -136,62 +136,31 @@ export function designThreadsFixture(): DesignThreadsFixture {
+     ({ id, role, text, createdAt: fixtureAt(dayOffset, hour, minute) })
+   const thread = (id: string, title: string, projectId: string, modelId: string, status: AgentThread['status'], messages: AgentThread['messages'], requests: AgentThread['requests'] = []): AgentThread =>
+     ({ id, title, projectId, modelId, status, messages, requests })
++  // saysotto.com capture (never pushed): Watcher's own thread and the three threads it starts, one evening.
+   const threads = [
+-    thread('visual-gate', 'Visual gate flake', 'workshop', 'claude:sonnet', 'running', [
+-      message('visual-gate-1', 'user', 0, 19, 32, 'Find why the visual gate flakes on the widget listening capture and fix it.'),
+-      message('visual-gate-2', 'assistant', 0, 19, 41, 'Found the cause. The listening bars animate from a CSS loop, so the frame depended on where the screenshot landed. Pinned the capture to the reduced-motion branch. I want to run the unit suite before calling it fixed.'),
+-    ], [{ id: 'visual-gate-permission', kind: 'permission', text: 'Run a command in workshop\nnpm test -- --run tests/unit/agents', options: [] }]),
+-    thread('footer-links', 'Footer links', 'sotto-site', 'codex:gpt', 'running', [
+-      message('footer-links-1', 'user', 0, 19, 38, 'Open a Codex session in sotto-site and fix the footer links, they point at the old docs path and the help page is a 404.'),
+-      message('footer-links-2', 'assistant', 0, 19, 39, 'Fixing the footer links that point at the old docs path. Editing site/help.html now; the 404 on the help page is next.'),
++    thread('watcher', 'Watcher', 'my-app', 'codex:gpt', 'idle', []),
++    thread('retry-uploads', 'Retry failed uploads', 'my-app', 'codex:gpt', 'running', [
++      message('retry-uploads-1', 'user', 1, 0, 38, 'Retry failed uploads. Open one pull request.'),
+     ]),
+-    thread('weekly-note', 'Weekly note', 'notes', 'grok:4', 'running', [
+-      message('weekly-note-1', 'user', 0, 19, 31, 'It is Friday. Write the weekly wrap from this week’s dictations and put it in notes/weekly.'),
+-      message('weekly-note-2', 'assistant', 0, 19, 33, 'Summarising this week’s dictations into the Friday note. Reading history from Monday onward.'),
++    thread('flaky-host-test', 'Fix the flaky host test', 'my-app', 'claude:sonnet', 'running', [
++      message('flaky-host-test-1', 'user', 1, 0, 38, 'Fix the flaky host test. Open one pull request.'),
+     ]),
+-    thread('release-notes', 'Release notes 1.4', 'workshop', 'codex:gpt', 'idle', [
+-      message('release-notes-1', 'user', 0, 16, 8, 'Draft the 1.4 release notes from the changelog and my dictation, then put them in the GitHub release.'),
+-      message('release-notes-2', 'assistant', 0, 16, 32, 'Release notes are in the draft release. I kept the Gatekeeper instructions and the Apple silicon note from the README, as you asked last time.'),
+-    ]),
+-    thread('grok-previews', 'Grok voice previews', 'workshop', 'claude:sonnet', 'idle', [
+-      message('grok-previews-1', 'user', 0, 14, 5, 'Add a preview button beside each Grok voice and move the key into the system keychain.'),
+-      message('grok-previews-2', 'assistant', 0, 14, 58, 'Done. The preview plays a two-second sample through the selected voice, and the key never touches settings.json.'),
+-    ]),
+-    thread('wav-stall', 'Streaming WAV stall', 'workshop', 'codex:gpt', 'error', [
+-      message('wav-stall-1', 'user', -1, 15, 40, 'Fix the streaming WAV stall. Playback stops at the length marker.'),
+-      message('wav-stall-2', 'assistant', -1, 17, 2, 'The length marker fix still fails the same playback test. I do not have an approach that differs from the last three.'),
+-    ]),
+-    thread('thread-routing', 'Thread routing', 'workshop', 'claude:sonnet', 'idle', [
+-      message('thread-routing-1', 'user', -1, 14, 2, 'Fix voice activation and route thread replies to the session that asked.'),
+-      message('thread-routing-2', 'assistant', -1, 16, 20, 'Merged to the feature branch. The wake phrase now survives a quiet room and replies land on the thread that asked.'),
+-    ]),
+-    thread('benchmark', 'Benchmark rerun', 'workshop', 'grok:4', 'idle', [
+-      message('benchmark-1', 'user', -4, 17, 10, 'Do that benchmark again.'),
+-      message('benchmark-2', 'assistant', -4, 17, 44, 'Same eleven fixtures, two runs each. Nothing moved more than a point. Table is in the results folder.'),
+-    ]),
+-    thread('notes-cleanup', 'Notes cleanup', 'notes', 'grok:4', 'idle', [
+-      message('notes-cleanup-1', 'user', -3, 15, 10, 'Tidy the notes folder and remove the empty daily files.'),
+-      message('notes-cleanup-2', 'assistant', -3, 15, 24, 'Removed nine empty daily notes and left everything with content untouched.'),
++    thread('settings-copy', 'Tidy the Settings copy', 'my-app', 'grok:4', 'running', [
++      message('settings-copy-1', 'user', 1, 0, 38, 'Tidy the Settings copy. Open one pull request.'),
+     ]),
+   ]
+-  // Explicit provider lifecycle facts: idle work can stay open until the user settles it.
+   for (const entry of threads) {
+     entry.updatedAt = entry.messages.at(-1)?.createdAt
+-    if (['release-notes', 'thread-routing', 'benchmark', 'notes-cleanup'].includes(entry.id)) {
+-      entry.settledOverride = 'settled'
+-      entry.settledAt = entry.updatedAt
+-    }
++    entry.providerId = entry.modelId.startsWith('claude:') ? 'claude' : entry.modelId.startsWith('grok:') ? 'grok' : 'codex'
+   }
+   return {
+     models: [
+-      { id: 'claude:sonnet', provider: 'Claude', name: 'Sonnet 4.5', ready: true },
+-      { id: 'codex:gpt', provider: 'Codex', name: 'GPT-5.4', ready: true },
+-      { id: 'grok:4', provider: 'Grok', name: 'Grok 4.6', ready: true },
++      { id: 'claude:sonnet', provider: 'Claude Code', providerId: 'claude', name: 'Sonnet 4.5', ready: true },
++      { id: 'codex:gpt', provider: 'Codex', providerId: 'codex', name: 'GPT-5.4', ready: true },
++      { id: 'grok:4', provider: 'Grok Build', providerId: 'grok', name: 'Grok 4.6', ready: true },
+     ],
+     projects: [
+-      { id: 'workshop', title: 'workshop', path: 'C:/workshop' },
+-      { id: 'sotto-site', title: 'sotto-site', path: 'C:/sotto-site' },
+-      { id: 'notes', title: 'notes', path: 'C:/notes' },
++      { id: 'my-app', title: 'my-app', path: 'C:/my-app' },
+     ],
+     threads,
+   }
+diff --git 1/tests/e2e/site-capture.spec.ts 2/tests/e2e/site-capture.spec.ts
+new file mode 100644
+index 0000000..fa4d976
+--- /dev/null
++++ 2/tests/e2e/site-capture.spec.ts
+@@ -0,0 +1,392 @@
++import { mkdir, rm, stat, writeFile } from 'node:fs/promises'
++import { spawn } from 'node:child_process'
++import { randomUUID } from 'node:crypto'
++import { homedir } from 'node:os'
++import { resolve } from 'node:path'
++
++import { expect, test, type Page } from '@playwright/test'
++
++import type { AgentMessage } from '../../src/shared/agents'
++import type { WatcherRoomState } from '../../src/shared/watcherRoom'
++import { WATCHER_STAND_IN_KEY, type WatcherStandInSeed } from '../../src/renderer/src/e2e/watcherStandIn'
++import { withSotto } from '../fixtures/designCaptureProfile'
++import { onReleaseTrack } from './support/releaseTrack'
++import { captureWindow } from './support/sottoCapture'
++import { openThreads, toggleTools, type LaunchedSotto } from './support/sottoLaunch'
++import { holdOwlSky } from './support/sottoOwl'
++import { resizeContentWindow } from './support/sottoWindow'
++
++/**
++ * saysotto.com pictures (never pushed): one evening in Watcher's room, three small jobs, dark theme. Stills on the design
++ * scenario's held clock; recordings on the workspace scenario's live clock, so the night scene moves. Fixture data only:
++ * src/shared/e2e.ts's designThreadsFixture is replaced in this clone with the story's threads.
++ *
++ *   SITE_PART=stills|record   SITE_SCALE=200|100   SITE_OUT=<folder>   SITE_ONLY=room,watched,...
++ */
++const OUT = process.env.SITE_OUT ?? resolve(homedir(), 'sotto-site-capture-out')
++const PART = process.env.SITE_PART ?? 'stills'
++const SCALE = Number(process.env.SITE_SCALE ?? 200) as 100 | 200
++const ONLY = process.env.SITE_ONLY?.split(',') ?? null
++const want = (name: string): boolean => ONLY === null || ONLY.includes(name)
++const SIZES = [[1280, 800, '1280'], [820, 560, '820']] as const
++const WATCHER = 'watcher'
++const THREADS = { uploads: 'retry-uploads', flaky: 'flaky-host-test', copy: 'settings-copy' } as const
++const PUSH_ID = 'settings-copy-push'
++
++type Beat = 1 | 2 | 3 | 4
++
++/** An evening clock time in Los Angeles: July 12 (PDT) for stills, today (whatever its offset) for the live recordings. */
++function clock(live: boolean): (hour: number, minute: number) => string {
++  if (!live) return (hour, minute) => new Date(Date.UTC(2026, 6, 12, hour + 7, minute)).toISOString()
++  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit', timeZoneName: 'shortOffset' }).formatToParts(new Date())
++  const get = (type: string): string => parts.find(part => part.type === type)!.value
++  const offset = -Number(get('timeZoneName').replace('GMT', '') || 0)
++  return (hour, minute) => new Date(Date.UTC(Number(get('year')), Number(get('month')) - 1, Number(get('day')), hour + offset, minute)).toISOString()
++}
++
++/** Watcher's conversation up to a beat. */
++function conversation(beat: Beat, at: (hour: number, minute: number) => string, mergesShown = 4): AgentMessage[] {
++  const said = (id: string, role: 'user' | 'assistant', hour: number, minute: number, text: string): AgentMessage => ({ id, role, text, createdAt: at(hour, minute) })
++  const messages = [
++    said('ask', 'user', 17, 38, 'Retry failed uploads, fix the flaky host test and tidy the Settings copy. One pull request each.'),
++    said('reply-538', 'assistant', 17, 38, 'Three threads, one pull request each. I am watching all three.'),
++  ]
++  if (beat >= 2) messages.push(said('reply-559', 'assistant', 17, 59, 'Fix the flaky host test went quiet, so I asked it where it stands. It is working again.'))
++  if (beat >= 3) messages.push(said('reply-602', 'assistant', 18, 2, 'Tidy the Settings copy is asking to push its branch. Only you can allow that.'))
++  if (beat >= 4) {
++    const merges = [
++      said('reply-640', 'assistant', 18, 40, 'All three pull requests are ready to merge. One at a time: #74 first.'),
++      said('reply-643', 'assistant', 18, 43, '#74 is merged. #75 next.'),
++      said('reply-646', 'assistant', 18, 46, '#75 is merged. #76 next.'),
++      said('reply-649', 'assistant', 18, 49, '#76 is merged. All three are in.'),
++    ]
++    messages.push(...merges.slice(0, mergesShown))
++  }
++  return messages
++}
++
++/** The room's projection at a beat: what Watcher started, sent and watches, and where each card goes. */
++function roomState(beat: Beat, hostId: string, at: (hour: number, minute: number) => string): { state: WatcherRoomState; created: WatcherStandInSeed['created'] } {
++  const target = (threadId: string) => ({ hostId, threadId })
++  const requestId = randomUUID()
++  const identity = { target: target(WATCHER), projectId: 'my-app', provider: 'codex' as const, creationOperationId: randomUUID(), createdAt: at(17, 37) }
++  const operation = (threadId: string, action: 'start' | 'send', hour: number, minute: number) => ({ id: randomUUID(), requestId, retryKey: randomUUID(), digest: '0'.repeat(64), action,
++    target: target(threadId), generation: 0, deliveryState: 'accepted' as const, createdAt: at(hour, minute), updatedAt: at(hour, minute), receiptId: randomUUID(), cardId: randomUUID() })
++  const placed: { op: ReturnType<typeof operation>; messageId: string }[] = [
++    { op: operation(THREADS.uploads, 'start', 17, 38), messageId: 'reply-538' },
++    { op: operation(THREADS.flaky, 'start', 17, 38), messageId: 'reply-538' },
++    { op: operation(THREADS.copy, 'start', 17, 38), messageId: 'reply-538' },
++  ]
++  if (beat >= 2) placed.push({ op: operation(THREADS.flaky, 'send', 17, 59), messageId: 'reply-559' })
++  if (beat >= 4) placed.push(
++    { op: operation(THREADS.uploads, 'send', 18, 40), messageId: 'reply-640' },
++    { op: operation(THREADS.flaky, 'send', 18, 43), messageId: 'reply-643' },
++    { op: operation(THREADS.copy, 'send', 18, 46), messageId: 'reply-646' })
++  const participants = Object.values(THREADS).map(threadId => ({ requestId, startedBy: 'watcher' as const, generation: 0, state: 'participating' as const, target: target(threadId), promptCount: 1 }))
++  const waiting = beat === 3
++  const rows = participants.map(part => ({ target: part.target, title: part.target.threadId, watched: true, paused: false,
++    status: beat >= 4 ? 'idle' as const : 'running' as const, connected: true, settled: false, backgroundWorkCount: 0,
++    waitsOn: waiting && part.target.threadId === THREADS.copy ? [{ id: PUSH_ID, kind: 'permission' as const, openTarget: part.target }] : [], participation: [part] }))
++  return {
++    created: identity,
++    state: {
++      current: identity,
++      currentOptions: { modelId: 'codex:gpt', reasoningEffort: null, runtimeMode: 'approval-required', status: 'idle', connected: true },
++      history: [], runtimeMode: 'approval-required', ownChanges: [],
++      standingWatches: participants.map(part => ({ id: randomUUID(), target: part.target, createdAt: at(17, 38), generation: 0 })),
++      requests: [{ id: requestId, watcher: identity.target, rootUserMessageId: 'ask', state: 'active', createdAt: at(17, 38), closedAt: null, participants }],
++      watchedThreads: rows,
++      receipts: placed.map(item => item.op), receiptReplies: placed.map(item => ({ operationId: item.op.id, messageId: item.messageId })),
++      ...(beat >= 3 ? { asks: [{ target: target(THREADS.copy), requestCardId: PUSH_ID, kind: 'permission' as const, messageId: 'reply-602', wakeUpMessageId: 'reply-602' }] } : {}),
++      recoveryNotice: null, observedAt: at(beat === 1 ? 17 : beat === 2 ? 17 : 18, beat === 1 ? 38 : beat === 2 ? 59 : beat === 3 ? 2 : 40),
++    },
++  }
++}
++
++const pr = (number: number, title: string, state: 'open' | 'merged', linkedAt: string) =>
++  ({ number, url: `https://github.com/example/my-app/pull/${number}`, title, state, draft: false, source: 'created' as const, linkedAt })
++
++/** The threads' own state at a beat: the push request while it waits, and each pull request open or merged. */
++async function threadsAt(page: Page, beat: Beat, at: (hour: number, minute: number) => string, merged = 3): Promise<void> {
++  await page.evaluate(async ({ beat, threads, push, prs, merged }) => {
++    const e2e = window.sottoE2E!
++    if (beat === 3) {
++      const thread = (await window.sotto!.agents!.get()).host.threads.find(item => item.id === threads.copy)
++      if (!thread?.requests.some(request => request.id === push)) await e2e.agentEvent!({ type: 'permission', threadId: threads.copy, requestId: push,
++        text: 'Run a command in my-app\ngit push origin sotto/settings-copy', status: 'running' })
++    }
++    if (beat >= 4) {
++      const list = [[threads.uploads, prs[0]], [threads.flaky, prs[1]], [threads.copy, prs[2]]] as const
++      for (const [index, [threadId, link]] of list.entries()) {
++        // Each thread's turn is over once it has said its pull request is ready to merge.
++        const thread = (await window.sotto!.agents!.get()).host.threads.find(item => item.id === threadId)
++        if (thread?.status !== 'idle') await e2e.agentEvent!({ type: 'history', threadId, text: '', messages: thread?.messages ?? [], status: 'idle' })
++        await e2e.agentEvent!({ type: 'pull-requests', threadId, text: '', pullRequests: [{ ...link, state: index < merged ? 'merged' : 'open' }] })
++      }
++    }
++  }, { beat, threads: THREADS, push: PUSH_ID, merged,
++    prs: [pr(74, 'Retry failed uploads', 'open', at(18, 30)), pr(75, 'Fix the flaky host test', 'open', at(18, 32)), pr(76, 'Tidy the Settings copy', 'open', at(18, 35))] })
++}
++
++/** Seeds the room and Watcher's conversation for a beat and opens the room. */
++async function stage(launched: LaunchedSotto, beat: Beat, live: boolean, extra: Partial<WatcherStandInSeed> = {}, mergesShown = 4): Promise<void> {
++  const { page } = launched
++  const at = clock(live)
++  const hostId = await page.evaluate(async () => (await window.sotto!.agents!.get()).hostId)
++  expect(hostId).toBeTruthy()
++  const { state, created } = roomState(beat, hostId!, at)
++  const seed: WatcherStandInSeed = { state, created, ...extra }
++  await page.evaluate(async ({ key, seed, thread, messages }) => {
++    localStorage.setItem(key, JSON.stringify(seed))
++    await window.sottoE2E!.agentEvent!({ type: 'history', threadId: thread, text: '', messages, status: 'idle' })
++  }, { key: WATCHER_STAND_IN_KEY, seed, thread: WATCHER, messages: conversation(beat, at, mergesShown) })
++  await threadsAt(page, beat, at)
++  await page.reload()
++  await openThreads(page)
++  const tab = page.getByRole('tablist', { name: 'Page' }).getByRole('tab', { name: 'Watcher', exact: true })
++  if (await tab.isVisible()) await tab.click()
++  else await page.keyboard.press('ControlOrMeta+2')
++  await expect(page.getByRole('heading', { level: 1, name: 'Watcher' })).toBeVisible()
++  await expect(page.locator('html[data-room-transition]')).toHaveCount(0, { timeout: 10_000 })
++}
++
++async function toEnd(page: Page): Promise<void> {
++  await page.mouse.move(0, 0)
++  await page.evaluate(async () => {
++    // No focus ring or tooltip left on the room switch from opening the room.
++    if (document.activeElement instanceof HTMLElement && document.activeElement.closest('.watcher-foot')) document.activeElement.blur()
++    await document.fonts.ready
++    const transcript = document.querySelector<HTMLElement>('#watcher-pane .thread-workspace__transcript')
++    if (transcript) { transcript.scrollTop = transcript.scrollHeight; transcript.dispatchEvent(new Event('scroll')) }
++    await new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done)))
++  })
++  await page.waitForTimeout(400)
++}
++
++async function stills(launched: LaunchedSotto, name: string, narrowAnchor?: string): Promise<void> {
++  for (const [width, height, label] of SIZES) {
++    await resizeContentWindow(launched, width, height)
++    await toEnd(launched.page)
++    // The narrow window cannot hold the whole beat: it starts at the message that tells it.
++    if (narrowAnchor && width < 1000) {
++      await launched.page.locator(`#watcher-pane [data-message-id="${narrowAnchor}"]`).evaluate(node => node.scrollIntoView({ block: 'start' }))
++      await launched.page.waitForTimeout(400)
++    }
++    await holdOwlSky(launched.page)
++    await captureWindow(launched.app, resolve(OUT, `${name}-${label}.png`))
++  }
++}
++
++function run(command: string, args: readonly string[]): Promise<void> {
++  return new Promise((done, fail) => {
++    const child = spawn(command, [...args], { stdio: ['ignore', 'ignore', 'pipe'] })
++    let err = ''
++    child.stderr.on('data', chunk => { err = (err + String(chunk)).slice(-4000) })
++    child.on('exit', code => code === 0 ? done() : fail(new Error(`${command} exited ${code}: ${err}`)))
++  })
++}
++
++/**
++ * Records the window's content off the Xvfb display for 11 seconds while `during` plays, then folds the last second into
++ * the first so the loop restarts without a jump: 10 seconds, 30 frames a second, H.264, no audio.
++ */
++/**
++ * Records the window's content off the Xvfb display while `during` plays, 30 frames a second, H.264, no audio. `seamless`
++ * (the room) folds its last second into its first so the loop restarts without a jump; `hold` (an event) is cut straight,
++ * its finished state held still for the last seconds, and the loop jumps back to the start with no crossfade.
++ */
++async function record(launched: LaunchedSotto, name: string, how: { readonly width: number; readonly height: number; readonly loop: 'seamless' | 'hold'; readonly anchor?: string },
++  during: (page: Page) => Promise<void>): Promise<void> {
++  const { page } = launched
++  const { width, height } = how
++  await resizeContentWindow(launched, width, height)
++  await toEnd(page)
++  if (how.anchor) {
++    await page.locator(`#watcher-pane [data-message-id="${how.anchor}"]`).evaluate(node => node.scrollIntoView({ block: 'start' }))
++    await page.waitForTimeout(400)
++  }
++  const box = await launched.app.evaluate(({ BrowserWindow }) => {
++    const window = BrowserWindow.getAllWindows().find(item => item.webContents.getURL().endsWith('/index.html'))!
++    window.setPosition(0, 0); window.show(); window.focus()
++    return window.getContentBounds()
++  })
++  expect([box.width, box.height]).toEqual([width, height])
++  // The display's pixels: the window's size and place times the device scale it was launched at.
++  const scale = await page.evaluate(() => devicePixelRatio)
++  const [w, h, x, y] = [width, height, box.x, box.y].map(value => Math.round(value * scale))
++  const raw = resolve(OUT, `.${name}-raw.mkv`)
++  const length = how.loop === 'seamless' ? 11.2 : 10.2
++  const started = Date.now()
++  const grab = run('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'x11grab', '-draw_mouse', '0', '-framerate', '30', '-video_size', `${w}x${h}`,
++    '-i', `${process.env.DISPLAY}+${x},${y}`, '-t', String(length), '-an', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '10', '-pix_fmt', 'yuv420p', raw])
++  await during(page)
++  await grab
++  const wall = (Date.now() - started) / 1000
++  const frames = Number((await output('ffprobe', ['-v', 'error', '-count_frames', '-select_streams', 'v', '-show_entries', 'stream=nb_read_frames', '-of', 'csv=p=0', raw])).trim())
++  const unique = Number((await output('ffmpeg', ['-v', 'info', '-i', raw, '-vf', 'mpdecimate=hi=64*4:lo=64:frac=0.1,showinfo', '-f', 'null', '-'], true)).split('\n').filter(line => line.includes('pts_time')).length)
++  process.stdout.write(`GRAB ${name} ${w}x${h} frames=${frames} wall=${wall.toFixed(1)}s distinct=${unique}\n`)
++  const final = resolve(OUT, `${name}.mp4`)
++  const filter = how.loop === 'seamless'
++    ? '[0:v]trim=start=0.2:end=1.2,setpts=PTS-STARTPTS[head];[0:v]trim=start=1.2:end=11.2,setpts=PTS-STARTPTS[body];[body][head]xfade=transition=fade:duration=1:offset=9,fps=30,format=yuv420p[v]'
++    : '[0:v]trim=start=0.2:end=10.2,setpts=PTS-STARTPTS,fps=30,format=yuv420p[v]'
++  // Scale 2: High profile, CRF 28 upward a step at a time to 31 until it is under 1.2 MB; a keyframe every 2 seconds.
++  const steps = scale > 1 ? [28, 29, 30, 31] : [26]
++  for (const crf of steps) {
++    await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', raw, '-filter_complex', filter, '-map', '[v]', '-an', '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'slow',
++      '-crf', String(crf), '-g', '60', '-keyint_min', '60', '-sc_threshold', '0', '-movflags', '+faststart', final])
++    const size = (await stat(final)).size
++    process.stdout.write(`ENCODE ${name} crf=${crf} bytes=${size}\n`)
++    if (scale === 1 || size < 1_200_000) break
++  }
++  await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', final, '-frames:v', '1', resolve(OUT, `${name}-poster.png`)])
++  await rm(raw, { force: true })
++}
++
++function output(command: string, args: readonly string[], stderr = false): Promise<string> {
++  return new Promise((done, fail) => {
++    const child = spawn(command, [...args], { stdio: ['ignore', 'pipe', 'pipe'] })
++    let text = ''
++    ;(stderr ? child.stderr : child.stdout).on('data', chunk => { text += String(chunk) })
++    child.on('exit', code => code === 0 ? done(text) : fail(new Error(`${command} exited ${code}`)))
++  })
++}
++
++const options = (live: boolean, scale: 100 | 200) => ({ onboardingComplete: true, appearance: 'dark', motion: 'normal', agents: 'design-threads',
++  scenario: live ? 'phase3-workspace' : 'design-threads', darkTheme: 't3-code', scalePercent: scale } as const)
++
++test.describe.configure({ mode: 'serial', timeout: 10 * 60_000 })
++test.beforeAll(async () => { await mkdir(OUT, { recursive: true }) })
++
++test('saysotto.com stills: one evening in Watcher\'s room', async () => {
++  test.skip(PART !== 'stills')
++  await onReleaseTrack('owl', () => withSotto(options(false, SCALE), async launched => {
++    const { page } = launched
++    await openThreads(page)
++    await stage(launched, 1, false)
++    await expect(page.getByRole('list', { name: 'What Watcher did' }).getByRole('listitem')).toHaveCount(3)
++    if (want('room')) await stills(launched, 'room', 'reply-538')
++    await stage(launched, 2, false)
++    if (want('watched')) await stills(launched, 'watched')
++    await stage(launched, 3, false)
++    await expect(page.locator('#watcher-pane .watcher-glance')).toContainText('1 needs you')
++    if (want('needs-you')) await stills(launched, 'needs-you')
++    // The user allows the push once, on the card in Watcher's conversation; then the pull requests land.
++    await resizeContentWindow(launched, 1280, 800)
++    await toEnd(page)
++    await page.locator('#watcher-pane .watcher-asks').getByRole('button', { name: /^Allow( once)?$/ }).click()
++    await stage(launched, 4, false)
++    if (want('merge')) await stills(launched, 'merge')
++  }))
++})
++
++test('saysotto.com recordings on the live clock', async () => {
++  test.skip(PART !== 'record')
++  const [width, height] = process.env.SITE_SIZE === '820' ? [820, 560] : [1280, 800]
++  const suffix = width === 820 ? '-820' : SCALE === 200 ? '@2x' : ''
++  const history = (page: Page, messages: AgentMessage[]) => page.evaluate(async ({ thread, messages }) =>
++    window.sottoE2E!.agentEvent!({ type: 'history', threadId: thread, text: '', messages, status: 'idle' }), { thread: WATCHER, messages })
++  await onReleaseTrack('owl', () => withSotto(options(true, SCALE), async launched => {
++    const { page } = launched
++    await openThreads(page)
++    await resizeContentWindow(launched, width, height)
++    if (want('room')) {
++      await stage(launched, 1, true)
++      await page.waitForTimeout(1500)
++      // The narrow window starts at Watcher's reply, as the still does.
++      await record(launched, `room${suffix}`, { width, height, loop: 'seamless', ...width === 820 ? { anchor: 'reply-538' } : {} }, async () => { await page.waitForTimeout(11_500) })
++    }
++    if (want('watched')) {
++      // Watcher's follow-up arrives: its reply and the card for what it sent, brought into view.
++      const at = clock(true)
++      await stage(launched, 2, true)
++      await history(page, conversation(1, at))
++      await page.waitForTimeout(1500)
++      await record(launched, `watched${suffix}`, { width, height, loop: 'hold' }, async () => {
++        await page.waitForTimeout(3000)
++        await history(page, conversation(2, at))
++        await page.waitForTimeout(150)
++        await toEnd(page)
++        await page.waitForTimeout(6900)
++      })
++    }
++    if (want('needs-you')) {
++      await stage(launched, 3, true)
++      await page.waitForTimeout(1500)
++      await record(launched, `needs-you${suffix}`, { width, height, loop: 'hold', ...width === 820 ? { anchor: 'reply-602' } : {} }, async () => {
++        await page.waitForTimeout(4000)
++        await page.locator('#watcher-pane .watcher-asks').getByRole('button', { name: /^Allow( once)?$/ }).click()
++        await page.mouse.move(0, 0)
++        await page.waitForTimeout(150)
++        await toEnd(page)
++        await page.waitForTimeout(6000)
++      })
++    }
++    if (want('merge')) {
++      const at = clock(true)
++      await stage(launched, 4, true, {}, 1)
++      await threadsAt(page, 4, at, 0)
++      await page.waitForTimeout(1500)
++      await record(launched, `merge${suffix}`, { width, height, loop: 'hold' }, async () => {
++        const start = Date.now()
++        for (let merged = 1; merged <= 3; merged++) {
++          await page.waitForTimeout(1600)
++          await threadsAt(page, 4, at, merged)
++          await history(page, conversation(4, at, merged + 1))
++          await page.waitForTimeout(150)
++          await toEnd(page)
++        }
++        await page.waitForTimeout(Math.max(0, 10_600 - (Date.now() - start)))
++      })
++    }
++  }))
++})
++
++test('saysotto.com still: Tidy the Settings copy with its Changes beside it', async () => {
++  test.skip(PART !== 'changes')
++  await withSotto(options(false, SCALE), async launched => {
++    const { page } = launched
++    await openThreads(page)
++    const at = clock(false)
++    // The project's real folder in this profile: a small repository whose working tree holds the thread's change.
++    const { folder, watcher } = await page.evaluate(async () => {
++      const state = await window.sotto!.agents!.get()
++      const qualified = (id: string) => state.hostId === undefined ? id : `host:${state.hostId}:${id}`
++      return { folder: state.host.projects.find(project => project.id === 'my-app' || project.id.endsWith(':my-app'))!.path, watcher: qualified('watcher') }
++    })
++    expect(folder.startsWith(launched.userData)).toBe(true)
++    const git = (args: string[]) => run('git', ['-C', folder, '-c', 'user.name=You', '-c', 'user.email=you@example.invalid', '-c', 'commit.gpgSign=false', '-c', 'core.hooksPath=/dev/null', ...args])
++    await mkdir(resolve(folder, 'src/settings'), { recursive: true })
++    const copy = (lines: Record<string, string>) => `export const settingsCopy = {\n${Object.entries(lines).map(([key, text]) => `  ${key}: '${text}',`).join('\n')}\n}\n`
++    await git(['init', '--quiet', '-b', 'main'])
++    await writeFile(resolve(folder, 'src/settings/copy.ts'), copy({ title: 'Settings',
++      notifications: 'Notify me whenever one of my threads needs my attention',
++      theme: 'Select which colour theme you would like the app to use', signOut: 'Sign out of your account on this computer' }))
++    await git(['add', '.'])
++    await git(['commit', '--quiet', '-m', 'Settings'])
++    await git(['switch', '--quiet', '-c', 'sotto/settings-copy'])
++    await writeFile(resolve(folder, 'src/settings/copy.ts'), copy({ title: 'Settings', notifications: 'Tell me when a thread needs me', theme: 'Theme', signOut: 'Sign out' }))
++    await page.evaluate(async ({ threadId, messages, watcher }) => {
++      await window.sottoE2E!.agentEvent!({ type: 'history', threadId, text: '', messages, status: 'idle' })
++      // Watcher's own thread is not a thread on this page: put it with the settled ones.
++      await window.sotto!.agents!.command({ type: 'settle-thread', threadId: watcher })
++    }, { threadId: THREADS.copy, watcher, messages: [
++      { id: 'settings-copy-1', role: 'user' as const, text: 'Tidy the Settings copy. Open one pull request.', createdAt: at(17, 38) },
++      { id: 'settings-copy-2', role: 'assistant' as const, text: 'Tidied the Settings copy: shorter labels in one voice. The change is in src/settings/copy.ts.', createdAt: at(17, 55) },
++    ] })
++    await page.reload()
++    await resizeContentWindow(launched, 1600, 1000)
++    await openThreads(page)
++    await page.getByRole('button', { name: 'Tidy the Settings copy', exact: true }).first().click()
++    await toggleTools(page)
++    const panel = page.getByRole('complementary', { name: 'Tools', exact: true })
++    await panel.getByRole('tablist', { name: 'Tools', exact: true }).getByRole('tab', { name: 'Changes', exact: true }).click()
++    const expand = panel.getByRole('button', { name: 'Expand all files', exact: true })
++    await expect(panel.locator('.changes-file')).toHaveCount(1)
++    if (await expand.isVisible()) await expand.click()
++    await expect(panel.getByRole('group', { name: 'src/settings/copy.ts' })).toContainText('Tell me when a thread needs me')
++    await page.mouse.move(0, 0)
++    await page.evaluate(async () => { (document.activeElement as HTMLElement | null)?.blur(); await document.fonts.ready; await new Promise(done => requestAnimationFrame(() => requestAnimationFrame(done))) })
++    await page.waitForTimeout(500)
++    await captureWindow(launched.app, resolve(OUT, 'changes-1600.png'))
++  })
++})
+diff --git 1/run-site-capture.sh 2/run-site-capture.sh
+new file mode 100755
+index 0000000..96552cc
+--- /dev/null
++++ 2/run-site-capture.sh
+@@ -0,0 +1,8 @@
++#!/usr/bin/env bash
++# Usage: run.sh <stills|record> [build] [only]
++set -euo pipefail
++cd ~/sotto-site-capture
++if [ "${2:-}" = build ]; then npm run build > /tmp/sotto-site-build.log 2>&1; fi
++export SITE_PART="$1" SITE_OUT="$HOME/sotto-site-capture-out" SITE_SCALE="${SITE_SCALE:-200}"
++[ -n "${3:-}" ] && export SITE_ONLY="$3"
++xvfb-run -a -s "-screen 0 3200x2200x24" npx playwright test tests/e2e/site-capture.spec.ts --reporter=line
+diff --git 1/check-site-capture.sh 2/check-site-capture.sh
+new file mode 100644
+index 0000000..735bd1e
+--- /dev/null
++++ 2/check-site-capture.sh
+@@ -0,0 +1,10 @@
++#!/usr/bin/env bash
++set -euo pipefail
++cd ~/sotto-site-capture-out
++mkdir -p /tmp/sotto-site-frames
++for n in room watched needs-you merge; do
++  ffprobe -v error -show_entries format=duration,size:stream=codec_type,codec_name,width,height,r_frame_rate,nb_frames,pix_fmt -of compact $n.mp4
++  for t in 0 2.5 5 7.5 9.9; do ffmpeg -v error -y -ss $t -i $n.mp4 -frames:v 1 /tmp/sotto-site-frames/$n-$t.png; done
++  # motion: mean abs diff between frames 1s apart, in the scene margins
++  ffmpeg -v error -i $n.mp4 -vf "crop=380:700:0:60,tblend=all_mode=difference,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-" -f null - 2>/dev/null | grep YAVG | awk -F= '{s+=$2; if ($2>0.05) m++; c++} END {printf "margin motion: mean %.3f, frames moving %d of %d\n", s/c, m, c}'
++done
